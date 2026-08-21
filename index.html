@@ -137,12 +137,11 @@ section,footer,.marquee{position:relative;z-index:1}
   display:grid;place-items:center;font-size:11px;color:#fff;
   background:rgba(13,13,15,.5);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px)}
 #work .list{display:flex;flex-direction:column}
-#work .item{position:relative;display:flex;align-items:baseline;gap:20px;
-  padding:26px 6px;border-bottom:1px solid var(--line);cursor:pointer;transition:padding .3s}
-#work .item:first-child{border-top:1px solid var(--line)}
-#work .item .num{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.2em}
-#work .item h3{font-size:clamp(20px,2.2vw,30px);letter-spacing:.02em;transition:color .3s}
-#work .item .cat{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
+#work .item{position:relative;display:block;
+  padding:22px 6px 24px;border-bottom:1px solid var(--line);cursor:pointer;transition:padding .3s}
+#work .item .num{display:block;font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.2em;margin-bottom:10px}
+#work .item h3{font-size:clamp(20px,2vw,27px);letter-spacing:.02em;transition:color .3s}
+#work .item .cat{display:block;margin-top:8px;font-family:var(--body);font-size:12.5px;color:var(--dim)}
 #work .item::before{content:'';position:absolute;left:0;bottom:-1px;height:1px;width:0;background:var(--hot);transition:width .45s ease}
 #work .item:hover,#work .item.active{padding-left:16px}
 #work .item:hover h3,#work .item.active h3{color:var(--hot)}
@@ -174,9 +173,22 @@ section,footer,.marquee{position:relative;z-index:1}
 
 /* ---------- CLIENTS ---------- */
 #clients{border-top:1px solid var(--line)}
-#clients .wall{margin-top:70px;display:grid;grid-template-columns:repeat(3,1fr);gap:56px 5vw;align-items:center;justify-items:start}
-#clients .clogo{height:clamp(54px,7vw,84px);width:auto;max-width:100%;
+#clients .marq{margin-top:70px;overflow:hidden;white-space:nowrap;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+#clients .track{display:inline-flex;will-change:transform;animation:lmq 34s linear infinite}
+#clients .marq:hover .track{animation-play-state:paused}
+#clients .unit{display:inline-flex;align-items:center;gap:6vw;padding-right:6vw}
+@keyframes lmq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){#clients .track{animation:none}}
+#clients .clogo{--lh:clamp(54px,7vw,84px);height:var(--lh);flex:none;
   color:var(--logo);transition:color .35s,transform .35s}
+#clients .unit .clogo:nth-child(1){width:calc(var(--lh)*3.125)}
+#clients .unit .clogo:nth-child(2){width:calc(var(--lh)*3.5)}
+#clients .unit .clogo:nth-child(3){width:calc(var(--lh)*2.875)}
+#clients .unit .clogo:nth-child(4){width:calc(var(--lh)*4)}
+#clients .unit .clogo:nth-child(5){width:calc(var(--lh)*2.375)}
+#clients .unit .clogo:nth-child(6){width:calc(var(--lh)*2.125)}
 #clients .clogo:hover{color:var(--hot);transform:translateY(-3px)}
 #clients .clogo text{font-family:var(--display);fill:currentColor;letter-spacing:.06em}
 #clients .clogo .sub{font-family:var(--mono);letter-spacing:.34em}
@@ -281,7 +293,6 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
       </div>
     </div>
     <div class="list reveal" id="workList">
-      <div class="item active" data-i="0"><span class="num">01</span><h3>GLOBAL BRAND COMMERCIAL</h3><span class="cat">Commercial</span></div>
       <div class="item" data-i="1"><span class="num">02</span><h3>GOV SUMMIT 2024</h3><span class="cat">Event Coverage</span></div>
       <div class="item" data-i="2"><span class="num">03</span><h3>LUXURY REAL ESTATE</h3><span class="cat">Architectural Film</span></div>
       <div class="item" data-i="3"><span class="num">04</span><h3>AUTOMOTIVE CAMPAIGN</h3><span class="cat">Commercial</span></div>
@@ -320,7 +331,7 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
 <!-- CLIENTS -->
 <section id="clients">
   <div class="label reveal"><span class="n">03</span> — TRUSTED BY</div>
-  <div class="wall reveal">
+  <div class="marq reveal" id="logoMarq"><div class="track"><div class="unit">
 
     <!-- ADNEC — pavilion emblem -->
     <svg class="clogo" viewBox="0 0 250 80" role="img" aria-label="ADNEC">
@@ -376,7 +387,7 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
       <text class="sub" x="75" y="72" font-size="8">FORUM</text>
     </svg>
 
-  </div>
+  </div></div></div>
 </section>
 
 <!-- STATS -->
@@ -449,15 +460,29 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
   const fTitle = document.getElementById('featureTitle');
   function setFeature(i){
     imgs.forEach((im,k)=>im.classList.toggle('on', k===i));
-    items.forEach((it,k)=>it.classList.toggle('active', k===i));
-    const it = items[i];
-    fLabel.textContent = it.querySelector('.num').textContent + ' / ' + it.querySelector('.cat').textContent.toUpperCase();
-    fTitle.textContent = it.querySelector('h3').textContent;
+    items.forEach(it=>it.classList.toggle('active', +it.dataset.i===i));
+    if (i === 0) {
+      fLabel.textContent = '01 / FEATURED';
+      fTitle.textContent = 'GLOBAL BRAND COMMERCIAL';
+    } else {
+      const it = [...items].find(el => +el.dataset.i === i);
+      fLabel.textContent = it.querySelector('.num').textContent + ' / ' + it.querySelector('.cat').textContent.toUpperCase();
+      fTitle.textContent = it.querySelector('h3').textContent;
+    }
   }
   items.forEach(it=>{
     it.addEventListener('mouseenter', ()=>setFeature(+it.dataset.i));
     it.addEventListener('click', ()=>setFeature(+it.dataset.i));
   });
+  document.getElementById('workList').addEventListener('mouseleave', ()=>setFeature(0));
+
+  /* ---------- LOGO MARQUEE (duplicate unit for seamless loop) ---------- */
+  const logoTrack = document.querySelector('#logoMarq .track');
+  if (logoTrack) {
+    const clone = logoTrack.firstElementChild.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    logoTrack.appendChild(clone);
+  }
 
   if (!hasGSAP || reduced) return;
   gsap.registerPlugin(ScrollTrigger);
