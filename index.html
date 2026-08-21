@@ -140,12 +140,15 @@ section{padding:120px 5vw}
 
 /* ---------- CLIENTS ---------- */
 #clients{border-top:1px solid var(--line)}
-#clients .wall{margin-top:60px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px 5vw}
-#clients .wall span{font-family:var(--display);text-transform:uppercase;
-  font-size:clamp(30px,4.4vw,64px);line-height:1.05;color:rgba(244,242,238,.28);
-  transition:color .35s}
-#clients .wall span:hover{color:var(--hot)}
-@media (max-width:700px){#clients .wall{grid-template-columns:repeat(2,1fr)}}
+#clients .wall{margin-top:70px;display:grid;grid-template-columns:repeat(3,1fr);gap:56px 5vw;align-items:center;justify-items:start}
+#clients .clogo{height:clamp(54px,7vw,84px);width:auto;max-width:100%;
+  color:rgba(244,242,238,.42);transition:color .35s,transform .35s}
+#clients .clogo:hover{color:var(--hot);transform:translateY(-3px)}
+#clients .clogo text{font-family:var(--display);fill:currentColor;letter-spacing:.06em}
+#clients .clogo .sub{font-family:var(--mono);letter-spacing:.34em}
+#clients .clogo .ln{stroke:currentColor;fill:none}
+#clients .clogo .fl{fill:currentColor}
+@media (max-width:700px){#clients .wall{grid-template-columns:repeat(2,1fr);gap:40px 8vw}}
 
 /* ---------- STATS ---------- */
 #stats{padding-top:60px}
@@ -282,8 +285,61 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
 <section id="clients">
   <div class="label reveal"><span class="n">03</span> — TRUSTED BY</div>
   <div class="wall reveal">
-    <span>ADNEC</span><span>SHUROOQ</span><span>DUBAI DESIGN WEEK</span>
-    <span>KHORFAKKAN</span><span>WIC</span><span>SIF</span>
+
+    <!-- ADNEC — pavilion emblem -->
+    <svg class="clogo" viewBox="0 0 250 80" role="img" aria-label="ADNEC">
+      <path class="fl" d="M8 58 L26 18 L44 58 L36 58 L26 34 L16 58 Z"/>
+      <rect class="fl" x="22" y="62" width="8" height="4"/>
+      <text x="60" y="56" font-size="38">ADNEC</text>
+      <text class="sub" x="61" y="72" font-size="8">VENUES · ABU DHABI</text>
+    </svg>
+
+    <!-- SHUROOQ — sunrise emblem -->
+    <svg class="clogo" viewBox="0 0 280 80" role="img" aria-label="Shurooq">
+      <path class="ln" d="M10 58 A18 18 0 0 1 46 58" stroke-width="5"/>
+      <line class="ln" x1="28" y1="22" x2="28" y2="30" stroke-width="4"/>
+      <line class="ln" x1="12" y1="30" x2="17" y2="37" stroke-width="4"/>
+      <line class="ln" x1="44" y1="30" x2="39" y2="37" stroke-width="4"/>
+      <line class="ln" x1="4" y1="58" x2="52" y2="58" stroke-width="3"/>
+      <text x="66" y="56" font-size="38">SHUROOQ</text>
+      <text class="sub" x="67" y="72" font-size="8">SHARJAH</text>
+    </svg>
+
+    <!-- DUBAI DESIGN WEEK — stacked grid lockup -->
+    <svg class="clogo" viewBox="0 0 230 80" role="img" aria-label="Dubai Design Week">
+      <rect class="ln" x="4" y="8" width="52" height="64" stroke-width="3"/>
+      <text x="14" y="32" font-size="18">DXB</text>
+      <text x="14" y="52" font-size="18">DSN</text>
+      <text x="14" y="68" font-size="14">WK</text>
+      <text x="70" y="34" font-size="24">DUBAI</text>
+      <text x="70" y="58" font-size="24">DESIGN</text>
+      <text class="sub" x="71" y="72" font-size="9">WEEK</text>
+    </svg>
+
+    <!-- KHORFAKKAN — mountains & bay emblem -->
+    <svg class="clogo" viewBox="0 0 320 80" role="img" aria-label="Khorfakkan">
+      <path class="fl" d="M4 52 L20 24 L30 40 L40 18 L58 52 Z"/>
+      <path class="ln" d="M4 62 Q16 56 30 62 Q44 68 58 62" stroke-width="4"/>
+      <text x="72" y="56" font-size="34">KHORFAKKAN</text>
+      <text class="sub" x="73" y="72" font-size="8">SHARJAH · EAST COAST</text>
+    </svg>
+
+    <!-- WIC — monogram emblem -->
+    <svg class="clogo" viewBox="0 0 190 80" role="img" aria-label="WIC">
+      <circle class="ln" cx="34" cy="40" r="27" stroke-width="4"/>
+      <text x="16" y="52" font-size="30">W</text>
+      <text x="76" y="56" font-size="38">WIC</text>
+      <text class="sub" x="77" y="72" font-size="8">CONGRESS</text>
+    </svg>
+
+    <!-- SIF — pennant emblem -->
+    <svg class="clogo" viewBox="0 0 170 80" role="img" aria-label="SIF">
+      <line class="ln" x1="12" y1="14" x2="12" y2="66" stroke-width="5"/>
+      <path class="fl" d="M18 16 L58 26 L18 40 Z"/>
+      <text x="74" y="56" font-size="38">SIF</text>
+      <text class="sub" x="75" y="72" font-size="8">FORUM</text>
+    </svg>
+
   </div>
 </section>
 
