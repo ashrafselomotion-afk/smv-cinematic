@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMV — Singer Media Vision · Cinematic Production Agency</title>
+<meta name="color-scheme" content="dark light">
+<title>SMV — Singer Media Vision · Media Production Agency</title>
 <meta name="description" content="Singer Media Vision — UAE cinematic production agency. Government summits, global exhibitions, national celebrations. Same-day delivery.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,9 +17,24 @@
   --dim:#8A8A93;
   --hot:#FF4A1F;
   --line:rgba(244,242,238,.12);
+  --nav-bg:rgba(13,13,15,.55);
+  --logo:rgba(244,242,238,.42);
   --display:'Anton',sans-serif;
   --body:'Space Grotesk',sans-serif;
   --mono:'JetBrains Mono',monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#F7F5F1;
+    --panel:#ECEAE4;
+    --ink:#121212;
+    --dim:#7C786F;
+    --line:rgba(18,18,18,.14);
+    --nav-bg:rgba(247,245,241,.6);
+    --logo:rgba(18,18,18,.42);
+    color-scheme:light;
+  }
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{background:var(--bg);scroll-behavior:smooth}
@@ -46,7 +62,7 @@ section{padding:120px 5vw}
 #nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:800;
   display:flex;align-items:center;gap:38px;
   padding:12px 14px 12px 26px;border-radius:999px;
-  background:rgba(13,13,15,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:var(--nav-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border:1px solid var(--line);white-space:nowrap}
 #nav .wordmark{font-family:var(--display);font-size:19px;letter-spacing:.05em}
 #nav .wordmark i{font-style:normal;color:var(--hot)}
@@ -142,7 +158,7 @@ section{padding:120px 5vw}
 #clients{border-top:1px solid var(--line)}
 #clients .wall{margin-top:70px;display:grid;grid-template-columns:repeat(3,1fr);gap:56px 5vw;align-items:center;justify-items:start}
 #clients .clogo{height:clamp(54px,7vw,84px);width:auto;max-width:100%;
-  color:rgba(244,242,238,.42);transition:color .35s,transform .35s}
+  color:var(--logo);transition:color .35s,transform .35s}
 #clients .clogo:hover{color:var(--hot);transform:translateY(-3px)}
 #clients .clogo text{font-family:var(--display);fill:currentColor;letter-spacing:.06em}
 #clients .clogo .sub{font-family:var(--mono);letter-spacing:.34em}
@@ -154,7 +170,7 @@ section{padding:120px 5vw}
 #stats{padding-top:60px}
 #stats .row{display:grid;grid-template-columns:repeat(4,1fr);gap:4vw}
 #stats .cell{border-top:1px solid var(--line);padding-top:24px}
-#stats .cell b{font-family:var(--display);font-weight:400;font-size:clamp(40px,5.5vw,84px);color:#fff;display:block;line-height:1}
+#stats .cell b{font-family:var(--display);font-weight:400;font-size:clamp(40px,5.5vw,84px);color:var(--ink);display:block;line-height:1}
 #stats .cell b em{font-style:normal;color:var(--hot)}
 #stats .cell .label{margin-top:12px}
 @media (max-width:700px){#stats .row{grid-template-columns:repeat(2,1fr);gap:36px 6vw}}
@@ -164,7 +180,7 @@ section{padding:120px 5vw}
 #contact::before{content:'';position:absolute;inset:0;
   background:radial-gradient(60% 55% at 50% 42%,rgba(255,74,31,.14),transparent 70%)}
 #contact .label{position:relative}
-#contact h2{position:relative;font-size:clamp(46px,8.2vw,120px);line-height:.98;margin:26px 0 54px;color:#fff}
+#contact h2{position:relative;font-size:clamp(46px,8.2vw,120px);line-height:.98;margin:26px 0 54px;color:var(--ink)}
 #contact .btns{position:relative;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 #contact .btn{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;padding:20px 38px;border-radius:999px;transition:transform .3s,background .3s,border-color .3s}
 #contact .btn.hot{background:var(--hot);color:#fff}
@@ -215,7 +231,7 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
   <div class="shade"></div>
   <div class="mid">
     <h1 aria-label="SMV"><span class="row"><span>SMV<i>.</i></span></span></h1>
-    <div class="tag reveal">CINEMATIC PRODUCTION AGENCY</div>
+    <div class="tag reveal">MEDIA PRODUCTION AGENCY</div>
   </div>
   <div class="meta">
     <span>EST. 2016 — DUBAI · SHARJAH</span>
