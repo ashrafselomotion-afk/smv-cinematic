@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('smv-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}})();</script>
 <title>SMV — Singer Media Vision · Media Production Agency</title>
 <meta name="description" content="Singer Media Vision — UAE cinematic production agency. Government summits, global exhibitions, national celebrations. Same-day delivery.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,13 +12,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0D0D0F;
-  --panel:#141416;
+  --bg:#000000;
+  --panel:#0A0A0C;
   --ink:#F4F2EE;
   --dim:#8A8A93;
   --hot:#FF4A1F;
   --line:rgba(244,242,238,.12);
-  --nav-bg:rgba(13,13,15,.55);
+  --nav-bg:rgba(0,0,0,.55);
   --logo:rgba(244,242,238,.42);
   --display:'Anton',sans-serif;
   --body:'Space Grotesk',sans-serif;
@@ -25,7 +26,7 @@
   color-scheme:dark;
 }
 @media (prefers-color-scheme: light){
-  :root{
+  :root:not([data-theme="dark"]){
     --bg:#F7F5F1;
     --panel:#ECEAE4;
     --ink:#121212;
@@ -35,6 +36,16 @@
     --logo:rgba(18,18,18,.42);
     color-scheme:light;
   }
+}
+:root[data-theme="light"]{
+  --bg:#F7F5F1;
+  --panel:#ECEAE4;
+  --ink:#121212;
+  --dim:#7C786F;
+  --line:rgba(18,18,18,.14);
+  --nav-bg:rgba(247,245,241,.6);
+  --logo:rgba(18,18,18,.42);
+  color-scheme:light;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{background:var(--bg);scroll-behavior:smooth}
@@ -72,11 +83,18 @@ section{padding:120px 5vw}
 #nav .cta{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:#fff;
   background:var(--hot);padding:12px 22px;border-radius:999px;transition:transform .3s,background .3s}
 #nav .cta:hover{background:#ff5f38;transform:translateY(-1px)}
+#themeBtn{width:36px;height:36px;border-radius:50%;flex:none;
+  display:grid;place-items:center;border:1px solid var(--line);color:var(--dim);
+  transition:color .3s,border-color .3s,transform .3s}
+#themeBtn:hover{color:var(--hot);border-color:var(--hot);transform:rotate(24deg)}
+#themeBtn svg{width:16px;height:16px;display:block}
 @media (max-width:820px){#nav .links{display:none}#nav{gap:20px}}
 
 /* ---------- HERO ---------- */
 #hero{position:relative;height:100svh;min-height:640px;overflow:hidden;padding:0;
   display:flex;align-items:center;justify-content:center}
+#space{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none}
+section,footer,.marquee{position:relative;z-index:1}
 #hero .vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #hero .shade{position:absolute;inset:0;background:linear-gradient(rgba(6,6,8,.5),rgba(6,6,8,.72))}
 #hero .mid{position:relative;z-index:2;text-align:center}
@@ -212,6 +230,7 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
 </head>
 <body>
 
+<canvas id="space" aria-hidden="true"></canvas>
 <div id="grain"></div>
 
 <nav id="nav">
@@ -221,6 +240,7 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
     <a href="#services">SERVICES</a>
     <a href="#contact">CONTACT</a>
   </div>
+  <button id="themeBtn" type="button" aria-label="Toggle light and dark mode"></button>
   <a class="cta" href="#contact">GET A PROPOSAL</a>
 </nav>
 
@@ -402,6 +422,26 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
   const hasGSAP = typeof gsap !== 'undefined';
   if (!hasGSAP || reduced) document.documentElement.classList.add('no-anim');
 
+  /* ---------- THEME TOGGLE ---------- */
+  const themeBtn = document.getElementById('themeBtn');
+  const sysLight = matchMedia('(prefers-color-scheme: light)');
+  const sunIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>';
+  const moonIcon = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.2 14.5A8.5 8.5 0 0 1 9.5 3.8 8.5 8.5 0 1 0 20.2 14.5Z"/></svg>';
+  function effectiveTheme(){
+    return document.documentElement.dataset.theme || (sysLight.matches ? 'light' : 'dark');
+  }
+  function paintThemeBtn(){
+    themeBtn.innerHTML = effectiveTheme() === 'dark' ? sunIcon : moonIcon;
+  }
+  themeBtn.addEventListener('click', () => {
+    const next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('smv-theme', next); } catch(e){}
+    paintThemeBtn();
+  });
+  sysLight.addEventListener('change', paintThemeBtn);
+  paintThemeBtn();
+
   /* ---------- FEATURED WORK SWAP ---------- */
   const imgs = document.querySelectorAll('#featureBox img');
   const items = document.querySelectorAll('#work .item');
@@ -449,6 +489,123 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
     });
   });
 })();
+</script>
+<script type="module">
+/* ---------- MINIMAL SPACE (Three.js + GSAP) ---------- */
+try {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+  const canvas = document.getElementById('space');
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
+  renderer.setClearColor(0x000000, 0);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 300);
+  camera.position.set(0, 0, 60);
+
+  const dot = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const g = c.getContext('2d');
+    const grad = g.createRadialGradient(32,32,0,32,32,32);
+    grad.addColorStop(0,'rgba(255,255,255,1)');
+    grad.addColorStop(.35,'rgba(255,255,255,.7)');
+    grad.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle = grad; g.fillRect(0,0,64,64);
+    return new THREE.CanvasTexture(c);
+  })();
+
+  function makePoints(count, color, size, spread){
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      // hollow-ish sphere so the center stays clear behind the logo
+      const r = spread * (0.35 + 0.65 * Math.cbrt(Math.random()));
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      pos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
+      pos[i*3+1] = r * Math.sin(phi) * Math.sin(theta) * 0.72;
+      pos[i*3+2] = r * Math.cos(phi);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const mat = new THREE.PointsMaterial({
+      color, size, sizeAttenuation: true, map: dot,
+      transparent: true, opacity: 0.85, depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+    return new THREE.Points(geo, mat);
+  }
+
+  const starsFar  = makePoints(420, 0xB8BCC6, 0.42, 95);
+  const starsNear = makePoints(110, 0xE8E8EC, 0.8, 55);
+  const embers    = makePoints(16,  0xFF4A1F, 1.1, 70);
+  const field = new THREE.Group();
+  field.add(starsFar, starsNear, embers);
+  scene.add(field);
+
+  /* theme-aware colors: soft white stars in dark mode, ink dots in light */
+  const sysLightMq = matchMedia('(prefers-color-scheme: light)');
+  function themeIsLight(){
+    return (document.documentElement.dataset.theme || (sysLightMq.matches ? 'light' : 'dark')) === 'light';
+  }
+  function applySceneTheme(){
+    const light = themeIsLight();
+    starsFar.material.color.set(light ? 0x3A3A40 : 0xD8DCE6);
+    starsNear.material.color.set(light ? 0x1E1E22 : 0xFFFFFF);
+    [starsFar, starsNear, embers].forEach(p => {
+      p.material.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
+      p.material.opacity = light ? 0.3 : 0.6;
+      p.material.needsUpdate = true;
+    });
+  }
+  applySceneTheme();
+  sysLightMq.addEventListener('change', applySceneTheme);
+  new MutationObserver(applySceneTheme)
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  function size(){
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  size();
+  addEventListener('resize', size);
+
+  /* GSAP-driven interactivity — gentle mouse parallax + slow scroll drift */
+  const hasGSAP = typeof gsap !== 'undefined';
+  if (hasGSAP && !reduced) {
+    const px = gsap.quickTo(field.rotation, 'y', { duration: 1.8, ease: 'power2.out' });
+    const py = gsap.quickTo(field.rotation, 'x', { duration: 1.8, ease: 'power2.out' });
+    const cx = gsap.quickTo(camera.position, 'x', { duration: 2, ease: 'power2.out' });
+    const cy = gsap.quickTo(camera.position, 'y', { duration: 2, ease: 'power2.out' });
+    addEventListener('pointermove', e => {
+      const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5;
+      px(nx * .18); py(ny * .12);
+      cx(nx * 3.5); cy(-ny * 2.5);
+    });
+    if (typeof ScrollTrigger !== 'undefined') {
+      gsap.to(field.rotation, { z: 0.5, ease: 'none',
+        scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 1.5 } });
+    }
+  }
+
+  const clock = new THREE.Clock();
+  renderer.setAnimationLoop(() => {
+    if (document.hidden) return;
+    const t = clock.getElapsedTime();
+    if (!reduced) {
+      starsFar.rotation.y  = t * 0.006;
+      starsNear.rotation.y = -t * 0.01;
+      embers.rotation.y    = t * 0.015;
+    }
+    renderer.render(scene, camera);
+  });
+} catch (err) {
+  // WebGL/CDN unavailable — the CSS gradient background stays
+  console.warn('space scene skipped:', err);
+}
 </script>
 </body>
 </html>
