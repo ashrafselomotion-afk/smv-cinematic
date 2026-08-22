@@ -20,6 +20,7 @@
   --line:rgba(244,242,238,.12);
   --nav-bg:rgba(0,0,0,.55);
   --logo:rgba(244,242,238,.42);
+  --tile:rgba(255,255,255,.035);
   --display:'Anton',sans-serif;
   --body:'Space Grotesk',sans-serif;
   --mono:'JetBrains Mono',monospace;
@@ -34,6 +35,7 @@
     --line:rgba(18,18,18,.14);
     --nav-bg:rgba(247,245,241,.6);
     --logo:rgba(18,18,18,.42);
+    --tile:rgba(18,18,18,.04);
     color-scheme:light;
   }
 }
@@ -45,6 +47,7 @@
   --line:rgba(18,18,18,.14);
   --nav-bg:rgba(247,245,241,.6);
   --logo:rgba(18,18,18,.42);
+  --tile:rgba(18,18,18,.04);
   color-scheme:light;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -103,6 +106,9 @@ section,footer,.marquee{position:relative;z-index:1}
 #hero h1 .row>span{display:inline-block;transform:translateY(110%)}
 .no-anim #hero h1 .row>span{transform:none}
 #hero h1 i{font-style:normal;color:var(--hot)}
+#hero .tagbox{display:inline-flex;align-items:center;gap:12px;padding:9px 16px;margin-bottom:28px;
+  border:1px solid rgba(255,255,255,.28);font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:rgba(255,255,255,.82)}
+#hero .tagbox i{width:6px;height:6px;background:var(--hot);display:inline-block}
 #hero .tag{margin-top:18px;font-family:var(--mono);font-size:11px;letter-spacing:.55em;color:var(--hot)}
 #hero .meta{position:absolute;left:5vw;right:5vw;bottom:5vh;z-index:2;
   display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
@@ -171,6 +177,55 @@ section,footer,.marquee{position:relative;z-index:1}
 }
 @media (max-width:560px){#services .grid{grid-template-columns:1fr}#services .card{aspect-ratio:4/3}}
 
+/* ---------- WHY SMV (bento) ---------- */
+#why h2,#voices h2{font-size:clamp(44px,7.5vw,110px);line-height:.95;margin:18px 0 0}
+.rule{display:flex;align-items:center;gap:0;margin:34px 0 0;max-width:180px}
+.rule::before{content:'';flex:1;height:1px;background:var(--ink);opacity:.7}
+.rule::after{content:'';width:7px;height:7px;border:1px solid var(--ink);margin-left:10px}
+#why .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:64px}
+.tile{position:relative;border:1px solid var(--line);border-radius:22px;padding:66px 30px 28px;min-height:250px;
+  background:var(--tile);overflow:hidden;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;
+  transition:border-color .4s,transform .4s}
+.tile::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .45s;
+  background:radial-gradient(440px circle at var(--mx,50%) var(--my,50%),rgba(255,74,31,.18),transparent 62%)}
+.tile:hover{border-color:rgba(255,74,31,.45);transform:translateY(-3px)}
+.tile:hover::before{opacity:1}
+.tile.w2{grid-column:span 2}
+.tile .k{position:absolute;top:24px;left:30px}
+.tile h3{font-size:clamp(22px,2.3vw,34px);line-height:.98;margin:0 0 10px}
+.tile p{color:var(--dim);font-size:14px;line-height:1.65;max-width:42ch}
+.tile .big{font-family:var(--display);font-size:clamp(64px,7.5vw,120px);line-height:.9;color:var(--ink);margin-bottom:8px}
+.tile .big em{font-style:normal;color:var(--hot)}
+.tl{display:flex;align-items:center;gap:0;margin:0 0 26px;max-width:520px}
+.tl .dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--dim);flex:none;transition:background .4s,border-color .4s}
+.tl .dot.on{background:var(--hot);border-color:var(--hot)}
+.tl .bar{flex:1;height:1px;background:var(--line);position:relative}
+.tl .bar i{position:absolute;inset:0;background:var(--hot);transform:scaleX(0);transform-origin:left}
+.tl-l{display:flex;justify-content:space-between;max-width:520px;margin:-16px 0 22px;font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:var(--dim)}
+.map{position:absolute;right:26px;top:26px;width:min(46%,260px);opacity:.9}
+.map .g{fill:var(--dim);opacity:.28}
+.map .c{fill:var(--hot)}
+.map .pulse{fill:none;stroke:var(--hot);stroke-width:1;transform-origin:center;animation:pulse 2.6s ease-out infinite}
+.map .pulse.d2{animation-delay:1.3s}
+@keyframes pulse{0%{transform:scale(.3);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.map text{font-family:var(--mono);font-size:7px;letter-spacing:.25em;fill:var(--ink)}
+.specs{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.specs span{font-family:var(--mono);font-size:9px;letter-spacing:.22em;padding:7px 11px;border:1px solid var(--line);border-radius:999px;color:var(--dim)}
+@media (max-width:900px){#why .grid{grid-template-columns:repeat(2,1fr)}.tile.w2{grid-column:span 2}}
+@media (max-width:600px){#why .grid{grid-template-columns:1fr}.tile.w2{grid-column:span 1}.map{position:static;width:100%;margin-bottom:18px}}
+
+/* ---------- VOICES (testimonials) ---------- */
+#voices{padding-top:40px}
+#voices .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:64px}
+.quote{position:relative;border:1px solid var(--line);border-radius:22px;padding:34px 30px 28px;background:var(--tile);
+  display:flex;flex-direction:column;gap:22px;transition:border-color .4s,transform .4s}
+.quote:hover{border-color:rgba(255,74,31,.45);transform:translateY(-3px)}
+.quote .qm{font-family:var(--display);font-size:64px;line-height:.6;color:var(--hot);height:30px}
+.quote p{font-size:15.5px;line-height:1.65;color:var(--ink)}
+.quote footer{border:none;padding:0;display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase;line-height:1.9}
+.quote footer b{display:block;font-weight:400;color:var(--ink)}
+@media (max-width:900px){#voices .grid{grid-template-columns:1fr}}
+
 /* ---------- CLIENTS ---------- */
 #clients{border-top:1px solid var(--line)}
 #clients .marq{margin-top:70px;overflow:hidden;white-space:nowrap;
@@ -203,12 +258,15 @@ section,footer,.marquee{position:relative;z-index:1}
 #stats .cell b{font-family:var(--display);font-weight:400;font-size:clamp(40px,5.5vw,84px);color:var(--ink);display:block;line-height:1}
 #stats .cell b em{font-style:normal;color:var(--hot)}
 #stats .cell .label{margin-top:12px}
+#stats .cell .sub{margin-top:6px;font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--dim);opacity:.65;text-transform:uppercase}
 @media (max-width:700px){#stats .row{grid-template-columns:repeat(2,1fr);gap:36px 6vw}}
 
 /* ---------- CTA / CONTACT ---------- */
 #contact{position:relative;text-align:center;padding:160px 5vw 60px;overflow:hidden}
-#contact::before{content:'';position:absolute;inset:0;
-  background:radial-gradient(60% 55% at 50% 42%,rgba(255,74,31,.14),transparent 70%)}
+#contact .bloom{position:absolute;left:50%;top:44%;width:clamp(520px,64vw,980px);height:auto;
+  transform:translate(-50%,-50%);pointer-events:none;z-index:0;opacity:.9;overflow:visible}
+:root[data-theme="light"] #contact .bloom{opacity:.55}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) #contact .bloom{opacity:.55}}
 #contact .label{position:relative}
 #contact h2{position:relative;font-size:clamp(46px,8.2vw,120px);line-height:.98;margin:26px 0 54px;color:var(--ink)}
 #contact .btns{position:relative;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
@@ -262,6 +320,7 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
     src="https://videos.pexels.com/video-files/3129957/3129957-hd_1920_1080_25fps.mp4"></video>
   <div class="shade"></div>
   <div class="mid">
+    <div class="tagbox reveal"><i></i>NOW BOOKING · 2026</div>
     <h1 aria-label="SMV"><span class="row"><span>SMV<i>.</i></span></span></h1>
     <div class="tag reveal">MEDIA PRODUCTION AGENCY</div>
   </div>
@@ -277,7 +336,7 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
 <section id="work">
   <div class="label reveal"><span class="n">01</span> — PORTFOLIO</div>
   <div class="head">
-    <h2 class="reveal">SELECTED WORK</h2>
+    <h2 class="wipe">SELECTED WORK</h2>
     <a class="portfolio-link reveal" href="#contact">VIEW PORTFOLIO <span class="arr">→</span></a>
   </div>
   <div class="split">
@@ -303,7 +362,7 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
 <!-- SERVICES -->
 <section id="services">
   <div class="label reveal"><span class="n">02</span> — WHAT WE DO</div>
-  <h2 class="reveal">OUR SERVICES</h2>
+  <h2 class="wipe">OUR SERVICES</h2>
   <div class="grid">
     <a class="card reveal" href="#contact">
       <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1200&q=80" alt="Event coverage — concert stage lights">
@@ -328,9 +387,72 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
   </div>
 </section>
 
+<!-- WHY SMV (bento) -->
+<section id="why">
+  <div class="label reveal"><span class="n">03</span> — WHY SMV</div>
+  <h2 class="wipe">BUILT FOR THE<br>BIG STAGE</h2>
+  <div class="rule reveal"></div>
+  <div class="grid">
+
+    <div class="tile w2 reveal">
+      <span class="k label">/01 · SPEED</span>
+      <div class="tl"><span class="dot"></span><span class="bar"><i></i></span><span class="dot"></span><span class="bar"><i></i></span><span class="dot"></span></div>
+      <div class="tl-l"><span>SHOOT</span><span>EDIT ON-SITE</span><span>DELIVER</span></div>
+      <h3>SAME-DAY DELIVERY</h3>
+      <p>Edited on location and shipped while the event is still trending — reels, highlight films and press cuts, hours not days.</p>
+    </div>
+
+    <div class="tile reveal">
+      <span class="k label">/02 · TURNAROUND</span>
+      <div class="big"><span data-count="24">0</span>H</div>
+      <p>Average delivery window across summits, exhibitions and national celebrations.</p>
+    </div>
+
+    <div class="tile reveal">
+      <span class="k label">/03 · PROTOCOL</span>
+      <h3>GOVERNMENT-GRADE</h3>
+      <p>Accredited, protocol-aware crews experienced with official ceremonies, dignitaries and secure venues.</p>
+    </div>
+
+    <div class="tile w2 reveal">
+      <span class="k label">/04 · COVERAGE</span>
+      <svg class="map" viewBox="0 0 260 150" aria-hidden="true">
+        <g class="g">
+          <circle cx="20" cy="30" r="1.4"/><circle cx="40" cy="30" r="1.4"/><circle cx="60" cy="30" r="1.4"/><circle cx="80" cy="30" r="1.4"/><circle cx="100" cy="30" r="1.4"/><circle cx="120" cy="30" r="1.4"/><circle cx="140" cy="30" r="1.4"/><circle cx="160" cy="30" r="1.4"/><circle cx="180" cy="30" r="1.4"/><circle cx="200" cy="30" r="1.4"/><circle cx="220" cy="30" r="1.4"/><circle cx="240" cy="30" r="1.4"/>
+          <circle cx="20" cy="55" r="1.4"/><circle cx="40" cy="55" r="1.4"/><circle cx="60" cy="55" r="1.4"/><circle cx="80" cy="55" r="1.4"/><circle cx="100" cy="55" r="1.4"/><circle cx="120" cy="55" r="1.4"/><circle cx="140" cy="55" r="1.4"/><circle cx="160" cy="55" r="1.4"/><circle cx="180" cy="55" r="1.4"/><circle cx="200" cy="55" r="1.4"/><circle cx="220" cy="55" r="1.4"/><circle cx="240" cy="55" r="1.4"/>
+          <circle cx="20" cy="80" r="1.4"/><circle cx="40" cy="80" r="1.4"/><circle cx="60" cy="80" r="1.4"/><circle cx="80" cy="80" r="1.4"/><circle cx="100" cy="80" r="1.4"/><circle cx="120" cy="80" r="1.4"/><circle cx="140" cy="80" r="1.4"/><circle cx="160" cy="80" r="1.4"/><circle cx="180" cy="80" r="1.4"/><circle cx="200" cy="80" r="1.4"/><circle cx="220" cy="80" r="1.4"/><circle cx="240" cy="80" r="1.4"/>
+          <circle cx="20" cy="105" r="1.4"/><circle cx="40" cy="105" r="1.4"/><circle cx="60" cy="105" r="1.4"/><circle cx="80" cy="105" r="1.4"/><circle cx="100" cy="105" r="1.4"/><circle cx="120" cy="105" r="1.4"/><circle cx="140" cy="105" r="1.4"/><circle cx="160" cy="105" r="1.4"/><circle cx="180" cy="105" r="1.4"/><circle cx="200" cy="105" r="1.4"/><circle cx="220" cy="105" r="1.4"/><circle cx="240" cy="105" r="1.4"/>
+          <circle cx="20" cy="130" r="1.4"/><circle cx="40" cy="130" r="1.4"/><circle cx="60" cy="130" r="1.4"/><circle cx="80" cy="130" r="1.4"/><circle cx="100" cy="130" r="1.4"/><circle cx="120" cy="130" r="1.4"/><circle cx="140" cy="130" r="1.4"/><circle cx="160" cy="130" r="1.4"/><circle cx="180" cy="130" r="1.4"/><circle cx="200" cy="130" r="1.4"/><circle cx="220" cy="130" r="1.4"/><circle cx="240" cy="130" r="1.4"/>
+        </g>
+        <g style="transform-origin:160px 80px"><circle class="pulse" cx="160" cy="80" r="5"/></g>
+        <g style="transform-origin:190px 58px"><circle class="pulse d2" cx="190" cy="58" r="5"/></g>
+        <circle class="c" cx="160" cy="80" r="3"/><text x="168" y="84">DUBAI</text>
+        <circle class="c" cx="190" cy="58" r="3"/><text x="198" y="62">SHARJAH</text>
+      </svg>
+      <h3>DUBAI · SHARJAH · UAE-WIDE</h3>
+      <p>Crews based in both emirates, deployable to any venue in the country on short notice.</p>
+    </div>
+
+    <div class="tile reveal">
+      <span class="k label">/05 · DELIVERABLES</span>
+      <h3>EVERY FORMAT,<br>EVERY SCREEN</h3>
+      <p>Cinema-grade masters down to vertical social cuts.</p>
+      <div class="specs"><span>4K</span><span>HDR</span><span>16:9</span><span>9:16</span><span>LED WALL</span></div>
+    </div>
+
+    <div class="tile w2 reveal">
+      <span class="k label">/06 · CREW</span>
+      <h3>FULL CREWS, ZERO GAPS</h3>
+      <p>Directors, DOPs, drone pilots, sound, editors and colorists — one accountable team from brief to master, no hand-offs between vendors.</p>
+      <div class="specs"><span>DIRECTION</span><span>CAMERA</span><span>DRONE</span><span>SOUND</span><span>EDIT</span><span>COLOR</span></div>
+    </div>
+
+  </div>
+</section>
+
 <!-- CLIENTS -->
 <section id="clients">
-  <div class="label reveal"><span class="n">03</span> — TRUSTED BY</div>
+  <div class="label reveal"><span class="n">04</span> — TRUSTED BY</div>
   <div class="marq reveal" id="logoMarq"><div class="track"><div class="unit">
 
     <!-- ADNEC — pavilion emblem -->
@@ -393,17 +515,54 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
 <!-- STATS -->
 <section id="stats">
   <div class="row">
-    <div class="cell reveal"><b><span data-count="70">0</span><em>+</em></b><div class="label">PRODUCTIONS</div></div>
-    <div class="cell reveal"><b><span data-count="10">0</span></b><div class="label">YEARS</div></div>
-    <div class="cell reveal"><b><span data-count="24">0</span>H</b><div class="label">DELIVERY</div></div>
-    <div class="cell reveal"><b><span data-count="40">0</span><em>+</em></b><div class="label">CLIENTS</div></div>
+    <div class="cell reveal"><b><span data-count="70">0</span><em>+</em></b><div class="label">PRODUCTIONS</div><div class="sub">Since 2016</div></div>
+    <div class="cell reveal"><b><span data-count="10">0</span></b><div class="label">YEARS</div><div class="sub">Dubai · Sharjah</div></div>
+    <div class="cell reveal"><b><span data-count="24">0</span>H</b><div class="label">DELIVERY</div><div class="sub">Avg. turnaround</div></div>
+    <div class="cell reveal"><b><span data-count="40">0</span><em>+</em></b><div class="label">CLIENTS</div><div class="sub">Government &amp; global</div></div>
+  </div>
+</section>
+
+<!-- VOICES -->
+<section id="voices">
+  <div class="label reveal"><span class="n">05</span> — WHAT CLIENTS SAY</div>
+  <h2 class="wipe">IN THEIR WORDS</h2>
+  <div class="rule reveal"></div>
+  <!-- PLACEHOLDER TESTIMONIALS — replace with real client quotes before launch -->
+  <div class="grid">
+    <blockquote class="quote reveal">
+      <span class="qm">“</span>
+      <p>The highlight film was on our channels before the closing session ended. Nobody else we've worked with moves like this.</p>
+      <footer><b>Client Name</b>Director of Communications, Government Entity</footer>
+    </blockquote>
+    <blockquote class="quote reveal">
+      <span class="qm">“</span>
+      <p>Protocol-aware, invisible on the floor, and the footage looks like a feature film. Exactly what an official ceremony needs.</p>
+      <footer><b>Client Name</b>Head of Events, Exhibition Venue</footer>
+    </blockquote>
+    <blockquote class="quote reveal">
+      <span class="qm">“</span>
+      <p>One brief, one crew, every format delivered — from the LED wall master to the vertical cuts for social.</p>
+      <footer><b>Client Name</b>Marketing Lead, Real-Estate Developer</footer>
+    </blockquote>
   </div>
 </section>
 
 <!-- CTA -->
 <section id="contact">
-  <div class="label reveal"><span class="n">04</span> — NEXT PRODUCTION</div>
-  <h2 class="reveal">LET'S CREATE<br>SOMETHING<br>UNFORGETTABLE</h2>
+  <svg class="bloom" viewBox="0 0 600 600" aria-hidden="true">
+    <defs>
+      <filter id="bloomF" x="-70%" y="-70%" width="240%" height="240%" color-interpolation-filters="sRGB">
+        <feTurbulence id="bloomNoise" type="fractalNoise" baseFrequency="0.006" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap id="bloomDisp" in="SourceGraphic" in2="n" scale="90" xChannelSelector="R" yChannelSelector="G"/>
+        <feGaussianBlur stdDeviation="30"/>
+      </filter>
+    </defs>
+    <g id="bloomG" filter="url(#bloomF)" transform-origin="300 300">
+      <ellipse cx="300" cy="300" rx="175" ry="125" fill="#FF4A1F" opacity=".28"/>
+    </g>
+  </svg>
+  <div class="label reveal"><span class="n">06</span> — NEXT PRODUCTION</div>
+  <h2 class="wipe">LET'S CREATE<br>SOMETHING<br>UNFORGETTABLE</h2>
   <div class="btns reveal">
     <a class="btn hot" href="mailto:mustafasinger@smv.ae?subject=Project%20Brief">START A BRIEF</a>
     <a class="btn ghost" href="https://wa.me/9710000000000" target="_blank" rel="noopener">WHATSAPP →</a>
@@ -501,6 +660,77 @@ footer .copy{width:100%;margin-top:26px;padding-top:20px;border-top:1px solid va
     gsap.to(el, { opacity:1, y:0, duration:1, ease:'power3.out',
       scrollTrigger:{ trigger:el, start:'top 88%' } });
   });
+
+  /* ---------- SVG CLIP-PATH WIPE on section titles ---------- */
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const clipHost = document.createElementNS(svgNS, 'svg');
+  clipHost.setAttribute('width', '0'); clipHost.setAttribute('height', '0');
+  clipHost.style.position = 'absolute';
+  const clipDefs = document.createElementNS(svgNS, 'defs');
+  clipHost.appendChild(clipDefs); document.body.appendChild(clipHost);
+  document.querySelectorAll('h2.wipe').forEach((h, i) => {
+    const id = 'wipe' + i;
+    const cp = document.createElementNS(svgNS, 'clipPath');
+    cp.setAttribute('id', id); cp.setAttribute('clipPathUnits', 'objectBoundingBox');
+    const r = document.createElementNS(svgNS, 'rect');
+    r.setAttribute('x', '0'); r.setAttribute('y', '0'); r.setAttribute('width', '1'); r.setAttribute('height', '1');
+    cp.appendChild(r); clipDefs.appendChild(cp);
+    h.style.clipPath = 'url(#' + id + ')';
+    gsap.set(r, { scaleX: 0, transformOrigin: '0 0' });
+    gsap.set(h, { y: 24 });
+    ScrollTrigger.create({ trigger: h, start: 'top 86%', once: true, onEnter(){
+      gsap.to(r, { scaleX: 1, duration: 1.25, ease: 'power4.inOut' });
+      gsap.to(h, { y: 0, duration: 1.25, ease: 'power3.out',
+        onComplete(){ h.style.clipPath = ''; } });
+    }});
+  });
+
+  /* ---------- MORPHING ORANGE BLOOM (CTA) ---------- */
+  const bloomG = document.getElementById('bloomG');
+  if (bloomG) {
+    const noise = document.getElementById('bloomNoise');
+    const disp  = document.getElementById('bloomDisp');
+    gsap.to(bloomG, { rotation: 360, duration: 90, ease: 'none', repeat: -1, transformOrigin: '300px 300px' });
+    gsap.to(bloomG, { scale: 1.18, duration: 7, ease: 'sine.inOut', yoyo: true, repeat: -1, transformOrigin: '300px 300px' });
+    gsap.to(noise, { attr: { baseFrequency: 0.010 }, duration: 9, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.to(disp,  { attr: { scale: 130 }, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  }
+
+  /* ---------- STROKE-DRAW client emblems ---------- */
+  const strokes = document.querySelectorAll('#clients .clogo .ln');
+  const fills   = document.querySelectorAll('#clients .clogo .fl');
+  strokes.forEach(el => {
+    const len = el.getTotalLength ? el.getTotalLength() : 200;
+    el.style.strokeDasharray = len; el.style.strokeDashoffset = len;
+  });
+  gsap.set(fills, { opacity: 0 });
+  ScrollTrigger.create({ trigger: '#clients', start: 'top 80%', once: true, onEnter(){
+    gsap.to(strokes, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut', stagger: .04 });
+    gsap.to(fills, { opacity: 1, duration: 1, delay: .8, ease: 'power2.out', stagger: .05 });
+  }});
+
+  /* ---------- SPOTLIGHT TILES (cursor-tracked glow) ---------- */
+  document.querySelectorAll('.tile').forEach(t => {
+    t.addEventListener('pointermove', e => {
+      const r = t.getBoundingClientRect();
+      t.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      t.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  /* ---------- DELIVERY TIMELINE ---------- */
+  const tl = document.querySelector('.tl');
+  if (tl) {
+    const bars = tl.querySelectorAll('.bar i'), dots = tl.querySelectorAll('.dot');
+    ScrollTrigger.create({ trigger: tl, start: 'top 85%', once: true, onEnter(){
+      const seq = gsap.timeline();
+      seq.add(() => dots[0].classList.add('on'))
+         .to(bars[0], { scaleX: 1, duration: .9, ease: 'power2.inOut' })
+         .add(() => dots[1].classList.add('on'))
+         .to(bars[1], { scaleX: 1, duration: .9, ease: 'power2.inOut' })
+         .add(() => dots[2].classList.add('on'));
+    }});
+  }
 
   /* ---------- STATS COUNT-UP ---------- */
   document.querySelectorAll('[data-count]').forEach(el=>{
