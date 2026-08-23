@@ -1,0 +1,17 @@
+# SMV — Singer Media Vision
+
+> Media production agency based in Dubai and Sharjah, United Arab Emirates. Event coverage, commercial videography, aerial filming and post-production for government summits, exhibitions and national celebrations, with same-day delivery.
+
+## Services
+- Event coverage (summits, exhibitions, ceremonies): https://ashrafselomotion-afk.github.io/smv-cinematic/#services
+- Commercial and brand films: https://ashrafselomotion-afk.github.io/smv-cinematic/#services
+- Aerial / drone filming: https://ashrafselomotion-afk.github.io/smv-cinematic/#services
+- Post-production, editing and color grading: https://ashrafselomotion-afk.github.io/smv-cinematic/#services
+
+## Locations
+Dubai (A34, Design District) and Sharjah (Media City FZ); crews deploy UAE-wide.
+
+## Contact
+- Website: https://ashrafselomotion-afk.github.io/smv-cinematic/
+- Email: mustafasinger@smv.ae
+- Brief form: https://ashrafselomotion-afk.github.io/smv-cinematic/#brief

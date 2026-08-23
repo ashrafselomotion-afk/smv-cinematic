@@ -1,0 +1,4 @@
+Contact: mailto:mustafasinger@smv.ae
+Expires: 2027-08-31T00:00:00.000Z
+Preferred-Languages: en, ar
+Canonical: https://ashrafselomotion-afk.github.io/smv-cinematic/.well-known/security.txt
