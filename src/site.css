@@ -210,7 +210,7 @@ section,footer,.marquee{position:relative;z-index:1}
 @media (max-width:560px){#services .grid{grid-template-columns:1fr}#services .card{aspect-ratio:4/3}}
 
 /* ---------- WHY SMV (bento) ---------- */
-#why h2{font-size:clamp(44px,7.5vw,110px);line-height:.95;margin:18px 0 0}
+#why h2,#productions h2,#faq h2{font-size:clamp(44px,7.5vw,110px);line-height:.95;margin:18px 0 0}
 .rule{display:flex;align-items:center;gap:0;margin:34px 0 0;max-width:180px}
 .rule::before{content:'';flex:1;height:1px;background:var(--ink);opacity:.7}
 .rule::after{content:'';width:7px;height:7px;border:1px solid var(--ink);margin-left:10px}
