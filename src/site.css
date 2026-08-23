@@ -253,17 +253,17 @@ section,footer,.marquee{position:relative;z-index:1}
   mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 #clients .track{display:inline-flex;will-change:transform;animation:lmq 34s linear infinite}
 #clients .marq:hover .track{animation-play-state:paused}
-#clients .unit{display:inline-flex;align-items:center;gap:6vw;padding-right:6vw}
+#clients .unit{display:inline-flex;align-items:center;gap:16px;padding-right:16px}
 @keyframes lmq{to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){#clients .track{animation:none}}
-#clients .clogo{--lh:clamp(54px,7vw,84px);height:var(--lh);flex:none;
+#clients .clogo{--lh:clamp(44px,5vw,60px);height:var(--lh);flex:none;
   color:var(--logo);transition:color .35s,transform .35s}
-#clients .unit .clogo:nth-child(1){width:calc(var(--lh)*3.125)}
-#clients .unit .clogo:nth-child(2){width:calc(var(--lh)*3.5)}
-#clients .unit .clogo:nth-child(3){width:calc(var(--lh)*2.875)}
-#clients .unit .clogo:nth-child(4){width:calc(var(--lh)*4)}
-#clients .unit .clogo:nth-child(5){width:calc(var(--lh)*2.375)}
-#clients .unit .clogo:nth-child(6){width:calc(var(--lh)*2.125)}
+#clients .unit .lcard:nth-child(1) .clogo{width:calc(var(--lh)*3.125)}
+#clients .unit .lcard:nth-child(2) .clogo{width:calc(var(--lh)*3.5)}
+#clients .unit .lcard:nth-child(3) .clogo{width:calc(var(--lh)*2.875)}
+#clients .unit .lcard:nth-child(4) .clogo{width:calc(var(--lh)*4)}
+#clients .unit .lcard:nth-child(5) .clogo{width:calc(var(--lh)*2.375)}
+#clients .unit .lcard:nth-child(6) .clogo{width:calc(var(--lh)*2.125)}
 #clients .clogo:hover{color:var(--hot);transform:translateY(-3px)}
 #clients .clogo text{font-family:var(--display);fill:currentColor;letter-spacing:.06em}
 #clients .clogo .sub{font-family:var(--mono);letter-spacing:.34em}
@@ -283,10 +283,6 @@ section,footer,.marquee{position:relative;z-index:1}
 
 /* ---------- CTA / CONTACT ---------- */
 #contact{position:relative;text-align:center;padding:160px var(--gutter) 60px;overflow:hidden}
-#contact .bloom{position:absolute;left:50%;top:44%;width:clamp(520px,64vw,980px);height:auto;
-  transform:translate(-50%,-50%);pointer-events:none;z-index:0;opacity:.9;overflow:visible}
-:root[data-theme="light"] #contact .bloom{opacity:.55}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) #contact .bloom{opacity:.55}}
 #contact .label{position:relative}
 #contact h2{position:relative;font-size:clamp(46px,8.2vw,120px);line-height:.98;margin:26px 0 54px;color:var(--ink)}
 #contact .btns{position:relative;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
@@ -457,3 +453,69 @@ html.gl #hero .mid{pointer-events:none}
 #rpMute{padding:10px 14px;border:1px solid rgba(255,255,255,.25);border-radius:999px;color:#fff;font-family:var(--mono);font-size:9.5px;letter-spacing:.22em}
 #rpMute.off{color:var(--dim)}
 @media (prefers-reduced-motion:reduce){.hud .rec{animation:none}}
+
+/* ====================== LIBRARY COMPONENT PORTS ====================== */
+/* Aceternity · Flip Words */
+.flipline{margin-top:22px;font-family:var(--display);font-size:clamp(20px,2.6vw,34px);letter-spacing:.04em;color:rgba(255,255,255,.85);display:flex;justify-content:center;gap:.35em;align-items:baseline}
+.flipw{display:inline-block;min-width:7.5ch;text-align:left;color:var(--hot-fill)}
+.flipw span{display:inline-block;will-change:transform,filter,opacity}
+/* Magic UI · Animated Shiny Text */
+.tagbox.shiny span{background:linear-gradient(110deg,rgba(255,255,255,.82) 0%,rgba(255,255,255,.82) 40%,#fff 50%,rgba(255,255,255,.82) 60%,rgba(255,255,255,.82) 100%);background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 3s linear infinite}
+@keyframes shine{to{background-position:-250% 0}}
+/* Aceternity · Hover Border Gradient */
+@property --hbg{syntax:'<angle>';inherits:false;initial-value:0deg}
+.hbg{position:relative;padding:0!important;border:0!important;background:transparent!important;overflow:visible!important}
+.hbg::before{content:'';position:absolute;inset:-1px;border-radius:999px;background:conic-gradient(from var(--hbg),rgba(255,255,255,.15) 0 60%,var(--hot-fill) 78%,#ffb38a 86%,rgba(255,255,255,.15) 100%);
+  animation:hbgspin 3.5s linear infinite;opacity:.9;transition:opacity .3s}
+.hbg:hover::before{opacity:1;animation-duration:1.2s}
+.hbg-in{position:relative;display:inline-flex;align-items:center;gap:12px;padding:14px 24px;border-radius:999px;background:#111418;color:#fff;z-index:1}
+#contact .btn.ghost.hbg .hbg-in{padding:20px 38px;color:var(--ink);background:var(--bg)}
+@keyframes hbgspin{to{--hbg:360deg}}
+/* Magic UI · Shimmer Button */
+.shimmer{position:relative;overflow:hidden;isolation:isolate;box-shadow:inset 0 -6px 12px -8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.35)}
+.shimmer::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);animation:shimmer 2.8s ease-in-out infinite;z-index:-1}
+@keyframes shimmer{60%,100%{transform:translateX(120%)}}
+/* Magic UI · Grid / Dot Pattern backdrops */
+#reels{position:relative}
+#reels::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(60% 55% at 50% 40%,#000 30%,transparent 100%);mask-image:radial-gradient(60% 55% at 50% 40%,#000 30%,transparent 100%);opacity:.5}
+#faq,#stats{position:relative}
+#faq::before,#stats::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(var(--dim) 1px,transparent 1.2px);background-size:22px 22px;opacity:.18;
+  -webkit-mask-image:radial-gradient(55% 60% at 50% 50%,#000 20%,transparent 100%);mask-image:radial-gradient(55% 60% at 50% 50%,#000 20%,transparent 100%)}
+/* Aceternity · Focus Cards (reels) */
+@media (hover:hover) and (pointer:fine){
+  .reel{transition:transform .4s,border-color .4s,filter .45s,opacity .45s}
+  .reel-grid:hover .reel:not(:hover){filter:blur(2px) saturate(.7);opacity:.45}
+}
+/* Aceternity · Direction Aware Hover (services) */
+#services .card .dah{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
+  background:linear-gradient(160deg,rgba(224,101,47,.55),rgba(224,101,47,.05) 60%,transparent)}
+#services .card .inner{transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+#services .card:hover .inner{transform:translateY(-6px)}
+/* Aceternity · Glowing Effect (bento borders) + Magic UI · Border Beam */
+.tile{--ang:0deg;--glow:0}
+.tile::after{content:'';position:absolute;inset:0;border-radius:22px;padding:1.5px;pointer-events:none;opacity:var(--glow);transition:opacity .4s;
+  background:conic-gradient(from var(--ang),transparent 0 70%,var(--hot-fill) 82%,#ffd2b8 88%,transparent 96%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+@property --beam{syntax:'<angle>';inherits:false;initial-value:0deg}
+.tile.beam::before{opacity:1;background:none}
+.tile.beam::after{opacity:1;background:conic-gradient(from var(--beam),transparent 0 80%,var(--hot-fill) 92%,transparent 100%);animation:beam 6s linear infinite}
+@keyframes beam{to{--beam:360deg}}
+/* Aceternity · Infinite Moving Cards (clients) */
+.lcard{flex:none;display:grid;place-items:center;padding:22px 28px;border:1px solid var(--line);border-radius:18px;background:var(--tile);transition:border-color .35s,transform .35s}
+.lcard:hover{border-color:rgba(224,101,47,.5);transform:translateY(-3px)}
+/* Aceternity · Lamp Effect (contact) */
+.lamp{position:relative;height:clamp(180px,28vw,320px);margin:-40px auto 0;max-width:900px;pointer-events:none;overflow:visible}
+.lamp .l1,.lamp .l2{position:absolute;bottom:36%;width:50%;height:100%;opacity:0;transform-origin:bottom;filter:blur(2px)}
+.lamp .l1{right:50%;background:conic-gradient(from 70deg at calc(100% - 1px) 100%,var(--hot-fill) 0deg,transparent 48deg);-webkit-mask-image:linear-gradient(180deg,#000 10%,transparent 95%);mask-image:linear-gradient(180deg,#000 10%,transparent 95%)}
+.lamp .l2{left:50%;background:conic-gradient(from 290deg at 1px 100%,transparent 312deg,var(--hot-fill) 360deg);-webkit-mask-image:linear-gradient(180deg,#000 10%,transparent 95%);mask-image:linear-gradient(180deg,#000 10%,transparent 95%)}
+.lamp .bar{position:absolute;left:50%;bottom:36%;width:0;height:2px;background:#ffd2b8;transform:translateX(-50%);box-shadow:0 0 24px 4px rgba(224,101,47,.8)}
+.lamp .glow{position:absolute;left:50%;bottom:36%;width:0;height:40px;transform:translate(-50%,50%);border-radius:50%;background:var(--hot-fill);filter:blur(36px);opacity:.7}
+.lamp+.label{margin-top:-60px}
+#contact{overflow:visible}
+/* Aceternity · Floating Navbar */
+#nav{transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .4s}
+html.nav-hide #nav{transform:translate(-50%,-150%);opacity:0}
+@media (prefers-reduced-motion:reduce){.hbg::before,.shimmer::after,.tagbox.shiny span,.tile.beam::after{animation:none}}

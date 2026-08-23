@@ -43,7 +43,7 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"Singer Media Vision","alternateName":"SMV","url":"https://ashrafselomotion-afk.github.io/smv-cinematic/","image":"https://ashrafselomotion-afk.github.io/smv-cinematic/og.jpg","email":"mustafasinger@smv.ae","description":"Media production agency covering government summits, exhibitions and national celebrations across the UAE with same-day delivery.","areaServed":["Dubai","Sharjah","United Arab Emirates"],"address":[{"@type":"PostalAddress","streetAddress":"A34, Design District","addressLocality":"Dubai","addressCountry":"AE"},{"@type":"PostalAddress","streetAddress":"Media City FZ","addressLocality":"Sharjah","addressCountry":"AE"}],"foundingDate":"2016","knowsAbout":["Event coverage","Commercial videography","Aerial filming","Post-production","Color grading"]}
 </script>
-<link rel="stylesheet" href="assets/site.1bc69fe7.min.css">
+<link rel="stylesheet" href="assets/site.54f268fd.min.css">
 </head>
 <body>
 
@@ -66,7 +66,7 @@
     <a href="#contact">CONTACT</a>
   </div>
   <button id="themeBtn" type="button" aria-label="Toggle light and dark mode"></button>
-  <a class="cta" href="#contact">GET A PROPOSAL</a>
+  <a class="cta shimmer" href="#contact">GET A PROPOSAL</a>
   <button id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mmenu"><span></span></button>
 </nav>
 <div id="mmenu" aria-hidden="true">
@@ -88,10 +88,11 @@
   <video class="vid" muted loop playsinline preload="none" poster="media/hero-poster.webp" width="1280" height="720" aria-hidden="true"></video>
   <div class="shade"></div>
   <div class="mid">
-    <div class="tagbox reveal"><i></i>NOW BOOKING · 2026</div>
+    <div class="tagbox reveal shiny"><i></i><span>NOW BOOKING · 2026</span></div>
     <h1><span class="row" aria-hidden="true"><span class="ch">S</span><span class="ch">M</span><span class="ch">V</span><span class="ch dot"><i>.</i></span></span><span class="sr">SMV — Singer Media Vision, media production agency in Dubai and Sharjah</span></h1>
     <div class="tag reveal" id="heroTag" data-text="MEDIA PRODUCTION AGENCY">MEDIA PRODUCTION AGENCY</div>
-    <button class="reel-btn reveal" type="button" id="openShowreel" data-cursor="PLAY"><span class="tri"></span>PLAY SHOWREEL</button>
+    <div class="flipline reveal" aria-live="polite">WE FILM <span class="flipw"><span id="flipWord">SUMMITS</span></span></div>
+    <button class="reel-btn hbg reveal" type="button" id="openShowreel" data-cursor="PLAY"><span class="hbg-in"><span class="tri"></span>PLAY SHOWREEL</span></button>
   </div>
   <div class="hud" aria-hidden="true">
     <span class="hud-tl"><i class="rec"></i>REC</span>
@@ -313,14 +314,17 @@
   <div class="marq reveal" id="logoMarq"><div class="track"><div class="unit">
 
     <!-- ADNEC — pavilion emblem -->
+    <div class="lcard">
     <svg class="clogo" viewBox="0 0 250 80" role="img" aria-label="ADNEC">
       <path class="fl" d="M8 58 L26 18 L44 58 L36 58 L26 34 L16 58 Z"/>
       <rect class="fl" x="22" y="62" width="8" height="4"/>
       <text x="60" y="56" font-size="38">ADNEC</text>
       <text class="sub" x="61" y="72" font-size="8">VENUES · ABU DHABI</text>
     </svg>
+    </div>
 
     <!-- SHUROOQ — sunrise emblem -->
+    <div class="lcard">
     <svg class="clogo" viewBox="0 0 280 80" role="img" aria-label="Shurooq">
       <path class="ln" d="M10 58 A18 18 0 0 1 46 58" stroke-width="5"/>
       <line class="ln" x1="28" y1="22" x2="28" y2="30" stroke-width="4"/>
@@ -330,8 +334,10 @@
       <text x="66" y="56" font-size="38">SHUROOQ</text>
       <text class="sub" x="67" y="72" font-size="8">SHARJAH</text>
     </svg>
+    </div>
 
     <!-- DUBAI DESIGN WEEK — stacked grid lockup -->
+    <div class="lcard">
     <svg class="clogo" viewBox="0 0 230 80" role="img" aria-label="Dubai Design Week">
       <rect class="ln" x="4" y="8" width="52" height="64" stroke-width="3"/>
       <text x="14" y="32" font-size="18">DXB</text>
@@ -341,30 +347,37 @@
       <text x="70" y="58" font-size="24">DESIGN</text>
       <text class="sub" x="71" y="72" font-size="9">WEEK</text>
     </svg>
+    </div>
 
     <!-- KHORFAKKAN — mountains & bay emblem -->
+    <div class="lcard">
     <svg class="clogo" viewBox="0 0 320 80" role="img" aria-label="Khorfakkan">
       <path class="fl" d="M4 52 L20 24 L30 40 L40 18 L58 52 Z"/>
       <path class="ln" d="M4 62 Q16 56 30 62 Q44 68 58 62" stroke-width="4"/>
       <text x="72" y="56" font-size="34">KHORFAKKAN</text>
       <text class="sub" x="73" y="72" font-size="8">SHARJAH · EAST COAST</text>
     </svg>
+    </div>
 
     <!-- WIC — monogram emblem -->
+    <div class="lcard">
     <svg class="clogo" viewBox="0 0 190 80" role="img" aria-label="WIC">
       <circle class="ln" cx="34" cy="40" r="27" stroke-width="4"/>
       <text x="16" y="52" font-size="30">W</text>
       <text x="76" y="56" font-size="38">WIC</text>
       <text class="sub" x="77" y="72" font-size="8">CONGRESS</text>
     </svg>
+    </div>
 
     <!-- SIF — pennant emblem -->
+    <div class="lcard">
     <svg class="clogo" viewBox="0 0 170 80" role="img" aria-label="SIF">
       <line class="ln" x1="12" y1="14" x2="12" y2="66" stroke-width="5"/>
       <path class="fl" d="M18 16 L58 26 L18 40 Z"/>
       <text x="74" y="56" font-size="38">SIF</text>
       <text class="sub" x="75" y="72" font-size="8">FORUM</text>
     </svg>
+    </div>
 
   </div></div></div>
 </section>
@@ -395,23 +408,12 @@
 
 <!-- CTA -->
 <section id="contact" data-chapter="CONTACT">
-  <svg class="bloom" viewBox="0 0 600 600" aria-hidden="true">
-    <defs>
-      <filter id="bloomF" x="-70%" y="-70%" width="240%" height="240%" color-interpolation-filters="sRGB">
-        <feTurbulence id="bloomNoise" type="fractalNoise" baseFrequency="0.006" numOctaves="2" seed="7" result="n"/>
-        <feDisplacementMap id="bloomDisp" in="SourceGraphic" in2="n" scale="90" xChannelSelector="R" yChannelSelector="G"/>
-        <feGaussianBlur stdDeviation="30"/>
-      </filter>
-    </defs>
-    <g id="bloomG" filter="url(#bloomF)" transform-origin="300 300">
-      <ellipse cx="300" cy="300" rx="175" ry="125" fill="#E0652F" opacity=".3"/>
-    </g>
-  </svg>
+  <div class="lamp" aria-hidden="true"><i class="l1"></i><i class="l2"></i><i class="bar"></i><i class="glow"></i></div>
   <div class="label reveal"><span class="n">06</span> — NEXT PRODUCTION</div>
   <h2 class="wipe" data-speed="0.95">LET'S CREATE<br>SOMETHING<br>UNFORGETTABLE</h2>
   <div class="btns reveal">
-    <a class="btn hot" href="#brief">START A BRIEF</a>
-    <a class="btn ghost" href="https://wa.me/9710000000000" target="_blank" rel="noopener">WHATSAPP →</a>
+    <a class="btn hot shimmer" href="#brief">START A BRIEF</a>
+    <a class="btn ghost hbg" href="https://wa.me/9710000000000" target="_blank" rel="noopener"><span class="hbg-in">WHATSAPP →</span></a>
   </div>
   <p id="sentMsg" hidden>✓ BRIEF RECEIVED — WE'LL REPLY WITHIN 24 HOURS</p>
   <form id="brief" class="reveal" action="https://formsubmit.co/mustafasinger@smv.ae" method="POST">
@@ -434,7 +436,7 @@
     </div>
     <div class="row">
       <span class="note">Replies within 24h · Dubai &amp; Sharjah</span>
-      <button type="submit">SEND BRIEF →</button>
+      <button type="submit" class="shimmer">SEND BRIEF →</button>
     </div>
   </form>
   <br>
@@ -482,7 +484,7 @@
 <script defer src="assets/vendor/ScrollSmoother.min.js"></script>
 <script defer src="assets/vendor/SplitText.min.js"></script>
 <script defer src="assets/vendor/Flip.min.js"></script>
-<script defer src="assets/site.f06ef4e5.min.js"></script>
+<script defer src="assets/site.9e812fa8.min.js"></script>
 <script type="module" src="assets/space.74e08b31.min.js"></script>
 </body>
 </html>

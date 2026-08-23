@@ -223,7 +223,8 @@
     gsap.to('#hero h1 .ch', { y:0, duration:1.1, ease:'power4.out', stagger:.08 });
     gsap.fromTo('#hero h1 .row', { '--sweep':'120%' }, { '--sweep':'-20%', duration:1.4, delay:.9, ease:'power2.inOut' });
     gsap.to('#hero .tag', { opacity:1, y:0, duration:.8, delay:.6, ease:'power3.out', onStart(){ scramble(document.getElementById('heroTag'), 900); } });
-    gsap.from('#hero .meta, #hero .scrolldn, #nav', { opacity:0, y:16, duration:1, delay:.9, ease:'power3.out' });
+    gsap.fromTo('#hero .meta, #hero .scrolldn', { opacity:0, y:16 }, { opacity:1, y:0, duration:1, delay:.9, ease:'power3.out' });
+    gsap.fromTo('#nav', { opacity:0, y:16 }, { opacity:1, y:0, duration:1, delay:.9, ease:'power3.out', clearProps:'all' });
   }
 
   /* ---------- FILM LEADER (3·2·1 countdown, letterbox opens onto the hero) ---------- */
@@ -333,21 +334,6 @@
   });
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { revealHeads(); ScrollTrigger.refresh(); });
 
-  /* ---------- MORPHING ORANGE BLOOM (CTA) ---------- */
-  const bloomG = document.getElementById('bloomG');
-  if (bloomG) {
-    const noise = document.getElementById('bloomNoise');
-    const disp  = document.getElementById('bloomDisp');
-    const bloomTweens = [
-      gsap.to(bloomG, { rotation: 360, duration: 90, ease: 'none', repeat: -1, transformOrigin: '300px 300px' }),
-      gsap.to(bloomG, { scale: 1.18, duration: 7, ease: 'sine.inOut', yoyo: true, repeat: -1, transformOrigin: '300px 300px' }),
-      gsap.to(noise, { attr: { baseFrequency: 0.010 }, duration: 9, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
-      gsap.to(disp,  { attr: { scale: 130 }, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1 })
-    ];
-    new IntersectionObserver(([e]) => bloomTweens.forEach(t => e.isIntersecting ? t.play() : t.pause()))
-      .observe(document.getElementById('contact'));
-  }
-
   /* ---------- STROKE-DRAW client emblems ---------- */
   const strokes = document.querySelectorAll('#clients .clogo .ln');
   const fills   = document.querySelectorAll('#clients .clogo .fl');
@@ -374,6 +360,54 @@
          .add(() => dots[2].classList.add('on'));
     }});
   }
+
+  /* ---------- Aceternity · Flip Words ---------- */
+  const flipEl = document.getElementById('flipWord');
+  if (flipEl) {
+    const WORDS = ['SUMMITS','LAUNCHES','CELEBRATIONS','EXHIBITIONS','CEREMONIES','CAMPAIGNS']; let wi = 0;
+    (function cycle(){ gsap.delayedCall(2.4, () => {
+      gsap.to(flipEl, { y:-14, opacity:0, filter:'blur(8px)', duration:.4, ease:'power2.in', onComplete(){
+        wi = (wi+1) % WORDS.length; flipEl.textContent = WORDS[wi];
+        gsap.fromTo(flipEl, { y:14, opacity:0, filter:'blur(8px)' }, { y:0, opacity:1, filter:'blur(0px)', duration:.55, ease:'power3.out', onComplete:cycle });
+      } });
+    }); })();
+  }
+
+  /* ---------- Aceternity · Direction Aware Hover (services) ---------- */
+  if (document.documentElement.classList.contains('cur')) document.querySelectorAll('#services .card').forEach(card => {
+    const ov = document.createElement('span'); ov.className = 'dah'; card.appendChild(ov);
+    const dir = e => { const r = card.getBoundingClientRect(); const x = (e.clientX - r.left - r.width/2) * (r.width > r.height ? r.height/r.width : 1); const y = e.clientY - r.top - r.height/2;
+      const d = Math.round(((Math.atan2(y, x) * 180 / Math.PI) + 180) / 90 + 3) % 4; return d; };  // 0 top 1 right 2 bottom 3 left
+    const vec = d => [[0,-100],[100,0],[0,100],[-100,0]][d];
+    card.addEventListener('pointerenter', e => { const v = vec(dir(e)); gsap.fromTo(ov, { xPercent:v[0], yPercent:v[1], opacity:1 }, { xPercent:0, yPercent:0, duration:.45, ease:'power3.out', overwrite:true }); });
+    card.addEventListener('pointerleave', e => { const v = vec(dir(e)); gsap.to(ov, { xPercent:v[0], yPercent:v[1], opacity:0, duration:.4, ease:'power3.in', overwrite:true }); });
+  });
+
+  /* ---------- Aceternity · Glowing Effect (bento borders follow the pointer) ---------- */
+  const why = document.getElementById('why'), tilesAll = gsap.utils.toArray('.tile');
+  if (why && tilesAll.length) {
+    tilesAll[0].classList.add('beam');
+    why.addEventListener('pointermove', e => tilesAll.forEach(t => {
+      if (t.classList.contains('beam')) return;
+      const r = t.getBoundingClientRect(), cx = r.left + r.width/2, cy = r.top + r.height/2;
+      const dx = e.clientX - cx, dy = e.clientY - cy, dist = Math.hypot(Math.max(0, Math.abs(dx) - r.width/2), Math.max(0, Math.abs(dy) - r.height/2));
+      t.style.setProperty('--ang', (Math.atan2(dy, dx) * 180 / Math.PI + 90) + 'deg');
+      t.style.setProperty('--glow', dist < 160 ? 1 : 0);
+    }), { passive:true });
+    why.addEventListener('pointerleave', () => tilesAll.forEach(t => t.style.setProperty('--glow', 0)));
+  }
+
+  /* ---------- Aceternity · Lamp Effect (contact) ---------- */
+  const lamp = document.querySelector('.lamp');
+  if (lamp) {
+    const tl = gsap.timeline({ scrollTrigger:{ trigger:lamp, start:'top 75%', once:true } });
+    tl.to(lamp.querySelectorAll('.l1,.l2'), { opacity:1, duration:1.2, ease:'power2.out' }, 0)
+      .fromTo(lamp.querySelector('.bar'), { width:0 }, { width:'min(30rem,70vw)', duration:1.1, ease:'power3.inOut' }, .1)
+      .fromTo(lamp.querySelector('.glow'), { width:0 }, { width:'min(18rem,50vw)', duration:1.1, ease:'power3.inOut' }, .1);
+  }
+
+  /* ---------- Aceternity · Floating Navbar (hide on scroll down, show on up) ---------- */
+  ScrollTrigger.create({ start:0, end:'max', onUpdate(self){ document.documentElement.classList.toggle('nav-hide', self.direction === 1 && self.scroll() > 600); } });
 
   /* ---------- STATS COUNT-UP ---------- */
   document.querySelectorAll('[data-count]').forEach(el=>{
