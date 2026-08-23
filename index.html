@@ -34,7 +34,7 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"Singer Media Vision","alternateName":"SMV","url":"https://ashrafselomotion-afk.github.io/smv-cinematic/","image":"https://ashrafselomotion-afk.github.io/smv-cinematic/og.jpg","email":"mustafasinger@smv.ae","description":"Media production agency covering government summits, exhibitions and national celebrations across the UAE with same-day delivery.","areaServed":["Dubai","Sharjah","United Arab Emirates"],"address":[{"@type":"PostalAddress","streetAddress":"A34, Design District","addressLocality":"Dubai","addressCountry":"AE"},{"@type":"PostalAddress","streetAddress":"Media City FZ","addressLocality":"Sharjah","addressCountry":"AE"}],"foundingDate":"2016","knowsAbout":["Event coverage","Commercial videography","Aerial filming","Post-production","Color grading"]}
 </script>
-<link rel="stylesheet" href="assets/site.af09aeff.min.css">
+<link rel="stylesheet" href="assets/site.8e1813ea.min.css">
 </head>
 <body>
 
@@ -89,9 +89,8 @@
     <h2 class="wipe">THE REELS</h2>
     <a class="cta-link reveal" href="#contact">BOOK A SHOOT <span class="arr">→</span></a>
   </div>
-  <div class="reel-wrap reveal">
-    <button class="reel-nav prev" type="button" id="reelPrev" aria-label="Previous reels">←</button>
-    <div class="reel-track" id="reelTrack" aria-label="Showreel gallery">
+  <div class="reel-wrap">
+    <div class="reel-grid" id="reelTrack" aria-label="Showreel gallery">
     <figure class="reel" tabindex="0" role="button" aria-label="Play reel: GOV SUMMIT 2024">
       <video muted loop playsinline preload="none" poster="media/reels/r01.webp" data-src="media/reels/r01.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">01 / EVENT</span><h3>GOV SUMMIT 2024</h3></figcaption><span class="play" aria-hidden="true">▶</span>
@@ -152,8 +151,11 @@
       <video muted loop playsinline preload="none" poster="media/reels/r15.webp" data-src="media/reels/r15.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">15 / EVENT</span><h3>SUMMER FESTIVAL</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
+    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: BRAND STORY">
+      <video muted loop playsinline preload="none" poster="media/reels/r16.webp" data-src="media/reels/r16.mp4" width="540" height="960" aria-hidden="true"></video>
+      <figcaption><span class="label">16 / COMMERCIAL</span><h3>BRAND STORY</h3></figcaption><span class="play" aria-hidden="true">▶</span>
+    </figure>
     </div>
-    <button class="reel-nav next" type="button" id="reelNext" aria-label="Next reels">→</button>
   </div>
 </section>
 
@@ -181,6 +183,26 @@
       <img loading="lazy" decoding="async" src="assets/img/svc-post.webp" srcset="assets/img/svc-post-640.webp 640w, assets/img/svc-post.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Post and color — edit suite">
       <span class="k label">/04</span>
       <div class="inner"><h3>POST &amp;<br>COLOR</h3><span class="arr">→</span></div>
+    </a>
+    <a class="card reveal" href="#contact">
+      <img loading="lazy" decoding="async" src="assets/img/svc-live.webp" srcset="assets/img/svc-live-640.webp 640w, assets/img/svc-live.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="534" alt="Live streaming — multi-camera broadcast setup">
+      <span class="k label">/05</span>
+      <div class="inner"><h3>LIVE<br>STREAMING</h3><span class="arr">→</span></div>
+    </a>
+    <a class="card reveal" href="#contact">
+      <img loading="lazy" decoding="async" src="assets/img/svc-photo.webp" srcset="assets/img/svc-photo-640.webp 640w, assets/img/svc-photo.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1000" alt="Photography — camera and lenses">
+      <span class="k label">/06</span>
+      <div class="inner"><h3>EVENT<br>PHOTOGRAPHY</h3><span class="arr">→</span></div>
+    </a>
+    <a class="card reveal" href="#contact">
+      <img loading="lazy" decoding="async" src="assets/img/svc-social.webp" srcset="assets/img/svc-social-640.webp 640w, assets/img/svc-social.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="534" alt="Social content — creator with laptop and phone">
+      <span class="k label">/07</span>
+      <div class="inner"><h3>SOCIAL<br>CONTENT</h3><span class="arr">→</span></div>
+    </a>
+    <a class="card reveal" href="#contact">
+      <img loading="lazy" decoding="async" src="assets/img/svc-motion.webp" srcset="assets/img/svc-motion-640.webp 640w, assets/img/svc-motion.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1000" alt="Motion graphics — design system on screen">
+      <span class="k label">/08</span>
+      <div class="inner"><h3>MOTION<br>GRAPHICS</h3><span class="arr">→</span></div>
     </a>
   </div>
 </section>
@@ -396,7 +418,7 @@
 <div id="lb" role="dialog" aria-modal="true" aria-label="Project video" aria-hidden="true">
   <div class="lb-bg"></div>
   <div class="lb-box">
-    <div class="lb-top"><span id="lbCount">01 / 15</span><button type="button" id="lbClose">CLOSE ✕</button></div>
+    <div class="lb-top"><span id="lbCount">01 / 16</span><button type="button" id="lbClose">CLOSE ✕</button></div>
     <video id="lbVideo" controls playsinline preload="none"></video>
     <div class="lb-meta">
       <div><div class="label" id="lbLabel"></div><h3 id="lbTitle"></h3><p id="lbDesc"></p></div>
@@ -420,7 +442,7 @@
 
 <script defer src="assets/vendor/gsap.min.js"></script>
 <script defer src="assets/vendor/ScrollTrigger.min.js"></script>
-<script defer src="assets/site.b46a9cf0.min.js"></script>
+<script defer src="assets/site.8f1a8c7c.min.js"></script>
 <script type="module" src="assets/space.ef649cdb.min.js"></script>
 </body>
 </html>

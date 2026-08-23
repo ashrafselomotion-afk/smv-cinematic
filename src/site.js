@@ -30,9 +30,8 @@
   const reels = [...track.querySelectorAll('.reel')];
   const REELS = reels.map(f => ({ title: f.querySelector('h3').textContent, label: f.querySelector('.label').textContent,
                                   src: f.querySelector('video').dataset.src, poster: f.querySelector('video').poster }));
-  let dragged = false;
   reels.forEach((f, i) => {
-    f.addEventListener('click', () => { if (!dragged) openLB(i); });
+    f.addEventListener('click', () => openLB(i));
     f.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(i); } });
   });
   const vids = reels.map(f => f.querySelector('video'));
@@ -44,13 +43,6 @@
     else if (!v.paused) v.pause();
   }), { threshold: .5 });
   vids.forEach(v => { near.observe(v); vis.observe(v); });
-  const step = () => (reels[0].getBoundingClientRect().width + 18) * 2;
-  document.getElementById('reelPrev').addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
-  document.getElementById('reelNext').addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
-  let down = false, sx = 0, sl = 0;
-  track.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; dragged = false; sx = e.clientX; sl = track.scrollLeft; });
-  addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 6) { dragged = true; track.classList.add('drag'); } track.scrollLeft = sl - dx; });
-  addEventListener('pointerup', () => { if (!down) return; down = false; track.classList.remove('drag'); setTimeout(() => { dragged = false; }, 50); });
 
   /* ---------- LOGO MARQUEE (duplicate unit for seamless loop) ---------- */
   const logoTrack = document.querySelector('#logoMarq .track');
