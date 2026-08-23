@@ -46,7 +46,7 @@ try {
 
   const starsFar  = makePoints(420, 0xB8BCC6, 0.42, 95);
   const starsNear = makePoints(110, 0xE8E8EC, 0.8, 55);
-  const embers    = makePoints(16,  0xFF4A1F, 1.1, 70);
+  const embers    = makePoints(16,  0xD4A84B, 1.1, 70);
   const field = new THREE.Group();
   field.add(starsFar, starsNear, embers);
   scene.add(field);
@@ -58,8 +58,8 @@ try {
   }
   function applySceneTheme(){
     const light = themeIsLight();
-    starsFar.material.color.set(light ? 0x3A3A40 : 0xD8DCE6);
-    starsNear.material.color.set(light ? 0x1E1E22 : 0xFFFFFF);
+    starsFar.material.color.set(light ? 0x3A4560 : 0xD8DCE6);
+    starsNear.material.color.set(light ? 0x15213A : 0xFFFFFF);
     [starsFar, starsNear, embers].forEach(p => {
       p.material.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
       p.material.opacity = light ? 0.3 : 0.6;
