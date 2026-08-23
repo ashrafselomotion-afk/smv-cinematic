@@ -34,7 +34,7 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"Singer Media Vision","alternateName":"SMV","url":"https://ashrafselomotion-afk.github.io/smv-cinematic/","image":"https://ashrafselomotion-afk.github.io/smv-cinematic/og.jpg","email":"mustafasinger@smv.ae","description":"Media production agency covering government summits, exhibitions and national celebrations across the UAE with same-day delivery.","areaServed":["Dubai","Sharjah","United Arab Emirates"],"address":[{"@type":"PostalAddress","streetAddress":"A34, Design District","addressLocality":"Dubai","addressCountry":"AE"},{"@type":"PostalAddress","streetAddress":"Media City FZ","addressLocality":"Sharjah","addressCountry":"AE"}],"foundingDate":"2016","knowsAbout":["Event coverage","Commercial videography","Aerial filming","Post-production","Color grading"]}
 </script>
-<link rel="stylesheet" href="assets/site.5ec6764e.min.css">
+<link rel="stylesheet" href="assets/site.7ff18313.min.css">
 </head>
 <body>
 
@@ -72,8 +72,10 @@
   </div>
 </div>
 
+<div id="smooth-wrapper"><div id="smooth-content">
 <!-- HERO -->
 <section id="hero">
+  <canvas id="heroGL" aria-hidden="true"></canvas>
   <video class="vid" muted loop playsinline preload="none" poster="media/hero-poster.webp" width="1280" height="720" aria-hidden="true"></video>
   <div class="shade"></div>
   <div class="mid">
@@ -96,7 +98,7 @@
 <section id="reels" data-chapter="REELS">
   <div class="label reveal"><span class="n">01</span> — THE GALLERY</div>
   <div class="head">
-    <h2 class="wipe">THE REELS</h2>
+    <h2 class="wipe" data-speed="0.92">THE REELS</h2>
     <a class="cta-link reveal" href="#contact">BOOK A SHOOT <span class="arr">→</span></a>
   </div>
   <div class="reel-wrap">
@@ -172,44 +174,44 @@
 <!-- SERVICES -->
 <section id="services" data-chapter="SERVICES">
   <div class="label reveal"><span class="n">02</span> — WHAT WE DO</div>
-  <h2 class="wipe">OUR SERVICES</h2>
+  <h2 class="wipe" data-speed="0.92">OUR SERVICES</h2>
   <div class="grid">
-    <a class="card reveal" data-cursor="VIEW" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="1.06" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-event.webp" srcset="assets/img/svc-event-640.webp 640w, assets/img/svc-event.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Event coverage — concert stage lights">
       <span class="k label">/01</span>
       <div class="inner"><h3>EVENT<br>COVERAGE</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" data-cursor="VIEW" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="0.96" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-commercial.webp" srcset="assets/img/svc-commercial-640.webp 640w, assets/img/svc-commercial.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Commercial videography — cinema camera">
       <span class="k label">/02</span>
       <div class="inner"><h3>COMMERCIAL<br>VIDEOGRAPHY</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" data-cursor="VIEW" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="1.04" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-aerial.webp" srcset="assets/img/svc-aerial-640.webp 640w, assets/img/svc-aerial.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1071" alt="Aerial — drone view of a UAE coastline and desert highway">
       <span class="k label">/03</span>
       <div class="inner"><h3>AERIAL</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" data-cursor="VIEW" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="0.94" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-post.webp" srcset="assets/img/svc-post-640.webp 640w, assets/img/svc-post.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Post and color — edit suite">
       <span class="k label">/04</span>
       <div class="inner"><h3>POST &amp;<br>COLOR</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" data-cursor="VIEW" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="1.06" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-live.webp" srcset="assets/img/svc-live-640.webp 640w, assets/img/svc-live.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1071" alt="Live streaming — broadcast camera operator at a live stage event">
       <span class="k label">/05</span>
       <div class="inner"><h3>LIVE<br>STREAMING</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" data-cursor="VIEW" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="0.96" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-photo.webp" srcset="assets/img/svc-photo-640.webp 640w, assets/img/svc-photo.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1000" alt="Photography — camera and lenses">
       <span class="k label">/06</span>
       <div class="inner"><h3>EVENT<br>PHOTOGRAPHY</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" data-cursor="VIEW" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="1.04" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-social.webp" srcset="assets/img/svc-social-640.webp 640w, assets/img/svc-social.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="534" alt="Social content — creator with laptop and phone">
       <span class="k label">/07</span>
       <div class="inner"><h3>SOCIAL<br>CONTENT</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" data-cursor="VIEW" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="0.94" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-motion.webp" srcset="assets/img/svc-motion-640.webp 640w, assets/img/svc-motion.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1000" alt="Motion graphics — design system on screen">
       <span class="k label">/08</span>
       <div class="inner"><h3>MOTION<br>GRAPHICS</h3><span class="arr">→</span></div>
@@ -220,11 +222,11 @@
 <!-- WHY SMV (bento) -->
 <section id="why" data-chapter="WHY SMV">
   <div class="label reveal"><span class="n">03</span> — WHY SMV</div>
-  <h2 class="wipe">BUILT FOR THE<br>BIG STAGE</h2>
+  <h2 class="wipe" data-speed="0.92">BUILT FOR THE<br>BIG STAGE</h2>
   <div class="rule reveal"></div>
   <div class="grid">
 
-    <div class="tile w2 reveal">
+    <div class="tile w2 reveal" data-speed="1.04">
       <span class="k label">/01 · SPEED</span>
       <div class="tl"><span class="dot"></span><span class="bar"><i></i></span><span class="dot"></span><span class="bar"><i></i></span><span class="dot"></span></div>
       <div class="tl-l"><span>SHOOT</span><span>EDIT ON-SITE</span><span>DELIVER</span></div>
@@ -232,19 +234,19 @@
       <p>Edited on location and shipped while the event is still trending — reels, highlight films and press cuts, hours not days.</p>
     </div>
 
-    <div class="tile reveal">
+    <div class="tile reveal" data-speed="0.97">
       <span class="k label">/02 · TURNAROUND</span>
       <div class="big"><span data-count="24">0</span>H</div>
       <p>Average delivery window across summits, exhibitions and national celebrations.</p>
     </div>
 
-    <div class="tile reveal">
+    <div class="tile reveal" data-speed="1.03">
       <span class="k label">/03 · PROTOCOL</span>
       <h3>GOVERNMENT-GRADE</h3>
       <p>Accredited, protocol-aware crews experienced with official ceremonies, dignitaries and secure venues.</p>
     </div>
 
-    <div class="tile w2 reveal">
+    <div class="tile w2 reveal" data-speed="0.96">
       <span class="k label">/04 · COVERAGE</span>
       <svg class="map" viewBox="0 0 260 150" aria-hidden="true">
         <g class="g">
@@ -263,14 +265,14 @@
       <p>Crews based in both emirates, deployable to any venue in the country on short notice.</p>
     </div>
 
-    <div class="tile reveal">
+    <div class="tile reveal" data-speed="1.04">
       <span class="k label">/05 · DELIVERABLES</span>
       <h3>EVERY FORMAT,<br>EVERY SCREEN</h3>
       <p>Cinema-grade masters down to vertical social cuts.</p>
       <div class="specs"><span>4K</span><span>HDR</span><span>16:9</span><span>9:16</span><span>LED WALL</span></div>
     </div>
 
-    <div class="tile w2 reveal">
+    <div class="tile w2 reveal" data-speed="0.97">
       <span class="k label">/06 · CREW</span>
       <h3>FULL CREWS, ZERO GAPS</h3>
       <p>Directors, DOPs, drone pilots, sound, editors and colorists — one accountable team from brief to master, no hand-offs between vendors.</p>
@@ -367,7 +369,7 @@
     </g>
   </svg>
   <div class="label reveal"><span class="n">05</span> — NEXT PRODUCTION</div>
-  <h2 class="wipe">LET'S CREATE<br>SOMETHING<br>UNFORGETTABLE</h2>
+  <h2 class="wipe" data-speed="0.95">LET'S CREATE<br>SOMETHING<br>UNFORGETTABLE</h2>
   <div class="btns reveal">
     <a class="btn hot" href="#brief">START A BRIEF</a>
     <a class="btn ghost" href="https://wa.me/9710000000000" target="_blank" rel="noopener">WHATSAPP →</a>
@@ -400,17 +402,6 @@
   <a class="mail reveal" href="mailto:mustafasinger@smv.ae">MUSTAFASINGER@SMV.AE</a>
 </section>
 
-<div id="lb" role="dialog" aria-modal="true" aria-label="Project video" aria-hidden="true">
-  <div class="lb-bg"></div>
-  <div class="lb-box">
-    <div class="lb-top"><span id="lbCount">01 / 16</span><button type="button" id="lbClose">CLOSE ✕</button></div>
-    <video id="lbVideo" controls playsinline preload="none"></video>
-    <div class="lb-meta">
-      <div><div class="label" id="lbLabel"></div><h3 id="lbTitle"></h3><p id="lbDesc"></p></div>
-      <div class="lb-nav"><button type="button" id="lbPrev" aria-label="Previous project">←</button><button type="button" id="lbNext" aria-label="Next project">→</button></div>
-    </div>
-  </div>
-</div>
 
 <footer>
   <div class="wordmark">SMV<i>.</i></div>
@@ -424,10 +415,25 @@
     <span>DUBAI — SHARJAH · UAE</span>
   </div>
 </footer>
+</div></div>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Project video" aria-hidden="true">
+  <div class="lb-bg"></div>
+  <div class="lb-box">
+    <div class="lb-top"><span id="lbCount">01 / 16</span><button type="button" id="lbClose">CLOSE ✕</button></div>
+    <video id="lbVideo" controls playsinline preload="none"></video>
+    <div class="lb-meta">
+      <div><div class="label" id="lbLabel"></div><h3 id="lbTitle"></h3><p id="lbDesc"></p></div>
+      <div class="lb-nav"><button type="button" id="lbPrev" aria-label="Previous project">←</button><button type="button" id="lbNext" aria-label="Next project">→</button></div>
+    </div>
+  </div>
+</div>
+
 
 <script defer src="assets/vendor/gsap.min.js"></script>
 <script defer src="assets/vendor/ScrollTrigger.min.js"></script>
-<script defer src="assets/site.843fcada.min.js"></script>
-<script type="module" src="assets/space.ef649cdb.min.js"></script>
+<script defer src="assets/vendor/ScrollSmoother.min.js"></script>
+<script defer src="assets/vendor/SplitText.min.js"></script>
+<script defer src="assets/site.a499edc8.min.js"></script>
+<script type="module" src="assets/space.74e08b31.min.js"></script>
 </body>
 </html>

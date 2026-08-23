@@ -69,12 +69,25 @@
     if (document.readyState === 'complete') startVid(); else addEventListener('load', startVid, { once: true });
   }
 
+  window.__reduced = reduced;
   if (!hasGSAP || reduced) {
     document.documentElement.classList.remove('leader','cur');
     const ld = document.getElementById('leader'); if (ld) ld.style.display = 'none';
     return;
   }
   gsap.registerPlugin(ScrollTrigger);
+  if (window.ScrollSmoother) gsap.registerPlugin(ScrollSmoother);
+  if (window.SplitText) gsap.registerPlugin(SplitText);
+
+  /* ---------- INERTIAL SMOOTH SCROLL + DEPTH (data-speed parallax) ---------- */
+  let smoother = null;
+  if (window.ScrollSmoother && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    smoother = ScrollSmoother.create({ wrapper:'#smooth-wrapper', content:'#smooth-content', smooth:1.1, effects:true, smoothTouch:false });
+    document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href')); if (!t || a.id === 'openPortfolio') return;
+      e.preventDefault(); smoother.scrollTo(t, true, 'top 80px');
+    }));
+  }
 
   /* ---------- HERO INTRO (letters, light sweep, decoded tagline) ---------- */
   function scramble(el, dur){
@@ -175,8 +188,12 @@
   });
 
   /* ---------- HERO PARALLAX ---------- */
-  gsap.to('#hero .mid', { yPercent:-22, opacity:.3, ease:'none',
-    scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom top', scrub:true } });
+  /* pinned hero: the shader zooms through the letters while the DOM layers fade */
+  window.__heroProgress = 0;
+  ScrollTrigger.create({ trigger:'#hero', start:'top top', end:'+=140%', pin:true, scrub:.6, anticipatePin:1,
+    onUpdate(s){ window.__heroProgress = s.progress; } });
+  gsap.to('#hero .mid, #hero .meta, #hero .scrolldn', { yPercent:-14, opacity:0, ease:'none',
+    scrollTrigger:{ trigger:'#hero', start:'top top', end:'+=32%', scrub:true } });
 
   /* ---------- SCROLL REVEALS ---------- */
   document.querySelectorAll('.reveal').forEach(el=>{
@@ -184,29 +201,18 @@
       scrollTrigger:{ trigger:el, start:'top 88%' } });
   });
 
-  /* ---------- SVG CLIP-PATH WIPE on section titles ---------- */
-  const svgNS = 'http://www.w3.org/2000/svg';
-  const clipHost = document.createElementNS(svgNS, 'svg');
-  clipHost.setAttribute('width', '0'); clipHost.setAttribute('height', '0');
-  clipHost.style.position = 'absolute';
-  const clipDefs = document.createElementNS(svgNS, 'defs');
-  clipHost.appendChild(clipDefs); document.body.appendChild(clipHost);
-  document.querySelectorAll('h2.wipe').forEach((h, i) => {
-    const id = 'wipe' + i;
-    const cp = document.createElementNS(svgNS, 'clipPath');
-    cp.setAttribute('id', id); cp.setAttribute('clipPathUnits', 'objectBoundingBox');
-    const r = document.createElementNS(svgNS, 'rect');
-    r.setAttribute('x', '0'); r.setAttribute('y', '0'); r.setAttribute('width', '1'); r.setAttribute('height', '1');
-    cp.appendChild(r); clipDefs.appendChild(cp);
-    h.style.clipPath = 'url(#' + id + ')';
-    gsap.set(r, { scaleX: 0, transformOrigin: '0 0' });
-    gsap.set(h, { y: 24 });
-    ScrollTrigger.create({ trigger: h, start: 'top 86%', once: true, onEnter(){
-      gsap.to(r, { scaleX: 1, duration: 1.25, ease: 'power4.inOut' });
-      gsap.to(h, { y: 0, duration: 1.25, ease: 'power3.out',
-        onComplete(){ h.style.clipPath = ''; } });
-    }});
+  /* ---------- MASKED LINE REVEALS on section titles (SplitText) ---------- */
+  const headlines = gsap.utils.toArray('h2.wipe');
+  const revealHeads = () => headlines.forEach(h => {
+    let lines = null;
+    if (window.SplitText) { try { lines = SplitText.create(h, { type:'lines', mask:'lines', linesClass:'line' }).lines; } catch(e){} }
+    if (lines && lines.length) {
+      gsap.from(lines, { yPercent:115, rotate:2, duration:1.15, ease:'power4.out', stagger:.09, scrollTrigger:{ trigger:h, start:'top 86%', once:true } });
+    } else {
+      gsap.from(h, { y:40, opacity:0, duration:1, ease:'power3.out', scrollTrigger:{ trigger:h, start:'top 86%', once:true } });
+    }
   });
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { revealHeads(); ScrollTrigger.refresh(); });
 
   /* ---------- MORPHING ORANGE BLOOM (CTA) ---------- */
   const bloomG = document.getElementById('bloomG');
