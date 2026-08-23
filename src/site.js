@@ -69,6 +69,7 @@
       tryPlay();
       vid.addEventListener('canplay', tryPlay, { once: true });
       ['pointerdown','touchstart','keydown','scroll'].forEach(ev => addEventListener(ev, tryPlay, { once: true, passive: true }));
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) tryPlay(); });
     };
     if (document.readyState === 'complete') startVid(); else addEventListener('load', startVid, { once: true });
   }
