@@ -1,2 +1,1 @@
 (function(){try{var t=localStorage.getItem('smv-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}})();
-(function(){try{var r=matchMedia('(prefers-reduced-motion: reduce)').matches;var seen=sessionStorage.getItem('smv-leader');if(!r&&!seen){document.documentElement.classList.add('leader');sessionStorage.setItem('smv-leader','1')}if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!r)document.documentElement.classList.add('cur')}catch(e){}})();
