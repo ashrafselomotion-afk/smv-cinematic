@@ -46,7 +46,7 @@ try {
 
   const starsFar  = makePoints(420, 0xB8BCC6, 0.42, 95);
   const starsNear = makePoints(110, 0xE8E8EC, 0.8, 55);
-  const embers    = makePoints(16,  0xFF9B6A, 1.1, 70);
+  const embers    = makePoints(16,  0xE0652F, 1.1, 70);
   const field = new THREE.Group();
   field.add(starsFar, starsNear, embers);
   scene.add(field);
