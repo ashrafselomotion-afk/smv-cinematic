@@ -55,7 +55,7 @@ img,video{display:block;max-width:100%}
 h1,h2,h3{font-family:var(--display);text-transform:uppercase;font-weight:400}
 .label{font-family:var(--mono);font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--dim)}
 .label .n{color:var(--hot)}
-section{padding:120px 5vw}
+section{--gutter:max(5vw,calc((100% - 1040px)/2));padding:120px var(--gutter)}
 .reveal{opacity:0;transform:translateY(36px)}
 .no-anim .reveal{opacity:1;transform:none}
 
@@ -192,7 +192,7 @@ section,footer,.marquee{position:relative;z-index:1}
 .cta-link{font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--hot);display:inline-flex;align-items:center;gap:10px;margin-bottom:44px}
 .cta-link .arr{transition:transform .3s}
 .cta-link:hover .arr{transform:translateX(6px)}
-.reel-wrap{max-width:1040px;margin:0 auto}
+.reel-wrap{max-width:1040px;margin:0 auto;width:100%}
 .reel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
 .reel{aspect-ratio:9/16;border-radius:18px;overflow:hidden;position:relative;
   background:var(--panel);border:1px solid var(--line);cursor:pointer;transition:transform .4s,border-color .4s}
@@ -313,7 +313,7 @@ section,footer,.marquee{position:relative;z-index:1}
 @media (max-width:700px){#stats .row{grid-template-columns:repeat(2,1fr);gap:36px 6vw}}
 
 /* ---------- CTA / CONTACT ---------- */
-#contact{position:relative;text-align:center;padding:160px 5vw 60px;overflow:hidden}
+#contact{position:relative;text-align:center;padding:160px var(--gutter) 60px;overflow:hidden}
 #contact .bloom{position:absolute;left:50%;top:44%;width:clamp(520px,64vw,980px);height:auto;
   transform:translate(-50%,-50%);pointer-events:none;z-index:0;opacity:.9;overflow:visible}
 :root[data-theme="light"] #contact .bloom{opacity:.55}
@@ -331,7 +331,7 @@ section,footer,.marquee{position:relative;z-index:1}
 #contact .mail:hover{color:var(--hot)}
 
 /* ---------- FOOTER ---------- */
-footer{border-top:1px solid var(--line);padding:44px 5vw 34px;
+footer{border-top:1px solid var(--line);padding:44px max(5vw,calc((100% - 1040px)/2)) 34px;
   display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
 footer .wordmark{font-family:var(--display);font-size:20px}
 footer .wordmark i{font-style:normal;color:var(--hot)}
