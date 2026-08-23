@@ -361,16 +361,6 @@
     gsap.to(fills, { opacity: 1, duration: 1, delay: .8, ease: 'power2.out', stagger: .05 });
   }});
 
-  /* ---------- PRODUCTIONS: pinned horizontal filmstrip (desktop) ---------- */
-  const strip = document.getElementById('strip'), stripWrap = document.getElementById('stripWrap');
-  if (strip && matchMedia('(min-width:901px)').matches) {
-    const dist = () => Math.max(0, strip.scrollWidth - stripWrap.clientWidth);
-    gsap.to(strip, { x: () => -dist(), ease: 'none',
-      scrollTrigger: { trigger: '#productions', start: 'top 10%', end: () => '+=' + (dist() + 200), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1 } });
-    gsap.utils.toArray('.prod img').forEach(img => gsap.fromTo(img, { xPercent: -6 }, { xPercent: 6, ease: 'none',
-      scrollTrigger: { trigger: '#productions', start: 'top 10%', end: () => '+=' + (dist() + 200), scrub: true } }));
-  }
-
   /* ---------- DELIVERY TIMELINE ---------- */
   const tl = document.querySelector('.tl');
   if (tl) {
