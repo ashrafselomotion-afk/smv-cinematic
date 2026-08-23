@@ -23,30 +23,34 @@
   sysLight.addEventListener('change', paintThemeBtn);
   paintThemeBtn();
 
-  /* ---------- FEATURED WORK SWAP ---------- */
-  let featureIdx = 0, openLB = function(){}, closeLB = function(){};
-  const imgs = document.querySelectorAll('#featureBox img');
-  const items = document.querySelectorAll('#work .item');
-  const fLabel = document.getElementById('featureLabel');
-  const fTitle = document.getElementById('featureTitle');
-  function setFeature(i){
-    featureIdx = i;
-    imgs.forEach((im,k)=>im.classList.toggle('on', k===i));
-    items.forEach(it=>it.classList.toggle('active', +it.dataset.i===i));
-    if (i === 0) {
-      fLabel.textContent = '01 / FEATURED';
-      fTitle.textContent = 'GLOBAL BRAND COMMERCIAL';
-    } else {
-      const it = [...items].find(el => +el.dataset.i === i);
-      fLabel.textContent = it.querySelector('.num').textContent + ' / ' + it.querySelector('.cat').textContent.toUpperCase();
-      fTitle.textContent = it.querySelector('h3').textContent;
-    }
-  }
-  items.forEach(it=>{
-    it.addEventListener('mouseenter', ()=>setFeature(+it.dataset.i));
-    it.addEventListener('click', ()=>{ setFeature(+it.dataset.i); openLB(+it.dataset.i); });
+  /* ---------- REELS GALLERY (lazy sources, autoplay in view, drag + arrows) ---------- */
+  let openLB = function(){}, closeLB = function(){};
+  const saveData = !!(navigator.connection && navigator.connection.saveData);
+  const track = document.getElementById('reelTrack');
+  const reels = [...track.querySelectorAll('.reel')];
+  const REELS = reels.map(f => ({ title: f.querySelector('h3').textContent, label: f.querySelector('.label').textContent,
+                                  src: f.querySelector('video').dataset.src, poster: f.querySelector('video').poster }));
+  let dragged = false;
+  reels.forEach((f, i) => {
+    f.addEventListener('click', () => { if (!dragged) openLB(i); });
+    f.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(i); } });
   });
-  document.getElementById('workList').addEventListener('mouseleave', ()=>setFeature(0));
+  const vids = reels.map(f => f.querySelector('video'));
+  const attach = v => { if (!v.getAttribute('src')) { v.src = v.dataset.src; v.preload = 'metadata'; } };
+  const near = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { attach(e.target); near.unobserve(e.target); } }), { rootMargin: '300px' });
+  const vis = new IntersectionObserver(es => es.forEach(e => {
+    const v = e.target;
+    if (e.isIntersecting && !reduced && !saveData) { attach(v); const p = v.play(); if (p && p.catch) p.catch(()=>{}); }
+    else if (!v.paused) v.pause();
+  }), { threshold: .5 });
+  vids.forEach(v => { near.observe(v); vis.observe(v); });
+  const step = () => (reels[0].getBoundingClientRect().width + 18) * 2;
+  document.getElementById('reelPrev').addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  document.getElementById('reelNext').addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  let down = false, sx = 0, sl = 0;
+  track.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; dragged = false; sx = e.clientX; sl = track.scrollLeft; });
+  addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 6) { dragged = true; track.classList.add('drag'); } track.scrollLeft = sl - dx; });
+  addEventListener('pointerup', () => { if (!down) return; down = false; track.classList.remove('drag'); setTimeout(() => { dragged = false; }, 50); });
 
   /* ---------- LOGO MARQUEE (duplicate unit for seamless loop) ---------- */
   const logoTrack = document.querySelector('#logoMarq .track');
@@ -58,7 +62,6 @@
 
   /* ---------- HERO VIDEO: poster paints first (LCP); the loop loads after the page has loaded ---------- */
   const vid = document.querySelector('#hero .vid');
-  const saveData = !!(navigator.connection && navigator.connection.saveData);
   if (vid && !reduced && !saveData) {
     const startVid = () => {
       if (vid.getAttribute('src')) return;
@@ -156,25 +159,18 @@
   mmenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   addEventListener('keydown', e => { if (e.key === 'Escape') { setMenu(false); closeLB(); } });
 
-  /* ---------- PORTFOLIO LIGHTBOX ---------- */
-  /* PLACEHOLDER FOOTAGE — swap each `video` URL for the real project film */
-  const PROJECTS = [
-    { label:'01 / COMMERCIAL',         title:'GLOBAL BRAND COMMERCIAL', desc:'Brand film shot across three locations in a single week — cinema cameras, aerials and a full post pipeline.', video:'https://videos.pexels.com/video-files/2099568/2099568-hd_1920_1080_30fps.mp4' },
-    { label:'02 / EVENT COVERAGE',     title:'GOV SUMMIT 2024',         desc:'Two-day government summit: plenary, bilateral and ceremony coverage with same-day highlight films.', video:'https://videos.pexels.com/video-files/3129957/3129957-hd_1920_1080_25fps.mp4' },
-    { label:'03 / ARCHITECTURAL FILM', title:'LUXURY REAL ESTATE',      desc:'Architectural film for a waterfront development — golden-hour aerials, interiors, lifestyle.', video:'https://videos.pexels.com/video-files/2099568/2099568-hd_1920_1080_30fps.mp4' },
-    { label:'04 / COMMERCIAL',         title:'AUTOMOTIVE CAMPAIGN',     desc:'Launch campaign: hero film, 15-second cutdowns and vertical social edits from one shoot.', video:'https://videos.pexels.com/video-files/3129957/3129957-hd_1920_1080_25fps.mp4' }
-  ];
+  /* ---------- REEL LIGHTBOX ---------- */
   const lb = document.getElementById('lb'), lbVideo = document.getElementById('lbVideo');
   let lbIndex = 0, lastFocus = null;
   function showLB(i){
-    lbIndex = (i + PROJECTS.length) % PROJECTS.length;
-    const p = PROJECTS[lbIndex];
-    document.getElementById('lbLabel').textContent = p.label;
-    document.getElementById('lbTitle').textContent = p.title;
-    document.getElementById('lbDesc').textContent = p.desc;
-    document.getElementById('lbCount').textContent = String(lbIndex+1).padStart(2,'0') + ' / ' + String(PROJECTS.length).padStart(2,'0');
-    lbVideo.src = p.video; lbVideo.currentTime = 0;
-    lbVideo.play().catch(()=>{});
+    lbIndex = (i + REELS.length) % REELS.length;
+    const r = REELS[lbIndex];
+    document.getElementById('lbLabel').textContent = r.label;
+    document.getElementById('lbTitle').textContent = r.title;
+    document.getElementById('lbDesc').textContent = 'Vertical reel · 9:16 · sound on';
+    document.getElementById('lbCount').textContent = String(lbIndex+1).padStart(2,'0') + ' / ' + String(REELS.length).padStart(2,'0');
+    lbVideo.poster = r.poster; lbVideo.src = r.src; lbVideo.currentTime = 0; lbVideo.muted = false;
+    const p = lbVideo.play(); if (p && p.catch) p.catch(()=>{ lbVideo.muted = true; lbVideo.play().catch(()=>{}); });
   }
   openLB = function(i){
     lastFocus = document.activeElement;
@@ -194,10 +190,6 @@
   lb.querySelector('.lb-bg').addEventListener('click', closeLB);
   document.getElementById('lbPrev').addEventListener('click', () => showLB(lbIndex - 1));
   document.getElementById('lbNext').addEventListener('click', () => showLB(lbIndex + 1));
-  const featureBox = document.getElementById('featureBox');
-  featureBox.addEventListener('click', () => openLB(featureIdx));
-  featureBox.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(featureIdx); } });
-  document.getElementById('openPortfolio').addEventListener('click', e => { e.preventDefault(); openLB(0); });
 
   /* ---------- BRIEF SENT ---------- */
   if (location.search.includes('sent=1')) {
