@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark light">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' https://videos.pexels.com; font-src 'self'; connect-src 'self'; form-action 'self' https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; manifest-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' https://videos.pexels.com; font-src 'self'; connect-src 'self'; form-action 'self' https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; manifest-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<script src="assets/theme.d42c63e0.min.js"></script>
+<script src="assets/theme.0c7589c8.min.js"></script>
 <title>SMV — Singer Media Vision · Media Production Agency</title>
 <meta name="description" content="Singer Media Vision — UAE media production agency. Government summits, global exhibitions, national celebrations. Same-day delivery from Dubai and Sharjah.">
 <meta name="theme-color" content="#111418">
@@ -43,15 +43,30 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"Singer Media Vision","alternateName":"SMV","url":"https://ashrafselomotion-afk.github.io/smv-cinematic/","image":"https://ashrafselomotion-afk.github.io/smv-cinematic/og.jpg","email":"mustafasinger@smv.ae","description":"Media production agency covering government summits, exhibitions and national celebrations across the UAE with same-day delivery.","areaServed":["Dubai","Sharjah","United Arab Emirates"],"address":[{"@type":"PostalAddress","streetAddress":"A34, Design District","addressLocality":"Dubai","addressCountry":"AE"},{"@type":"PostalAddress","streetAddress":"Media City FZ","addressLocality":"Sharjah","addressCountry":"AE"}],"foundingDate":"2016","knowsAbout":["Event coverage","Commercial videography","Aerial filming","Post-production","Color grading"]}
 </script>
-<link rel="stylesheet" href="assets/site.af089af1.min.css">
+<link rel="stylesheet" href="assets/site.54f268fd.min.css">
 </head>
 <body>
+
+<canvas id="space" aria-hidden="true"></canvas>
+<div id="grain"></div>
+<div id="leader" aria-hidden="true"><i class="bar top"></i><i class="bar bot"></i>
+  <div class="count"><svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="46"/><circle id="leaderRing" class="ring" cx="50" cy="50" r="46"/></svg><span id="leaderNum">3</span></div>
+  <div class="slate">SMV · PICTURE START</div>
+</div>
+<div id="cur" aria-hidden="true"><span class="dot"></span><span class="ring"><b id="curLabel"></b></span></div>
+<div id="progress" aria-hidden="true"><i></i></div>
+<div id="chapter" aria-hidden="true"><span id="chapterNum">00</span><i></i><span id="chapterName">INTRO</span></div>
+
 <a class="skip" href="#reels">SKIP TO CONTENT</a>
 <nav id="nav" aria-label="Primary">
   <a class="wordmark" href="#hero">SMV<i>.</i></a>
-  <div class="links"><a href="#reels">REELS</a><a href="#services">SERVICES</a><a href="#why">WHY SMV</a><a href="#contact">CONTACT</a></div>
+  <div class="links">
+    <a href="#reels">REELS</a>
+    <a href="#services">SERVICES</a>
+    <a href="#contact">CONTACT</a>
+  </div>
   <button id="themeBtn" type="button" aria-label="Toggle light and dark mode"></button>
-  <a class="cta" href="#contact">GET A PROPOSAL</a>
+  <a class="cta shimmer" href="#contact">GET A PROPOSAL</a>
   <button id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mmenu"><span></span></button>
 </nav>
 <div id="mmenu" aria-hidden="true">
@@ -60,137 +75,169 @@
   <a class="big" href="#why"><small>03</small>WHY SMV</a>
   <a class="big" href="#clients"><small>04</small>CLIENTS</a>
   <a class="big" href="#contact"><small>06</small>CONTACT</a>
-  <div class="foot"><span>DUBAI — SHARJAH · UAE</span><a class="cta" href="#contact">GET A PROPOSAL</a></div>
+  <div class="foot">
+    <span>DUBAI — SHARJAH · UAE</span>
+    <a class="cta" href="#contact">GET A PROPOSAL</a>
+  </div>
 </div>
 
+<div id="smooth-wrapper"><div id="smooth-content">
 <!-- HERO -->
 <section id="hero">
+  <canvas id="heroGL" aria-hidden="true"></canvas>
   <video class="vid" muted loop playsinline preload="none" poster="media/hero-poster.webp" width="1280" height="720" aria-hidden="true"></video>
   <div class="shade"></div>
   <div class="mid">
-    <div class="tagbox reveal"><i></i>NOW BOOKING · 2026</div>
-    <h1><span class="row" aria-hidden="true">SMV<i>.</i></span><span class="sr">SMV — Singer Media Vision, media production agency in Dubai and Sharjah</span></h1>
-    <div class="tag reveal">MEDIA PRODUCTION AGENCY</div>
-    <p class="lede reveal">Government summits, global exhibitions and national celebrations — filmed, edited on site and delivered the same day.</p>
+    <div class="tagbox reveal shiny"><i></i><span>NOW BOOKING · 2026</span></div>
+    <h1><span class="row" aria-hidden="true"><span class="ch">S</span><span class="ch">M</span><span class="ch">V</span><span class="ch dot"><i>.</i></span></span><span class="sr">SMV — Singer Media Vision, media production agency in Dubai and Sharjah</span></h1>
+    <div class="tag reveal" id="heroTag" data-text="MEDIA PRODUCTION AGENCY">MEDIA PRODUCTION AGENCY</div>
+    <div class="flipline reveal" aria-live="polite">WE FILM <span class="flipw"><span id="flipWord">SUMMITS</span></span></div>
+    <button class="reel-btn hbg reveal" type="button" id="openShowreel" data-cursor="PLAY"><span class="hbg-in"><span class="tri"></span>PLAY SHOWREEL</span></button>
   </div>
-  <div class="meta"><span>EST. 2016 — DUBAI · SHARJAH</span><span>GOVERNMENT-GRADE PRODUCTION</span><span>SAME-DAY DELIVERY</span></div>
+  <div class="hud" aria-hidden="true">
+    <span class="hud-tl"><i class="rec"></i>REC</span>
+    <span class="hud-tr" id="hudTc">00:00:00:00</span>
+    <span class="hud-bl">4K · 24 FPS · ISO 800 · T2.8</span>
+    <span class="hud-br">A-CAM · SMV</span>
+  </div>
+  <div class="meta">
+    <span>EST. 2016 — DUBAI · SHARJAH</span>
+    <span>GOVERNMENT-GRADE PRODUCTION</span>
+    <span>SAME-DAY DELIVERY</span>
+  </div>
+  <div class="scrolldn">SCROLL</div>
 </section>
 
-<!-- REELS -->
-<section id="reels">
+<!-- KINETIC BAND -->
+<div class="band" aria-hidden="true"><div class="band-track" id="bandTrack"><span>EVENTS ✦ COMMERCIALS ✦ AERIAL ✦ POST &amp; COLOR ✦ LIVE ✦ SOCIAL ✦ </span><span>EVENTS ✦ COMMERCIALS ✦ AERIAL ✦ POST &amp; COLOR ✦ LIVE ✦ SOCIAL ✦ </span></div></div>
+
+<!-- REELS (placeholder clips — swap media/reels/rNN.mp4 + .webp for real work) -->
+<section id="reels" data-chapter="REELS">
   <div class="label reveal"><span class="n">01</span> — THE GALLERY</div>
-  <div class="head"><h2 class="reveal">THE REELS</h2><a class="cta-link reveal" href="#contact">BOOK A SHOOT <span class="arr">→</span></a></div>
-  <p class="intro reveal">Sixteen recent cuts — shot, edited and delivered by our own crew, most of them the same day they were filmed.</p>
-  <div class="reel-grid" id="reelTrack" aria-label="Showreel gallery">
-    <figure class="reel" data-cat="events" tabindex="0" role="button" aria-label="Play reel: GOV SUMMIT 2024">
+  <div class="head">
+    <h2 class="wipe" data-speed="0.92">THE REELS</h2>
+    <a class="cta-link reveal" href="#contact">BOOK A SHOOT <span class="arr">→</span></a>
+  </div>
+  <p class="intro reveal">Sixteen recent cuts — every one shot, edited and delivered by our own crew, most of them the same day they were filmed.</p>
+  <div class="filters reveal" role="tablist" aria-label="Filter reels">
+    <button type="button" class="on" data-filter="all" role="tab" aria-selected="true">ALL</button>
+    <button type="button" data-filter="events" role="tab" aria-selected="false">EVENTS</button>
+    <button type="button" data-filter="commercial" role="tab" aria-selected="false">COMMERCIAL</button>
+    <button type="button" data-filter="aerial" role="tab" aria-selected="false">AERIAL</button>
+    <button type="button" data-filter="social" role="tab" aria-selected="false">SOCIAL</button>
+  </div>
+  <div class="reel-wrap">
+    <div class="reel-grid" id="reelTrack" aria-label="Showreel gallery">
+    <figure class="reel" data-cat="events" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: GOV SUMMIT 2024">
       <video muted loop playsinline preload="none" poster="media/reels/r01.webp" data-src="media/reels/r01.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">01 / EVENT</span><h3>GOV SUMMIT 2024</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="events" tabindex="0" role="button" aria-label="Play reel: NATIONAL DAY">
+    <figure class="reel" data-cat="events" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: NATIONAL DAY">
       <video muted loop playsinline preload="none" poster="media/reels/r02.webp" data-src="media/reels/r02.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">02 / CEREMONY</span><h3>NATIONAL DAY</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="commercial" tabindex="0" role="button" aria-label="Play reel: AUTOMOTIVE LAUNCH">
+    <figure class="reel" data-cat="commercial" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: AUTOMOTIVE LAUNCH">
       <video muted loop playsinline preload="none" poster="media/reels/r03.webp" data-src="media/reels/r03.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">03 / COMMERCIAL</span><h3>AUTOMOTIVE LAUNCH</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="aerial" tabindex="0" role="button" aria-label="Play reel: DUBAI SKYLINE">
+    <figure class="reel" data-cat="aerial" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: DUBAI SKYLINE">
       <video muted loop playsinline preload="none" poster="media/reels/r04.webp" data-src="media/reels/r04.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">04 / AERIAL</span><h3>DUBAI SKYLINE</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="commercial" tabindex="0" role="button" aria-label="Play reel: LUXURY VILLA">
+    <figure class="reel" data-cat="commercial" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: LUXURY VILLA">
       <video muted loop playsinline preload="none" poster="media/reels/r05.webp" data-src="media/reels/r05.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">05 / REAL ESTATE</span><h3>LUXURY VILLA</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="events" tabindex="0" role="button" aria-label="Play reel: EXHIBITION RECAP">
+    <figure class="reel" data-cat="events" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: EXHIBITION RECAP">
       <video muted loop playsinline preload="none" poster="media/reels/r06.webp" data-src="media/reels/r06.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">06 / EVENT</span><h3>EXHIBITION RECAP</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="commercial" tabindex="0" role="button" aria-label="Play reel: FASHION CAMPAIGN">
+    <figure class="reel" data-cat="commercial" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: FASHION CAMPAIGN">
       <video muted loop playsinline preload="none" poster="media/reels/r07.webp" data-src="media/reels/r07.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">07 / COMMERCIAL</span><h3>FASHION CAMPAIGN</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="aerial" tabindex="0" role="button" aria-label="Play reel: DESERT DRIVE">
+    <figure class="reel" data-cat="aerial" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: DESERT DRIVE">
       <video muted loop playsinline preload="none" poster="media/reels/r08.webp" data-src="media/reels/r08.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">08 / AERIAL</span><h3>DESERT DRIVE</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="events" tabindex="0" role="button" aria-label="Play reel: TECH KEYNOTE">
+    <figure class="reel" data-cat="events" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: TECH KEYNOTE">
       <video muted loop playsinline preload="none" poster="media/reels/r09.webp" data-src="media/reels/r09.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">09 / EVENT</span><h3>TECH KEYNOTE</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="social" tabindex="0" role="button" aria-label="Play reel: RESTAURANT LAUNCH">
+    <figure class="reel" data-cat="social" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: RESTAURANT LAUNCH">
       <video muted loop playsinline preload="none" poster="media/reels/r10.webp" data-src="media/reels/r10.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">10 / SOCIAL</span><h3>RESTAURANT LAUNCH</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="commercial" tabindex="0" role="button" aria-label="Play reel: GLOBAL BRAND FILM">
+    <figure class="reel" data-cat="commercial" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: GLOBAL BRAND FILM">
       <video muted loop playsinline preload="none" poster="media/reels/r11.webp" data-src="media/reels/r11.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">11 / COMMERCIAL</span><h3>GLOBAL BRAND FILM</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="aerial" tabindex="0" role="button" aria-label="Play reel: MARINA AT NIGHT">
+    <figure class="reel" data-cat="aerial" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: MARINA AT NIGHT">
       <video muted loop playsinline preload="none" poster="media/reels/r12.webp" data-src="media/reels/r12.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">12 / AERIAL</span><h3>MARINA AT NIGHT</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="events" tabindex="0" role="button" aria-label="Play reel: AWARDS NIGHT">
+    <figure class="reel" data-cat="events" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: AWARDS NIGHT">
       <video muted loop playsinline preload="none" poster="media/reels/r13.webp" data-src="media/reels/r13.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">13 / EVENT</span><h3>AWARDS NIGHT</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="commercial" tabindex="0" role="button" aria-label="Play reel: HOTEL OPENING">
+    <figure class="reel" data-cat="commercial" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: HOTEL OPENING">
       <video muted loop playsinline preload="none" poster="media/reels/r14.webp" data-src="media/reels/r14.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">14 / HOSPITALITY</span><h3>HOTEL OPENING</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="events" tabindex="0" role="button" aria-label="Play reel: SUMMER FESTIVAL">
+    <figure class="reel" data-cat="events" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: SUMMER FESTIVAL">
       <video muted loop playsinline preload="none" poster="media/reels/r15.webp" data-src="media/reels/r15.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">15 / EVENT</span><h3>SUMMER FESTIVAL</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" data-cat="commercial" tabindex="0" role="button" aria-label="Play reel: BRAND STORY">
+    <figure class="reel" data-cat="commercial" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: BRAND STORY">
       <video muted loop playsinline preload="none" poster="media/reels/r16.webp" data-src="media/reels/r16.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">16 / COMMERCIAL</span><h3>BRAND STORY</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
     </div>
+  </div>
 </section>
 
 <!-- SERVICES -->
-<section id="services">
+<section id="services" data-chapter="SERVICES">
   <div class="label reveal"><span class="n">02</span> — WHAT WE DO</div>
-  <h2 class="reveal">OUR SERVICES</h2>
-  <p class="intro reveal">One accountable crew from brief to master — cameras, drones, sound, edit and color under one roof.</p>
+  <h2 class="wipe" data-speed="0.92">OUR SERVICES</h2>
+  <p class="intro reveal">One accountable crew from brief to master — cameras, drones, sound, edit and color under one roof, so nothing is lost between vendors.</p>
   <div class="grid">
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="1.06" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-event.webp" srcset="assets/img/svc-event-640.webp 640w, assets/img/svc-event.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Event coverage — concert stage lights">
       <span class="k label">/01</span>
       <div class="inner"><h3>EVENT<br>COVERAGE</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="0.96" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-commercial.webp" srcset="assets/img/svc-commercial-640.webp 640w, assets/img/svc-commercial.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Commercial videography — cinema camera">
       <span class="k label">/02</span>
       <div class="inner"><h3>COMMERCIAL<br>VIDEOGRAPHY</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="1.04" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-aerial.webp" srcset="assets/img/svc-aerial-640.webp 640w, assets/img/svc-aerial.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1071" alt="Aerial — drone view of a UAE coastline and desert highway">
       <span class="k label">/03</span>
       <div class="inner"><h3>AERIAL</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="0.94" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-post.webp" srcset="assets/img/svc-post-640.webp 640w, assets/img/svc-post.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Post and color — edit suite">
       <span class="k label">/04</span>
       <div class="inner"><h3>POST &amp;<br>COLOR</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="1.06" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-live.webp" srcset="assets/img/svc-live-640.webp 640w, assets/img/svc-live.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1071" alt="Live streaming — broadcast camera operator at a live stage event">
       <span class="k label">/05</span>
       <div class="inner"><h3>LIVE<br>STREAMING</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="0.96" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-photo.webp" srcset="assets/img/svc-photo-640.webp 640w, assets/img/svc-photo.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1000" alt="Photography — camera and lenses">
       <span class="k label">/06</span>
       <div class="inner"><h3>EVENT<br>PHOTOGRAPHY</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="1.04" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-social.webp" srcset="assets/img/svc-social-640.webp 640w, assets/img/svc-social.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="534" alt="Social content — creator with laptop and phone">
       <span class="k label">/07</span>
       <div class="inner"><h3>SOCIAL<br>CONTENT</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" data-speed="0.94" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-motion.webp" srcset="assets/img/svc-motion-640.webp 640w, assets/img/svc-motion.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1000" alt="Motion graphics — design system on screen">
       <span class="k label">/08</span>
       <div class="inner"><h3>MOTION<br>GRAPHICS</h3><span class="arr">→</span></div>
@@ -198,13 +245,14 @@
   </div>
 </section>
 
-<!-- WHY SMV -->
-<section id="why">
+<!-- WHY SMV (bento) -->
+<section id="why" data-chapter="WHY SMV">
   <div class="label reveal"><span class="n">03</span> — WHY SMV</div>
-  <h2 class="reveal">BUILT FOR THE<br>BIG STAGE</h2>
+  <h2 class="wipe" data-speed="0.92">BUILT FOR THE<br>BIG STAGE</h2>
+  <div class="rule reveal"></div>
   <div class="grid">
 
-    <div class="tile w2 reveal">
+    <div class="tile w2 reveal" data-speed="1.04">
       <span class="k label">/01 · SPEED</span>
       <div class="tl"><span class="dot"></span><span class="bar"><i></i></span><span class="dot"></span><span class="bar"><i></i></span><span class="dot"></span></div>
       <div class="tl-l"><span>SHOOT</span><span>EDIT ON-SITE</span><span>DELIVER</span></div>
@@ -212,19 +260,19 @@
       <p>Edited on location and shipped while the event is still trending — reels, highlight films and press cuts, hours not days.</p>
     </div>
 
-    <div class="tile reveal">
+    <div class="tile reveal" data-speed="0.97">
       <span class="k label">/02 · TURNAROUND</span>
       <div class="big"><span data-count="24">0</span>H</div>
       <p>Average delivery window across summits, exhibitions and national celebrations.</p>
     </div>
 
-    <div class="tile reveal">
+    <div class="tile reveal" data-speed="1.03">
       <span class="k label">/03 · PROTOCOL</span>
       <h3>GOVERNMENT-GRADE</h3>
       <p>Accredited, protocol-aware crews experienced with official ceremonies, dignitaries and secure venues.</p>
     </div>
 
-    <div class="tile w2 reveal">
+    <div class="tile w2 reveal" data-speed="0.96">
       <span class="k label">/04 · COVERAGE</span>
       <svg class="map" viewBox="0 0 260 150" aria-hidden="true">
         <g class="g">
@@ -243,14 +291,14 @@
       <p>Crews based in both emirates, deployable to any venue in the country on short notice.</p>
     </div>
 
-    <div class="tile reveal">
+    <div class="tile reveal" data-speed="1.04">
       <span class="k label">/05 · DELIVERABLES</span>
       <h3>EVERY FORMAT,<br>EVERY SCREEN</h3>
       <p>Cinema-grade masters down to vertical social cuts.</p>
       <div class="specs"><span>4K</span><span>HDR</span><span>16:9</span><span>9:16</span><span>LED WALL</span></div>
     </div>
 
-    <div class="tile w2 reveal">
+    <div class="tile w2 reveal" data-speed="0.97">
       <span class="k label">/06 · CREW</span>
       <h3>FULL CREWS, ZERO GAPS</h3>
       <p>Directors, DOPs, drone pilots, sound, editors and colorists — one accountable team from brief to master, no hand-offs between vendors.</p>
@@ -261,16 +309,23 @@
 </section>
 
 <!-- CLIENTS -->
-<section id="clients">
+<section id="clients" data-chapter="CLIENTS">
   <div class="label reveal"><span class="n">04</span> — TRUSTED BY</div>
-  <div class="wall reveal">
-        <div class="lcard"><svg class="clogo" viewBox="0 0 250 80" role="img" aria-label="ADNEC">
+  <div class="marq reveal" id="logoMarq"><div class="track"><div class="unit">
+
+    <!-- ADNEC — pavilion emblem -->
+    <div class="lcard">
+    <svg class="clogo" viewBox="0 0 250 80" role="img" aria-label="ADNEC">
       <path class="fl" d="M8 58 L26 18 L44 58 L36 58 L26 34 L16 58 Z"/>
       <rect class="fl" x="22" y="62" width="8" height="4"/>
       <text x="60" y="56" font-size="38">ADNEC</text>
       <text class="sub" x="61" y="72" font-size="8">VENUES · ABU DHABI</text>
-    </svg></div>
-    <div class="lcard"><svg class="clogo" viewBox="0 0 280 80" role="img" aria-label="Shurooq">
+    </svg>
+    </div>
+
+    <!-- SHUROOQ — sunrise emblem -->
+    <div class="lcard">
+    <svg class="clogo" viewBox="0 0 280 80" role="img" aria-label="Shurooq">
       <path class="ln" d="M10 58 A18 18 0 0 1 46 58" stroke-width="5"/>
       <line class="ln" x1="28" y1="22" x2="28" y2="30" stroke-width="4"/>
       <line class="ln" x1="12" y1="30" x2="17" y2="37" stroke-width="4"/>
@@ -278,8 +333,12 @@
       <line class="ln" x1="4" y1="58" x2="52" y2="58" stroke-width="3"/>
       <text x="66" y="56" font-size="38">SHUROOQ</text>
       <text class="sub" x="67" y="72" font-size="8">SHARJAH</text>
-    </svg></div>
-    <div class="lcard"><svg class="clogo" viewBox="0 0 230 80" role="img" aria-label="Dubai Design Week">
+    </svg>
+    </div>
+
+    <!-- DUBAI DESIGN WEEK — stacked grid lockup -->
+    <div class="lcard">
+    <svg class="clogo" viewBox="0 0 230 80" role="img" aria-label="Dubai Design Week">
       <rect class="ln" x="4" y="8" width="52" height="64" stroke-width="3"/>
       <text x="14" y="32" font-size="18">DXB</text>
       <text x="14" y="52" font-size="18">DSN</text>
@@ -287,26 +346,40 @@
       <text x="70" y="34" font-size="24">DUBAI</text>
       <text x="70" y="58" font-size="24">DESIGN</text>
       <text class="sub" x="71" y="72" font-size="9">WEEK</text>
-    </svg></div>
-    <div class="lcard"><svg class="clogo" viewBox="0 0 320 80" role="img" aria-label="Khorfakkan">
+    </svg>
+    </div>
+
+    <!-- KHORFAKKAN — mountains & bay emblem -->
+    <div class="lcard">
+    <svg class="clogo" viewBox="0 0 320 80" role="img" aria-label="Khorfakkan">
       <path class="fl" d="M4 52 L20 24 L30 40 L40 18 L58 52 Z"/>
       <path class="ln" d="M4 62 Q16 56 30 62 Q44 68 58 62" stroke-width="4"/>
       <text x="72" y="56" font-size="34">KHORFAKKAN</text>
       <text class="sub" x="73" y="72" font-size="8">SHARJAH · EAST COAST</text>
-    </svg></div>
-    <div class="lcard"><svg class="clogo" viewBox="0 0 190 80" role="img" aria-label="WIC">
+    </svg>
+    </div>
+
+    <!-- WIC — monogram emblem -->
+    <div class="lcard">
+    <svg class="clogo" viewBox="0 0 190 80" role="img" aria-label="WIC">
       <circle class="ln" cx="34" cy="40" r="27" stroke-width="4"/>
       <text x="16" y="52" font-size="30">W</text>
       <text x="76" y="56" font-size="38">WIC</text>
       <text class="sub" x="77" y="72" font-size="8">CONGRESS</text>
-    </svg></div>
-    <div class="lcard"><svg class="clogo" viewBox="0 0 170 80" role="img" aria-label="SIF">
+    </svg>
+    </div>
+
+    <!-- SIF — pennant emblem -->
+    <div class="lcard">
+    <svg class="clogo" viewBox="0 0 170 80" role="img" aria-label="SIF">
       <line class="ln" x1="12" y1="14" x2="12" y2="66" stroke-width="5"/>
       <path class="fl" d="M18 16 L58 26 L18 40 Z"/>
       <text x="74" y="56" font-size="38">SIF</text>
       <text class="sub" x="75" y="72" font-size="8">FORUM</text>
-    </svg></div>
-  </div>
+    </svg>
+    </div>
+
+  </div></div></div>
 </section>
 
 <!-- STATS -->
@@ -320,9 +393,9 @@
 </section>
 
 <!-- FAQ -->
-<section id="faq">
+<section id="faq" data-chapter="FAQ">
   <div class="label reveal"><span class="n">05</span> — BEFORE YOU BRIEF US</div>
-  <h2 class="reveal">QUESTIONS,<br>ANSWERED</h2>
+  <h2 class="wipe" data-speed="0.95">QUESTIONS,<br>ANSWERED</h2>
   <div class="faq reveal">
     <details><summary>How fast can you deliver after an event?<i></i></summary><p>Highlight reels and press cuts are edited on site and can be delivered the same day. Full films with color and sound typically follow within 24 to 72 hours depending on length and formats.</p></details>
     <details><summary>Do you cover government and protocol events?<i></i></summary><p>Yes. Our crews are experienced with official ceremonies, summits and secure venues, and we plan access, positions and dress code with your protocol team in advance.</p></details>
@@ -333,13 +406,14 @@
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
+<!-- CTA -->
+<section id="contact" data-chapter="CONTACT">
+  <div class="lamp" aria-hidden="true"><i class="l1"></i><i class="l2"></i><i class="bar"></i><i class="glow"></i></div>
   <div class="label reveal"><span class="n">06</span> — NEXT PRODUCTION</div>
-  <h2 class="reveal">LET'S CREATE<br>SOMETHING<br>UNFORGETTABLE</h2>
+  <h2 class="wipe" data-speed="0.95">LET'S CREATE<br>SOMETHING<br>UNFORGETTABLE</h2>
   <div class="btns reveal">
-    <a class="btn hot" href="#brief">START A BRIEF</a>
-    <a class="btn ghost" href="https://wa.me/9710000000000" target="_blank" rel="noopener">WHATSAPP →</a>
+    <a class="btn hot shimmer" href="#brief">START A BRIEF</a>
+    <a class="btn ghost hbg" href="https://wa.me/9710000000000" target="_blank" rel="noopener"><span class="hbg-in">WHATSAPP →</span></a>
   </div>
   <p id="sentMsg" hidden>✓ BRIEF RECEIVED — WE'LL REPLY WITHIN 24 HOURS</p>
   <form id="brief" class="reveal" action="https://formsubmit.co/mustafasinger@smv.ae" method="POST">
@@ -362,30 +436,55 @@
     </div>
     <div class="row">
       <span class="note">Replies within 24h · Dubai &amp; Sharjah</span>
-      <button type="submit">SEND BRIEF →</button>
+      <button type="submit" class="shimmer">SEND BRIEF →</button>
     </div>
   </form>
+  <br>
   <a class="mail reveal" href="mailto:mustafasinger@smv.ae">MUSTAFASINGER@SMV.AE</a>
 </section>
+
 
 <footer>
   <div class="wordmark">SMV<i>.</i></div>
   <div class="col"><b>DUBAI</b>A34, DESIGN DISTRICT</div>
   <div class="col"><b>SHARJAH</b>MEDIA CITY FZ</div>
-  <div class="col"><a href="#" rel="nofollow">INSTAGRAM</a> / <a href="#" rel="nofollow">VIMEO</a> / <a href="#" rel="nofollow">LINKEDIN</a></div>
-  <div class="copy"><span>© 2026 SINGER MEDIA VISION</span><span>DUBAI — SHARJAH · UAE</span></div>
+  <div class="col">
+    <!-- TODO: replace # with the real profile URLs --><a href="#" rel="nofollow">INSTAGRAM</a> / <a href="#" rel="nofollow">VIMEO</a> / <a href="#" rel="nofollow">LINKEDIN</a>
+  </div>
+  <div class="copy">
+    <span>© 2026 SINGER MEDIA VISION</span>
+    <span>DUBAI — SHARJAH · UAE</span>
+  </div>
 </footer>
-
-<div id="lb" role="dialog" aria-modal="true" aria-label="Reel" aria-hidden="true">
-  <div class="lb-bg"></div>
-  <div class="lb-box">
-    <div class="lb-top"><span id="lbCount">01 / 16</span><button type="button" id="lbClose">CLOSE ✕</button></div>
-    <video id="lbVideo" controls playsinline preload="none"></video>
-    <div class="lb-meta"><div><div class="label" id="lbLabel"></div><h3 id="lbTitle"></h3></div>
-      <div class="lb-nav"><button type="button" id="lbPrev" aria-label="Previous reel">←</button><button type="button" id="lbNext" aria-label="Next reel">→</button></div></div>
+</div></div>
+<div id="feed" role="dialog" aria-modal="true" aria-label="Reels" aria-hidden="true">
+  <div class="feed-bg"></div>
+  <div class="feed-top"><span id="feedCount">01 / 16</span><span class="feed-hint">SWIPE · ↑ ↓</span><button type="button" id="feedClose">CLOSE ✕</button></div>
+  <div class="feed-col" id="feedCol"></div>
+  <button type="button" id="feedMute" aria-label="Toggle sound">SOUND ON</button>
+</div>
+<div id="rp" role="dialog" aria-modal="true" aria-label="Showreel" aria-hidden="true">
+  <div class="rp-bg"></div>
+  <button type="button" id="rpClose">CLOSE ✕</button>
+  <div class="rp-box">
+    <video id="rpVideo" playsinline preload="none" poster="media/hero-poster.webp"></video>
+    <div class="rp-ui">
+      <button type="button" id="rpPlay" aria-label="Play or pause"><span class="tri"></span></button>
+      <span class="rp-tc" id="rpTc">00:00:00</span>
+      <div class="rp-bar" id="rpBar"><i id="rpBuf"></i><b id="rpFill"></b></div>
+      <span class="rp-tc" id="rpDur">00:00:00</span>
+      <button type="button" id="rpMute" aria-label="Mute">SOUND</button>
+    </div>
   </div>
 </div>
 
-<script defer src="assets/site.a9e0b08c.min.js"></script>
+
+<script defer src="assets/vendor/gsap.min.js"></script>
+<script defer src="assets/vendor/ScrollTrigger.min.js"></script>
+<script defer src="assets/vendor/ScrollSmoother.min.js"></script>
+<script defer src="assets/vendor/SplitText.min.js"></script>
+<script defer src="assets/vendor/Flip.min.js"></script>
+<script defer src="assets/site.9e812fa8.min.js"></script>
+<script type="module" src="assets/space.74e08b31.min.js"></script>
 </body>
 </html>
