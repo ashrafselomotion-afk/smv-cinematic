@@ -145,7 +145,7 @@ html.menu-open #mmenu a.big:nth-child(5){transition-delay:.24s}
 section,footer,.marquee{position:relative;z-index:1}
 #hero .vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #hero .shade{position:absolute;inset:0;background:linear-gradient(rgba(12,14,18,.5),rgba(12,14,18,.72))}
-.no-anim @keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ---------- REELS GALLERY ---------- */
 #reels h2{font-size:clamp(44px,7.5vw,110px);line-height:.95;margin:18px 0 44px}
@@ -332,7 +332,7 @@ html.leader #leader{display:flex}
 #chapter #chapterNum{color:var(--hot-fill)}
 html.chapters #chapter{opacity:1}
 @media (max-width:1100px){#chapter{display:none}}
-.no-anim .band{position:relative;z-index:1;overflow:hidden;padding:38px 0 10px;border-bottom:1px solid var(--line);
+.band{position:relative;z-index:1;overflow:hidden;padding:38px 0 10px;border-bottom:1px solid var(--line);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .band-track{display:inline-flex;white-space:nowrap;will-change:transform}
 .band-track span{font-family:var(--display);font-size:clamp(56px,9vw,140px);line-height:1;letter-spacing:.02em;color:transparent;-webkit-text-stroke:1px rgba(244,242,238,.55);padding-right:.4em}
@@ -486,6 +486,6 @@ html.nav-hide #nav{transform:translate(-50%,-150%);opacity:0}
 .no-anim #hero h1 .l>span{transform:none}
 #hero h1 em{font-style:normal;color:var(--hot-fill)}
 .hero-copy .sub{opacity:0;max-width:44ch;margin:22px 0 30px;color:rgba(255,255,255,.75);font-size:15px;line-height:1.7}
-@media (max-width:640px){.hero-copy{padding-bottom:12vh}.hero-copy .sub{font-size:14px}}
+@media (max-width:640px){.hero-copy{padding-bottom:8vh}.hero-copy .sub{font-size:14px;margin:16px 0 22px}#hero h1{font-size:clamp(30px,10.5vw,44px)}}
 
 .no-anim .hero-copy .eyebrow,.no-anim .hero-copy .sub,.no-anim .reel-btn{opacity:1}

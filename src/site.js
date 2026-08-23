@@ -263,11 +263,19 @@
     ScrollTrigger.addEventListener('scrollEnd', () => { gsap.to(loop, { timeScale:1, duration:.8 }); skew(0); });
   }
 
+  /* ---------- one-shot reveal helper: fires on enter, jump-past, or load-already-past ---------- */
+  const enterOnce = (trigger, start, fn) => {
+    let fired = false;
+    const go = self => { if (!fired && self.progress > 0) { fired = true; fn(); self.kill(); } };
+    const st = ScrollTrigger.create({ trigger, start, onUpdate:go, onEnter:go, onRefresh:go });
+    go(st);
+  };
+
   /* ---------- REELS: staggered entrance + 3D tilt with glare ---------- */
   const reelEls = gsap.utils.toArray('.reel');
   if (reelEls.length) {
-    gsap.from(reelEls, { y:70, opacity:0, scale:.92, duration:.9, ease:'power3.out', stagger:{ each:.06, grid:'auto', from:'start' },
-      scrollTrigger:{ trigger:'#reelTrack', start:'top 85%', once:true } });
+    gsap.set(reelEls, { y:70, opacity:0, scale:.92 });
+    enterOnce('#reelTrack', 'top 85%', () => gsap.to(reelEls, { y:0, opacity:1, scale:1, duration:.9, ease:'power3.out', stagger:{ each:.06, grid:'auto', from:'start' }, overwrite:'auto', clearProps:'opacity,transform' }));
     if (document.documentElement.classList.contains('cur')) reelEls.forEach(r => {
       const g = document.createElement('span'); g.className = 'glare'; r.appendChild(g);
       const rx = gsap.quickTo(r, 'rotationX', { duration:.5, ease:'power2.out' }), ry = gsap.quickTo(r, 'rotationY', { duration:.5, ease:'power2.out' });
@@ -279,8 +287,8 @@
 
   /* ---------- SERVICES: wipe reveal + in-card parallax ---------- */
   gsap.utils.toArray('#services .card').forEach((card, i) => {
-    gsap.fromTo(card, { clipPath:'inset(100% 0 0 0 round 26px)' }, { clipPath:'inset(0% 0 0 0 round 26px)', duration:1.1, ease:'power4.out', delay:(i%4)*.08,
-      scrollTrigger:{ trigger:card, start:'top 88%', once:true } });
+    gsap.set(card, { clipPath:'inset(100% 0 0 0 round 26px)' });
+    enterOnce(card, 'top 88%', () => gsap.to(card, { clipPath:'inset(0% 0 0 0 round 26px)', duration:1.1, ease:'power4.out', delay:(i%4)*.08, clearProps:'clipPath' }));
     gsap.fromTo(card.querySelector('img'), { yPercent:-8, scale:1.16 }, { yPercent:8, scale:1.16, ease:'none',
       scrollTrigger:{ trigger:card, start:'top bottom', end:'bottom top', scrub:true } });
   });
@@ -308,9 +316,11 @@
     let lines = null;
     if (window.SplitText) { try { lines = SplitText.create(h, { type:'lines', mask:'lines', linesClass:'line' }).lines; } catch(e){} }
     if (lines && lines.length) {
-      gsap.from(lines, { yPercent:115, rotate:2, duration:1.15, ease:'power4.out', stagger:.09, scrollTrigger:{ trigger:h, start:'top 86%', once:true } });
+      gsap.set(lines, { yPercent:115, rotate:2 });
+      enterOnce(h, 'top 86%', () => gsap.to(lines, { yPercent:0, rotate:0, duration:1.15, ease:'power4.out', stagger:.09 }));
     } else {
-      gsap.from(h, { y:40, opacity:0, duration:1, ease:'power3.out', scrollTrigger:{ trigger:h, start:'top 86%', once:true } });
+      gsap.set(h, { y:40, opacity:0 });
+      enterOnce(h, 'top 86%', () => gsap.to(h, { y:0, opacity:1, duration:1, ease:'power3.out', clearProps:'opacity,transform' }));
     }
   });
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { revealHeads(); ScrollTrigger.refresh(); });
@@ -323,10 +333,10 @@
     el.style.strokeDasharray = len; el.style.strokeDashoffset = len;
   });
   gsap.set(fills, { opacity: 0 });
-  ScrollTrigger.create({ trigger: '#clients', start: 'top 80%', once: true, onEnter(){
+  enterOnce('#clients', 'top 80%', () => {
     gsap.to(strokes, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut', stagger: .04 });
     gsap.to(fills, { opacity: 1, duration: 1, delay: .8, ease: 'power2.out', stagger: .05 });
-  }});
+  });
 
   /* ---------- DELIVERY TIMELINE ---------- */
   const tl = document.querySelector('.tl');
@@ -369,10 +379,14 @@
   /* ---------- Aceternity · Lamp Effect (contact) ---------- */
   const lamp = document.querySelector('.lamp');
   if (lamp) {
-    const tl = gsap.timeline({ scrollTrigger:{ trigger:lamp, start:'top 75%', once:true } });
-    tl.to(lamp.querySelectorAll('.l1,.l2'), { opacity:1, duration:1.2, ease:'power2.out' }, 0)
-      .fromTo(lamp.querySelector('.bar'), { width:0 }, { width:'min(30rem,70vw)', duration:1.1, ease:'power3.inOut' }, .1)
-      .fromTo(lamp.querySelector('.glow'), { width:0 }, { width:'min(18rem,50vw)', duration:1.1, ease:'power3.inOut' }, .1);
+    gsap.set(lamp.querySelector('.bar'), { width:0 });
+    gsap.set(lamp.querySelector('.glow'), { width:0 });
+    enterOnce(lamp, 'top 75%', () => {
+      gsap.timeline()
+        .to(lamp.querySelectorAll('.l1,.l2'), { opacity:1, duration:1.2, ease:'power2.out' }, 0)
+        .to(lamp.querySelector('.bar'), { width:'min(30rem,70vw)', duration:1.1, ease:'power3.inOut' }, .1)
+        .to(lamp.querySelector('.glow'), { width:'min(18rem,50vw)', duration:1.1, ease:'power3.inOut' }, .1);
+    });
   }
 
   /* ---------- Aceternity · Floating Navbar (hide on scroll down, show on up) ---------- */
@@ -381,12 +395,9 @@
   /* ---------- STATS COUNT-UP ---------- */
   document.querySelectorAll('[data-count]').forEach(el=>{
     const target = +el.dataset.count;
-    ScrollTrigger.create({
-      trigger: el, start:'top 90%', once:true,
-      onEnter(){
-        gsap.to({v:0}, { v:target, duration:1.6, ease:'power2.out',
-          onUpdate(){ el.textContent = Math.round(this.targets()[0].v); } });
-      }
+    enterOnce(el, 'top 90%', () => {
+      gsap.to({v:0}, { v:target, duration:1.6, ease:'power2.out',
+        onUpdate(){ el.textContent = Math.round(this.targets()[0].v); } });
     });
   });
 })();
