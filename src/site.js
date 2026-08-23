@@ -150,10 +150,6 @@
   rpMute.addEventListener('click', () => { rpV.muted = !rpV.muted; rpMute.classList.toggle('off', rpV.muted); });
   addEventListener('keydown', e => { if (!rp.classList.contains('open')) return; if (e.key === ' ') { e.preventDefault(); rpV.paused ? rpV.play() : rpV.pause(); } if (e.key === 'ArrowRight') rpV.currentTime += 5; if (e.key === 'ArrowLeft') rpV.currentTime -= 5; });
 
-  /* ---------- HERO HUD TIMECODE ---------- */
-  const hudTc = document.getElementById('hudTc');
-  if (hudTc && !reduced) { const t0 = performance.now(); (function tick(){ const ms = performance.now() - t0, f = Math.floor(ms / 1000 * 24) % 24, s = Math.floor(ms / 1000); hudTc.textContent = [s/3600|0, (s/60|0)%60, s%60, f].map(n => String(n).padStart(2,'0')).join(':'); if (document.visibilityState === 'visible') setTimeout(tick, 41); else setTimeout(tick, 500); })(); }
-
   /* ---------- REEL FILTERS (Flip layout animation when available) ---------- */
   const filters = document.querySelectorAll('.filters button');
   filters.forEach(btn => btn.addEventListener('click', () => {
@@ -209,22 +205,11 @@
   }
 
   /* ---------- HERO INTRO (letters, light sweep, decoded tagline) ---------- */
-  function scramble(el, dur){
-    const final = el.dataset.text || el.textContent, glyphs = '▮▯/\\|<>-_=+*#';
-    const t0 = performance.now();
-    (function tick(){
-      const p = Math.min(1, (performance.now() - t0) / dur);
-      el.textContent = [...final].map((ch, i) => ch === ' ' ? ' ' : (i / final.length < p ? ch : glyphs[Math.floor(Math.random() * glyphs.length)])).join('');
-      if (p < 1) requestAnimationFrame(tick); else el.textContent = final;
-    })();
-  }
   function heroIntro(){
-    gsap.set('#hero .mid, #hero .meta, #hero .scrolldn, #nav', { visibility:'visible' });
-    gsap.to('#hero h1 .ch', { y:0, duration:1.1, ease:'power4.out', stagger:.08 });
-    gsap.fromTo('#hero h1 .row', { '--sweep':'120%' }, { '--sweep':'-20%', duration:1.4, delay:.9, ease:'power2.inOut' });
-    gsap.to('#hero .tag', { opacity:1, y:0, duration:.8, delay:.6, ease:'power3.out', onStart(){ scramble(document.getElementById('heroTag'), 900); } });
-    gsap.fromTo('#hero .meta, #hero .scrolldn', { opacity:0, y:16 }, { opacity:1, y:0, duration:1, delay:.9, ease:'power3.out' });
-    gsap.fromTo('#nav', { opacity:0, y:16 }, { opacity:1, y:0, duration:1, delay:.9, ease:'power3.out', clearProps:'all' });
+    gsap.set('#hero .hero-copy, #nav', { visibility:'visible' });
+    gsap.to('#hero h1 .l > span', { y:0, duration:1.15, ease:'power4.out', stagger:.12, delay:.1 });
+    gsap.fromTo('#hero .eyebrow, #hero .sub, #hero .reel-btn', { opacity:0, y:16 }, { opacity:1, y:0, duration:.9, delay:.55, ease:'power3.out', stagger:.12 });
+    gsap.fromTo('#nav', { opacity:0, y:16 }, { opacity:1, y:0, duration:1, delay:.7, ease:'power3.out', clearProps:'all' });
   }
 
   /* ---------- FILM LEADER (3·2·1 countdown, letterbox opens onto the hero) ---------- */
@@ -308,12 +293,8 @@
   });
 
   /* ---------- HERO PARALLAX ---------- */
-  /* pinned hero: the shader zooms through the letters while the DOM layers fade */
-  window.__heroProgress = 0;
-  ScrollTrigger.create({ trigger:'#hero', start:'top top', end:'+=140%', pin:true, scrub:.6, anticipatePin:1,
-    onUpdate(s){ window.__heroProgress = s.progress; } });
-  gsap.to('#hero .mid, #hero .meta, #hero .scrolldn', { yPercent:-14, opacity:0, ease:'none',
-    scrollTrigger:{ trigger:'#hero', start:'top top', end:'+=32%', scrub:true } });
+  gsap.to('#hero .hero-copy', { yPercent:-12, opacity:0, ease:'none',
+    scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom 45%', scrub:true } });
 
   /* ---------- SCROLL REVEALS ---------- */
   document.querySelectorAll('.reveal').forEach(el=>{
@@ -359,18 +340,6 @@
          .to(bars[1], { scaleX: 1, duration: .9, ease: 'power2.inOut' })
          .add(() => dots[2].classList.add('on'));
     }});
-  }
-
-  /* ---------- Aceternity · Flip Words ---------- */
-  const flipEl = document.getElementById('flipWord');
-  if (flipEl) {
-    const WORDS = ['SUMMITS','LAUNCHES','CELEBRATIONS','EXHIBITIONS','CEREMONIES','CAMPAIGNS']; let wi = 0;
-    (function cycle(){ gsap.delayedCall(2.4, () => {
-      gsap.to(flipEl, { y:-14, opacity:0, filter:'blur(8px)', duration:.4, ease:'power2.in', onComplete(){
-        wi = (wi+1) % WORDS.length; flipEl.textContent = WORDS[wi];
-        gsap.fromTo(flipEl, { y:14, opacity:0, filter:'blur(8px)' }, { y:0, opacity:1, filter:'blur(0px)', duration:.55, ease:'power3.out', onComplete:cycle });
-      } });
-    }); })();
   }
 
   /* ---------- Aceternity · Direction Aware Hover (services) ---------- */

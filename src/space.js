@@ -127,66 +127,44 @@ addEventListener('touchstart', startSpace, { once: true, passive: true });
    window onto vivid footage, everything outside is cinematic-dark, the picture liquefies
    under the cursor with chromatic aberration, and scrolling zooms through the letters. */
 async function initHeroGL(){
-  const canvas = document.getElementById('heroGL'), video = document.querySelector('#hero .vid'), h1 = document.querySelector('#hero h1');
-  if (!canvas || !video || !h1 || window.__reduced || (navigator.connection && navigator.connection.saveData)) return;
+  const canvas = document.getElementById('heroGL'), video = document.querySelector('#hero .vid');
+  if (!canvas || !video || window.__reduced || (navigator.connection && navigator.connection.saveData)) return;
   try {
     const THREE = await import('./vendor/three.module.min.js');
     const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, alpha:false, powerPreference:'high-performance' });
     renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 760 ? 1 : 1.5));
     const scene = new THREE.Scene(), cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const vtex = new THREE.VideoTexture(video); vtex.colorSpace = THREE.SRGBColorSpace; vtex.minFilter = THREE.LinearFilter;
-    const maskC = document.createElement('canvas'), mctx = maskC.getContext('2d');
-    const mtex = new THREE.CanvasTexture(maskC); mtex.minFilter = THREE.LinearFilter; mtex.wrapS = mtex.wrapT = THREE.ClampToEdgeWrapping;
     const bg = () => { const v = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(); const n = parseInt(v.slice(1),16); return new THREE.Vector3(((n>>16)&255)/255,((n>>8)&255)/255,(n&255)/255); };
-    const u = { uVideo:{value:vtex}, uMask:{value:mtex}, uRes:{value:new THREE.Vector2(1,1)}, uVRes:{value:new THREE.Vector2(16,9)},
+    const u = { uVideo:{value:vtex}, uRes:{value:new THREE.Vector2(1,1)}, uVRes:{value:new THREE.Vector2(16,9)},
       uMouse:{value:new THREE.Vector2(.5,.5)}, uTime:{value:0}, uProgress:{value:0}, uHover:{value:0}, uBg:{value:bg()} };
     const mat = new THREE.ShaderMaterial({ uniforms:u, vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`,
-      fragmentShader:`precision highp float;varying vec2 vUv;uniform sampler2D uVideo,uMask;uniform vec2 uRes,uVRes,uMouse;uniform float uTime,uProgress,uHover;uniform vec3 uBg;
+      fragmentShader:`precision highp float;varying vec2 vUv;uniform sampler2D uVideo;uniform vec2 uRes,uVRes,uMouse;uniform float uTime,uProgress,uHover;uniform vec3 uBg;
       float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
       float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
       void main(){
         vec2 uv=vUv; float sa=uRes.x/uRes.y, va=uVRes.x/uVRes.y;          /* cover-fit the video */
-        vec2 cuv=uv-.5; if(sa>va) cuv.y*=sa/va; else cuv.x*=va/sa; cuv+=.5;
+        vec2 cuv=uv-.5; if(sa>va) cuv.y*=va/sa; else cuv.x*=sa/va; cuv+=.5;
         vec2 m=uMouse; vec2 d=uv-m; d.x*=sa; float dist=length(d);
         float w=noise(uv*6.+uTime*.25)-.5;                                   /* slow liquid drift */
         float rip=smoothstep(.42,0.,dist)*(.018*sin(dist*38.-uTime*4.5)+.012*w)*(.35+uHover);
         vec2 duv=cuv+normalize(d+1e-4)*rip+w*.004;
-        float p=uProgress, z=1.+pow(p,1.6)*16.;                              /* zoom through the letters */
-        vec2 muv=(uv-.5)/z+.5; vec4 mk=texture2D(uMask,muv);
-        float inL=smoothstep(.45,.55,mk.a), isDot=step(.5,mk.r)*step(mk.g,.5)*inL;
-        float ab=.0045*(1.-p)+.0025*uHover;
-        vec3 vivid=vec3(texture2D(uVideo,duv+vec2(ab,0)).r,texture2D(uVideo,duv).g,texture2D(uVideo,duv-vec2(ab,0)).b)*1.35;
+        float p=0.; float inL=1., isDot=0.;
+        float ab=.002+.0025*uHover;
+        vec3 vivid=vec3(texture2D(uVideo,duv+vec2(ab,0)).r,texture2D(uVideo,duv).g,texture2D(uVideo,duv-vec2(ab,0)).b)*1.02;
         vec3 vid=texture2D(uVideo,duv).rgb; float g=dot(vid,vec3(.299,.587,.114));
         vec3 outside=mix(vec3(g),vid,.3)*.16;
         vec3 col=mix(outside,vivid,inL);
         col=mix(col,vec3(.88,.40,.18),isDot);                                  /* the orange dot stays solid */
-        vec2 e=vec2(1.5)/uRes; float rim=0.;
-        rim+=abs(texture2D(uMask,muv+vec2(e.x,0)/z).a-mk.a)+abs(texture2D(uMask,muv+vec2(0,e.y)/z).a-mk.a);
-        col+=vec3(.95,.48,.22)*clamp(rim,0.,1.)*.9*(1.-p);                    /* orange rim light on the letter edges */
         float vig=smoothstep(1.25,.35,length((uv-.5)*vec2(sa,1.)));
         col*=mix(.75,1.,vig);
         col+=(hash(uv*uRes+fract(uTime))-.5)*.05;                             /* film grain */
-        col=mix(col,uBg,smoothstep(.8,1.,p));                                 /* hand over to the page */
         gl_FragColor=vec4(col,1.);
       }` });
     scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat));
-    function drawMask(){
-      const r = h1.getBoundingClientRect(), hr = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio, 2);
-      maskC.width = Math.round(hr.width*dpr); maskC.height = Math.round(hr.height*dpr); mctx.setTransform(dpr,0,0,dpr,0,0);
-      mctx.clearRect(0,0,hr.width,hr.height);
-      const cs = getComputedStyle(h1), fs = parseFloat(cs.fontSize);
-      mctx.font = `400 ${fs}px Anton, sans-serif`; if ('letterSpacing' in mctx) mctx.letterSpacing = cs.letterSpacing;
-      mctx.textBaseline = 'alphabetic';
-      const mW = mctx.measureText('SMV').width, mD = mctx.measureText('.').width, total = mW + mD;
-      const mt = mctx.measureText('SMV'); const x = r.left - hr.left + (r.width - total)/2;
-      const y = r.top - hr.top + (r.height + mt.actualBoundingBoxAscent - mt.actualBoundingBoxDescent)/2;
-      mctx.fillStyle = '#fff'; mctx.fillText('SMV', x, y);
-      mctx.fillStyle = '#ff0000'; mctx.fillText('.', x + mW, y);
-      mtex.needsUpdate = true;
-    }
     function size(){
       const w = canvas.clientWidth, h = canvas.clientHeight; renderer.setSize(w, h, false);
-      u.uRes.value.set(w*renderer.getPixelRatio(), h*renderer.getPixelRatio()); drawMask();
+      u.uRes.value.set(w*renderer.getPixelRatio(), h*renderer.getPixelRatio());
     }
     video.addEventListener('loadedmetadata', () => u.uVRes.value.set(video.videoWidth||16, video.videoHeight||9));
     if (video.videoWidth) u.uVRes.value.set(video.videoWidth, video.videoHeight);
@@ -204,7 +182,6 @@ async function initHeroGL(){
       u.uTime.value = clock.getElapsedTime();
       u.uMouse.value.x += (tx - u.uMouse.value.x)*.06; u.uMouse.value.y += (ty - u.uMouse.value.y)*.06;
       u.uHover.value += (hoverT - u.uHover.value)*.05; hoverT *= .98;
-      u.uProgress.value = window.__heroProgress || 0;
       renderer.render(scene, cam);
     });
   } catch (err) { console.warn('hero shader skipped:', err); }
