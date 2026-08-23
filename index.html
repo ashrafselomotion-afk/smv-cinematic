@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark light">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' https://videos.pexels.com; font-src 'self'; connect-src 'self'; form-action 'self' https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; manifest-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<script src="assets/theme.d42c63e0.min.js"></script>
+<script src="assets/theme.0c7589c8.min.js"></script>
 <title>SMV — Singer Media Vision · Media Production Agency</title>
 <meta name="description" content="Singer Media Vision — UAE media production agency. Government summits, global exhibitions, national celebrations. Same-day delivery from Dubai and Sharjah.">
 <meta name="theme-color" content="#111418">
@@ -34,12 +34,19 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"Singer Media Vision","alternateName":"SMV","url":"https://ashrafselomotion-afk.github.io/smv-cinematic/","image":"https://ashrafselomotion-afk.github.io/smv-cinematic/og.jpg","email":"mustafasinger@smv.ae","description":"Media production agency covering government summits, exhibitions and national celebrations across the UAE with same-day delivery.","areaServed":["Dubai","Sharjah","United Arab Emirates"],"address":[{"@type":"PostalAddress","streetAddress":"A34, Design District","addressLocality":"Dubai","addressCountry":"AE"},{"@type":"PostalAddress","streetAddress":"Media City FZ","addressLocality":"Sharjah","addressCountry":"AE"}],"foundingDate":"2016","knowsAbout":["Event coverage","Commercial videography","Aerial filming","Post-production","Color grading"]}
 </script>
-<link rel="stylesheet" href="assets/site.19ceb66e.min.css">
+<link rel="stylesheet" href="assets/site.5ec6764e.min.css">
 </head>
 <body>
 
 <canvas id="space" aria-hidden="true"></canvas>
 <div id="grain"></div>
+<div id="leader" aria-hidden="true"><i class="bar top"></i><i class="bar bot"></i>
+  <div class="count"><svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="46"/><circle id="leaderRing" class="ring" cx="50" cy="50" r="46"/></svg><span id="leaderNum">3</span></div>
+  <div class="slate">SMV · PICTURE START</div>
+</div>
+<div id="cur" aria-hidden="true"><span class="dot"></span><span class="ring"><b id="curLabel"></b></span></div>
+<div id="progress" aria-hidden="true"><i></i></div>
+<div id="chapter" aria-hidden="true"><span id="chapterNum">00</span><i></i><span id="chapterName">INTRO</span></div>
 
 <a class="skip" href="#reels">SKIP TO CONTENT</a>
 <nav id="nav" aria-label="Primary">
@@ -71,8 +78,8 @@
   <div class="shade"></div>
   <div class="mid">
     <div class="tagbox reveal"><i></i>NOW BOOKING · 2026</div>
-    <h1><span class="row" aria-hidden="true"><span>SMV<i>.</i></span></span><span class="sr">SMV — Singer Media Vision, media production agency in Dubai and Sharjah</span></h1>
-    <div class="tag reveal">MEDIA PRODUCTION AGENCY</div>
+    <h1><span class="row" aria-hidden="true"><span class="ch">S</span><span class="ch">M</span><span class="ch">V</span><span class="ch dot"><i>.</i></span></span><span class="sr">SMV — Singer Media Vision, media production agency in Dubai and Sharjah</span></h1>
+    <div class="tag reveal" id="heroTag" data-text="MEDIA PRODUCTION AGENCY">MEDIA PRODUCTION AGENCY</div>
   </div>
   <div class="meta">
     <span>EST. 2016 — DUBAI · SHARJAH</span>
@@ -82,8 +89,11 @@
   <div class="scrolldn">SCROLL</div>
 </section>
 
+<!-- KINETIC BAND -->
+<div class="band" aria-hidden="true"><div class="band-track" id="bandTrack"><span>EVENTS ✦ COMMERCIALS ✦ AERIAL ✦ POST &amp; COLOR ✦ LIVE ✦ SOCIAL ✦ </span><span>EVENTS ✦ COMMERCIALS ✦ AERIAL ✦ POST &amp; COLOR ✦ LIVE ✦ SOCIAL ✦ </span></div></div>
+
 <!-- REELS (placeholder clips — swap media/reels/rNN.mp4 + .webp for real work) -->
-<section id="reels">
+<section id="reels" data-chapter="REELS">
   <div class="label reveal"><span class="n">01</span> — THE GALLERY</div>
   <div class="head">
     <h2 class="wipe">THE REELS</h2>
@@ -91,67 +101,67 @@
   </div>
   <div class="reel-wrap">
     <div class="reel-grid" id="reelTrack" aria-label="Showreel gallery">
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: GOV SUMMIT 2024">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: GOV SUMMIT 2024">
       <video muted loop playsinline preload="none" poster="media/reels/r01.webp" data-src="media/reels/r01.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">01 / EVENT</span><h3>GOV SUMMIT 2024</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: NATIONAL DAY">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: NATIONAL DAY">
       <video muted loop playsinline preload="none" poster="media/reels/r02.webp" data-src="media/reels/r02.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">02 / CEREMONY</span><h3>NATIONAL DAY</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: AUTOMOTIVE LAUNCH">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: AUTOMOTIVE LAUNCH">
       <video muted loop playsinline preload="none" poster="media/reels/r03.webp" data-src="media/reels/r03.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">03 / COMMERCIAL</span><h3>AUTOMOTIVE LAUNCH</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: DUBAI SKYLINE">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: DUBAI SKYLINE">
       <video muted loop playsinline preload="none" poster="media/reels/r04.webp" data-src="media/reels/r04.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">04 / AERIAL</span><h3>DUBAI SKYLINE</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: LUXURY VILLA">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: LUXURY VILLA">
       <video muted loop playsinline preload="none" poster="media/reels/r05.webp" data-src="media/reels/r05.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">05 / REAL ESTATE</span><h3>LUXURY VILLA</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: EXHIBITION RECAP">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: EXHIBITION RECAP">
       <video muted loop playsinline preload="none" poster="media/reels/r06.webp" data-src="media/reels/r06.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">06 / EVENT</span><h3>EXHIBITION RECAP</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: FASHION CAMPAIGN">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: FASHION CAMPAIGN">
       <video muted loop playsinline preload="none" poster="media/reels/r07.webp" data-src="media/reels/r07.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">07 / COMMERCIAL</span><h3>FASHION CAMPAIGN</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: DESERT DRIVE">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: DESERT DRIVE">
       <video muted loop playsinline preload="none" poster="media/reels/r08.webp" data-src="media/reels/r08.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">08 / AERIAL</span><h3>DESERT DRIVE</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: TECH KEYNOTE">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: TECH KEYNOTE">
       <video muted loop playsinline preload="none" poster="media/reels/r09.webp" data-src="media/reels/r09.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">09 / EVENT</span><h3>TECH KEYNOTE</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: RESTAURANT LAUNCH">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: RESTAURANT LAUNCH">
       <video muted loop playsinline preload="none" poster="media/reels/r10.webp" data-src="media/reels/r10.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">10 / SOCIAL</span><h3>RESTAURANT LAUNCH</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: GLOBAL BRAND FILM">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: GLOBAL BRAND FILM">
       <video muted loop playsinline preload="none" poster="media/reels/r11.webp" data-src="media/reels/r11.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">11 / COMMERCIAL</span><h3>GLOBAL BRAND FILM</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: MARINA AT NIGHT">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: MARINA AT NIGHT">
       <video muted loop playsinline preload="none" poster="media/reels/r12.webp" data-src="media/reels/r12.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">12 / AERIAL</span><h3>MARINA AT NIGHT</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: AWARDS NIGHT">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: AWARDS NIGHT">
       <video muted loop playsinline preload="none" poster="media/reels/r13.webp" data-src="media/reels/r13.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">13 / EVENT</span><h3>AWARDS NIGHT</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: HOTEL OPENING">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: HOTEL OPENING">
       <video muted loop playsinline preload="none" poster="media/reels/r14.webp" data-src="media/reels/r14.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">14 / HOSPITALITY</span><h3>HOTEL OPENING</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: SUMMER FESTIVAL">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: SUMMER FESTIVAL">
       <video muted loop playsinline preload="none" poster="media/reels/r15.webp" data-src="media/reels/r15.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">15 / EVENT</span><h3>SUMMER FESTIVAL</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
-    <figure class="reel" tabindex="0" role="button" aria-label="Play reel: BRAND STORY">
+    <figure class="reel" data-cursor="PLAY" tabindex="0" role="button" aria-label="Play reel: BRAND STORY">
       <video muted loop playsinline preload="none" poster="media/reels/r16.webp" data-src="media/reels/r16.mp4" width="540" height="960" aria-hidden="true"></video>
       <figcaption><span class="label">16 / COMMERCIAL</span><h3>BRAND STORY</h3></figcaption><span class="play" aria-hidden="true">▶</span>
     </figure>
@@ -160,46 +170,46 @@
 </section>
 
 <!-- SERVICES -->
-<section id="services">
+<section id="services" data-chapter="SERVICES">
   <div class="label reveal"><span class="n">02</span> — WHAT WE DO</div>
   <h2 class="wipe">OUR SERVICES</h2>
   <div class="grid">
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-event.webp" srcset="assets/img/svc-event-640.webp 640w, assets/img/svc-event.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Event coverage — concert stage lights">
       <span class="k label">/01</span>
       <div class="inner"><h3>EVENT<br>COVERAGE</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-commercial.webp" srcset="assets/img/svc-commercial-640.webp 640w, assets/img/svc-commercial.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Commercial videography — cinema camera">
       <span class="k label">/02</span>
       <div class="inner"><h3>COMMERCIAL<br>VIDEOGRAPHY</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-aerial.webp" srcset="assets/img/svc-aerial-640.webp 640w, assets/img/svc-aerial.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1071" alt="Aerial — drone view of a UAE coastline and desert highway">
       <span class="k label">/03</span>
       <div class="inner"><h3>AERIAL</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-post.webp" srcset="assets/img/svc-post-640.webp 640w, assets/img/svc-post.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="533" alt="Post and color — edit suite">
       <span class="k label">/04</span>
       <div class="inner"><h3>POST &amp;<br>COLOR</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-live.webp" srcset="assets/img/svc-live-640.webp 640w, assets/img/svc-live.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1071" alt="Live streaming — broadcast camera operator at a live stage event">
       <span class="k label">/05</span>
       <div class="inner"><h3>LIVE<br>STREAMING</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-photo.webp" srcset="assets/img/svc-photo-640.webp 640w, assets/img/svc-photo.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1000" alt="Photography — camera and lenses">
       <span class="k label">/06</span>
       <div class="inner"><h3>EVENT<br>PHOTOGRAPHY</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-social.webp" srcset="assets/img/svc-social-640.webp 640w, assets/img/svc-social.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="534" alt="Social content — creator with laptop and phone">
       <span class="k label">/07</span>
       <div class="inner"><h3>SOCIAL<br>CONTENT</h3><span class="arr">→</span></div>
     </a>
-    <a class="card reveal" href="#contact">
+    <a class="card reveal" data-cursor="VIEW" href="#contact">
       <img loading="lazy" decoding="async" src="assets/img/svc-motion.webp" srcset="assets/img/svc-motion-640.webp 640w, assets/img/svc-motion.webp 800w" sizes="(max-width:560px) 90vw, (max-width:900px) 45vw, 22vw" width="800" height="1000" alt="Motion graphics — design system on screen">
       <span class="k label">/08</span>
       <div class="inner"><h3>MOTION<br>GRAPHICS</h3><span class="arr">→</span></div>
@@ -208,7 +218,7 @@
 </section>
 
 <!-- WHY SMV (bento) -->
-<section id="why">
+<section id="why" data-chapter="WHY SMV">
   <div class="label reveal"><span class="n">03</span> — WHY SMV</div>
   <h2 class="wipe">BUILT FOR THE<br>BIG STAGE</h2>
   <div class="rule reveal"></div>
@@ -271,7 +281,7 @@
 </section>
 
 <!-- CLIENTS -->
-<section id="clients">
+<section id="clients" data-chapter="CLIENTS">
   <div class="label reveal"><span class="n">04</span> — TRUSTED BY</div>
   <div class="marq reveal" id="logoMarq"><div class="track"><div class="unit">
 
@@ -343,7 +353,7 @@
 </section>
 
 <!-- CTA -->
-<section id="contact">
+<section id="contact" data-chapter="CONTACT">
   <svg class="bloom" viewBox="0 0 600 600" aria-hidden="true">
     <defs>
       <filter id="bloomF" x="-70%" y="-70%" width="240%" height="240%" color-interpolation-filters="sRGB">
@@ -417,7 +427,7 @@
 
 <script defer src="assets/vendor/gsap.min.js"></script>
 <script defer src="assets/vendor/ScrollTrigger.min.js"></script>
-<script defer src="assets/site.8f1a8c7c.min.js"></script>
+<script defer src="assets/site.843fcada.min.js"></script>
 <script type="module" src="assets/space.ef649cdb.min.js"></script>
 </body>
 </html>
