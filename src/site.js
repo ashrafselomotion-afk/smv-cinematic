@@ -194,7 +194,6 @@
   }
   gsap.registerPlugin(ScrollTrigger);
   if (window.ScrollSmoother) gsap.registerPlugin(ScrollSmoother);
-  if (window.SplitText) gsap.registerPlugin(SplitText);
   if (window.Flip) gsap.registerPlugin(Flip);
 
   /* ---------- INERTIAL SMOOTH SCROLL + DEPTH (data-speed parallax) ---------- */
@@ -313,20 +312,12 @@
       scrollTrigger:{ trigger:el, start:'top 88%' } });
   });
 
-  /* ---------- MASKED LINE REVEALS on section titles (SplitText) ---------- */
-  const headlines = gsap.utils.toArray('h2.wipe');
-  const revealHeads = () => headlines.forEach(h => {
-    let lines = null;
-    if (window.SplitText) { try { lines = SplitText.create(h, { type:'lines', mask:'lines', linesClass:'line' }).lines; } catch(e){} }
-    if (lines && lines.length) {
-      gsap.set(lines, { yPercent:115, rotate:2 });
-      enterOnce(h, 'top 86%', () => gsap.to(lines, { yPercent:0, rotate:0, duration:1.15, ease:'power4.out', stagger:.09 }));
-    } else {
-      gsap.set(h, { y:40, opacity:0 });
-      enterOnce(h, 'top 86%', () => gsap.to(h, { y:0, opacity:1, duration:1, ease:'power3.out', clearProps:'opacity,transform' }));
-    }
+  /* ---------- SECTION TITLE REVEALS (simple, clip-proof) ---------- */
+  gsap.utils.toArray('h2.wipe').forEach(h => {
+    gsap.set(h, { y: 40, opacity: 0 });
+    enterOnce(h, 'top 88%', () => gsap.to(h, { y: 0, opacity: 1, duration: 1, ease: 'power3.out', clearProps: 'opacity,transform' }));
   });
-  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { revealHeads(); ScrollTrigger.refresh(); });
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => ScrollTrigger.refresh());
 
   /* ---------- STROKE-DRAW client emblems ---------- */
   if (document.getElementById('clients')) {
@@ -396,6 +387,27 @@
 
   /* ---------- Aceternity · Floating Navbar (hide on scroll down, show on up) ---------- */
   ScrollTrigger.create({ start:0, end:'max', onUpdate(self){ document.documentElement.classList.toggle('nav-hide', self.direction === 1 && self.scroll() > 600); } });
+
+  /* ---------- SERVICE JOURNEY (production confidence line-draw) ---------- */
+  const journey = document.querySelector('.service-journey');
+  if (journey) {
+    const stops = [...journey.querySelectorAll('.service-stop')];
+    const livePath = journey.querySelector('.service-line-live');
+    let plen = 1;
+    const sizePath = () => { plen = livePath.getTotalLength() || 1; livePath.style.strokeDasharray = String(plen); livePath.style.strokeDashoffset = String(plen); };
+    const updateJourney = () => {
+      const rect = journey.getBoundingClientRect();
+      const travel = Math.max(rect.height - innerHeight * .55, 1);
+      const progress = Math.max(0, Math.min(1, (innerHeight * .42 - rect.top) / travel));
+      livePath.style.strokeDashoffset = String(plen * (1 - progress));
+      let active = 0;
+      stops.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * .58) active = i; });
+      stops.forEach((s, i) => s.classList.toggle('is-active', i === active));
+    };
+    sizePath(); updateJourney();
+    ScrollTrigger.create({ trigger: journey, start: 'top bottom', end: 'bottom top',
+      onUpdate: updateJourney, onRefresh(){ sizePath(); updateJourney(); } });
+  }
 
   /* ---------- STATS COUNT-UP ---------- */
   document.querySelectorAll('[data-count]').forEach(el=>{
