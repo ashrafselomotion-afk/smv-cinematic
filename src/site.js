@@ -304,8 +304,8 @@
   });
 
   /* ---------- HERO PARALLAX ---------- */
-  gsap.to('#hero .hero-copy', { yPercent:-12, opacity:0, ease:'none',
-    scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom 45%', scrub:true } });
+  gsap.to('#hero .hero-copy', { yPercent:-8, opacity:0, ease:'none',
+    scrollTrigger:{ trigger:'#hero', start:'top top', end:'+=340', scrub:true } });
 
   /* ---------- SCROLL REVEALS ---------- */
   document.querySelectorAll('.reveal').forEach(el=>{
