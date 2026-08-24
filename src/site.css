@@ -260,7 +260,7 @@ section,footer,.marquee{position:relative;z-index:1}
 /* ---------- CTA / CONTACT ---------- */
 #contact{position:relative;text-align:center;padding:160px var(--gutter) 60px;overflow:hidden}
 #contact .label{position:relative}
-#contact h2{position:relative;font-size:clamp(46px,8.2vw,120px);line-height:.98;margin:26px 0 54px;color:var(--ink)}
+#contact h2{position:relative;font-size:clamp(32px,4.6vw,72px);line-height:1.04;margin:26px 0 34px;color:var(--ink)}
 #contact .btns{position:relative;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 #contact .btn{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;padding:20px 38px;border-radius:999px;transition:transform .3s,background .3s,border-color .3s}
 #contact .btn.hot{background:var(--hot-fill);color:#111418;font-weight:500}
