@@ -168,9 +168,12 @@
     }
   }));
 
+  document.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
+
   /* ---------- BRIEF SENT ---------- */
   if (location.search.includes('sent=1')) {
-    document.getElementById('sentMsg').hidden = false;
+    const sentMsg = document.getElementById('sentMsg');
+    if (sentMsg) sentMsg.hidden = false;
     history.replaceState(null, '', location.pathname + '#contact');
   }
 
@@ -208,7 +211,7 @@
   function heroIntro(){
     gsap.set('#hero .hero-copy, #nav', { visibility:'visible' });
     gsap.to('#hero h1 .l > span', { y:0, duration:1.15, ease:'power4.out', stagger:.12, delay:.1 });
-    gsap.fromTo('#hero .eyebrow, #hero .sub, #hero .reel-btn', { opacity:0, y:16 }, { opacity:1, y:0, duration:.9, delay:.55, ease:'power3.out', stagger:.12 });
+    gsap.fromTo('#hero .eyebrow, #hero .sub, #hero .hero-ctas, #hero .trust', { opacity:0, y:16 }, { opacity:1, y:0, duration:.9, delay:.55, ease:'power3.out', stagger:.12 });
     gsap.fromTo('#nav', { opacity:0, y:16 }, { opacity:1, y:0, duration:1, delay:.7, ease:'power3.out', clearProps:'all' });
   }
 
@@ -326,17 +329,19 @@
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { revealHeads(); ScrollTrigger.refresh(); });
 
   /* ---------- STROKE-DRAW client emblems ---------- */
-  const strokes = document.querySelectorAll('#clients .clogo .ln');
-  const fills   = document.querySelectorAll('#clients .clogo .fl');
-  strokes.forEach(el => {
-    const len = el.getTotalLength ? el.getTotalLength() : 200;
-    el.style.strokeDasharray = len; el.style.strokeDashoffset = len;
-  });
-  gsap.set(fills, { opacity: 0 });
-  enterOnce('#clients', 'top 80%', () => {
-    gsap.to(strokes, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut', stagger: .04 });
-    gsap.to(fills, { opacity: 1, duration: 1, delay: .8, ease: 'power2.out', stagger: .05 });
-  });
+  if (document.getElementById('clients')) {
+    const strokes = document.querySelectorAll('#clients .clogo .ln');
+    const fills   = document.querySelectorAll('#clients .clogo .fl');
+    strokes.forEach(el => {
+      const len = el.getTotalLength ? el.getTotalLength() : 200;
+      el.style.strokeDasharray = len; el.style.strokeDashoffset = len;
+    });
+    gsap.set(fills, { opacity: 0 });
+    enterOnce('#clients', 'top 80%', () => {
+      gsap.to(strokes, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut', stagger: .04 });
+      gsap.to(fills, { opacity: 1, duration: 1, delay: .8, ease: 'power2.out', stagger: .05 });
+    });
+  }
 
   /* ---------- DELIVERY TIMELINE ---------- */
   const tl = document.querySelector('.tl');

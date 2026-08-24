@@ -1,17 +1,18 @@
 # SMV — Singer Media Vision
 
-> Media production agency based in Dubai and Sharjah, United Arab Emirates. Event coverage, commercial videography, aerial filming and post-production for government summits, exhibitions and national celebrations, with same-day delivery.
+UAE-based film and content production partner for government entities, public-sector
+organisations and national institutions. Government films, official event coverage,
+national occasions, leadership and protocol coverage, live broadcast, aerial capture,
+photography and post-production across the UAE.
 
-## Services
-- Event coverage (summits, exhibitions, ceremonies): https://ashrafselomotion-afk.github.io/smv-cinematic/#services
-- Commercial and brand films: https://ashrafselomotion-afk.github.io/smv-cinematic/#services
-- Aerial / drone filming: https://ashrafselomotion-afk.github.io/smv-cinematic/#services
-- Post-production, editing and color grading: https://ashrafselomotion-afk.github.io/smv-cinematic/#services
+Brand line: Stories of progress. Produced with precision.
 
-## Locations
-Dubai (A34, Design District) and Sharjah (Media City FZ); crews deploy UAE-wide.
+- Home: https://ashrafselomotion-afk.github.io/smv-cinematic/
+- Work: https://ashrafselomotion-afk.github.io/smv-cinematic/work.html
+- Government Production: https://ashrafselomotion-afk.github.io/smv-cinematic/government-production.html
+- Capabilities: https://ashrafselomotion-afk.github.io/smv-cinematic/capabilities.html
+- Approach: https://ashrafselomotion-afk.github.io/smv-cinematic/approach.html
+- About: https://ashrafselomotion-afk.github.io/smv-cinematic/about.html
+- Contact / Start a brief: https://ashrafselomotion-afk.github.io/smv-cinematic/contact.html
 
-## Contact
-- Website: https://ashrafselomotion-afk.github.io/smv-cinematic/
-- Email: mustafasinger@smv.ae
-- Brief form: https://ashrafselomotion-afk.github.io/smv-cinematic/#brief
+New business & briefs: mustafasinger@smv.ae

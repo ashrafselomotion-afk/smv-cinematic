@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SMV portfolio project",
+  "description": "Data structure for approved portfolio projects and case studies. Populate only with client-approved information; entries with approved:false are never rendered publicly.",
+  "type": "object",
+  "required": ["id", "approved", "title", "attribution", "service"],
+  "properties": {
+    "id": { "type": "string", "description": "Slug, e.g. national-initiative-launch" },
+    "approved": { "type": "boolean", "description": "Written client approval for publication exists" },
+    "title": { "type": "string", "description": "Approved project or initiative name, or a neutral structure such as 'Selected Event Production' when unapproved" },
+    "attribution": { "type": "string", "description": "Entity name, or 'Confidential government entity' by agreement" },
+    "confidential": { "type": "boolean", "description": "Published with limited project detail by agreement" },
+    "service": { "type": "string", "enum": ["Film", "Event coverage", "Live", "Aerial", "Photography", "Social", "Post-production"] },
+    "emirate": { "type": "string" },
+    "year": { "type": "integer" },
+    "objective": { "type": "string", "description": "One sentence: communication objective, SMV's role, main delivery" },
+    "deliverables": { "type": "array", "items": { "type": "string" } },
+    "outcome": { "type": "string", "description": "Approved evidence only: release timing, channels, reach, feedback" },
+    "caseStudyUrl": { "type": "string", "format": "uri-reference" },
+    "media": {
+      "type": "object",
+      "properties": {
+        "video": { "type": "string", "description": "Path under media/ — keep configurable so approved replacements can be swapped in" },
+        "poster": { "type": "string" },
+        "alt": { "type": "string", "description": "Accurate, neutral description of the footage" }
+      }
+    }
+  }
+}
