@@ -9,7 +9,7 @@
   --hot:#E0652F;
   --hot-fill:#E0652F;
   --line:rgba(244,242,238,.12);
-  --nav-bg:rgba(17,20,24,.6);
+  --nav-bg:rgba(17,20,24,.9);
   --logo:rgba(244,242,238,.42);
   --tile:rgba(255,255,255,.035);
   --display:'Anton',sans-serif;
@@ -24,7 +24,7 @@
     --ink:#121418;
     --dim:#6E7179;
     --line:rgba(18,20,24,.18);
-    --nav-bg:rgba(221,224,228,.75);
+    --nav-bg:rgba(221,224,228,.94);
     --logo:rgba(18,20,24,.42);
     --tile:rgba(18,20,24,.05);
     color-scheme:light;
@@ -36,7 +36,7 @@
   --ink:#121418;
   --dim:#6E7179;
   --line:rgba(18,20,24,.18);
-  --nav-bg:rgba(221,224,228,.75);
+  --nav-bg:rgba(221,224,228,.94);
   --logo:rgba(18,20,24,.42);
   --tile:rgba(18,20,24,.05);
   color-scheme:light;
