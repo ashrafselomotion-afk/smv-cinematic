@@ -112,10 +112,6 @@ html.menu-open #mmenu a.big:nth-child(5){transition-delay:.24s}
   font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--hot);text-align:center}
 @media (max-width:640px){#brief .grid{grid-template-columns:1fr}#brief{padding:26px 20px}}
 
-/* ---------- GRAIN ---------- */
-#grain{position:fixed;inset:-60%;width:220%;height:220%;pointer-events:none;z-index:900;opacity:.05;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-
 /* ---------- NAV ---------- */
 #nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:800;
   display:flex;align-items:center;gap:38px;
@@ -190,7 +186,7 @@ section,footer,.marquee{position:relative;z-index:1}
 @media (max-width:560px){#services .grid{grid-template-columns:1fr}#services .card{aspect-ratio:4/3}}
 
 /* ---------- WHY SMV (bento) ---------- */
-#why h2,#faq h2{font-size:clamp(44px,7.5vw,110px);line-height:.95;margin:18px 0 0}
+#faq h2{font-size:clamp(44px,7.5vw,110px);line-height:.95;margin:18px 0 0}
 .rule{display:flex;align-items:center;gap:0;margin:34px 0 0;max-width:180px}
 .rule::before{content:'';flex:1;height:1px;background:var(--ink);opacity:.7}
 .rule::after{content:'';width:7px;height:7px;border:1px solid var(--ink);margin-left:10px}
@@ -600,13 +596,91 @@ html.nav-hide #nav{transform:translate(-50%,-150%);opacity:0}
   .service-card{margin-top:26px;min-height:220px}
 }
 
+/* ---------- BIG SECTION HEADINGS for approach / confidence / credentials ---------- */
+#process h2,#confidence h2,#credentials h2{font-size:clamp(40px,6vw,92px);line-height:.96;margin:18px 0 30px}
+#process .intro,#confidence .intro,#credentials .intro{margin-top:0}
 
-/* ---------- 06 · CREDENTIALS — big-values row (ref numbers design) ---------- */
-.nrow{display:grid;grid-template-columns:repeat(4,1fr);gap:4vw;max-width:1040px}
-.ncell{border-top:1px solid var(--line);padding-top:26px}
-.ncell .v{font-family:var(--display);font-size:clamp(40px,5.4vw,86px);line-height:1;letter-spacing:.005em;color:var(--ink);text-transform:uppercase}
+/* ---------- 03 · APPROACH — glass timeline cards ---------- */
+.flow{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:44px;
+  margin-inline:calc(3vw - var(--gutter))}
+.flow::before{content:'';position:absolute;top:26px;left:3%;right:3%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(224,101,47,.55) 12%,rgba(224,101,47,.55) 88%,transparent)}
+.fcard{position:relative;border:1px solid var(--line);border-radius:22px;padding:20px 20px 24px;
+  background:linear-gradient(165deg,rgba(255,255,255,.045),rgba(255,255,255,.012) 55%,rgba(224,101,47,.04));
+  transition:transform .35s,border-color .35s}
+.fcard:hover{transform:translateY(-4px);border-color:rgba(224,101,47,.45)}
+.fcard .node{position:absolute;top:18px;left:18px;width:14px;height:14px;border-radius:50%;
+  background:var(--hot-fill);box-shadow:0 0 0 5px rgba(224,101,47,.16),0 0 18px rgba(224,101,47,.55)}
+.fcard .mini{position:relative;margin:34px 0 20px;height:96px;border-radius:12px;overflow:hidden;
+  background:rgba(10,13,17,.72);border:1px solid rgba(255,255,255,.07);padding:16px 14px}
+:root[data-theme="light"] .fcard .mini{background:rgba(18,20,24,.85)}
+.fcard .mini b{position:absolute;left:14px;bottom:10px;font-family:var(--mono);font-weight:400;
+  font-size:8px;letter-spacing:.24em;color:rgba(244,242,238,.55)}
+.fcard .mini .ln{display:block;height:2px;border-radius:2px;background:rgba(244,242,238,.28);margin-bottom:9px;width:82%}
+.fcard .mini .ln.s{width:58%}
+.fcard .mini .ln.hot{width:70%;background:var(--hot-fill)}
+.fcard .mini .bx{display:inline-block;width:9px;height:9px;border:1px solid rgba(244,242,238,.4);border-radius:2px;margin:0 8px 6px 0;vertical-align:middle}
+.fcard .mini .bx.on{background:var(--hot-fill);border-color:var(--hot-fill)}
+.fcard .mini .ln + .bx{margin-top:2px}
+.fcard .mini.rec .ring{position:absolute;left:50%;top:32px;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;border:2px solid rgba(244,242,238,.35)}
+.fcard .mini.rec .ring::after{content:'';position:absolute;inset:9px;border-radius:50%;background:rgba(244,242,238,.2)}
+.fcard .mini.rec .dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--hot-fill)}
+.fcard .mini.rec .d1{top:14px;left:14px}
+.fcard .mini.rec .d2{top:20px;right:16px}
+.fcard .mini.bars .br{position:absolute;bottom:34px;width:7px;border-radius:3px;background:linear-gradient(180deg,#EA7A47,var(--hot-fill))}
+.fcard .mini.bars .b1{left:22%;height:26px}
+.fcard .mini.bars .b2{left:34%;height:38px}
+.fcard .mini.bars .b3{left:46%;height:20px}
+.fcard .mini.bars .b4{left:58%;height:32px}
+.fcard .mini.bars .b5{left:70%;height:42px}
+.fcard .mini .pill{display:block;height:8px;border-radius:99px;border:1px solid rgba(244,242,238,.3);margin-bottom:10px;width:84%}
+.fcard .mini .pill.s{width:62%}
+.fcard .mini .pill.hot{width:74%;border-color:var(--hot);background:rgba(224,101,47,.35)}
+.fcard .stepk{font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:var(--hot)}
+.fcard h3{font-family:var(--display);font-weight:400;font-size:clamp(22px,1.9vw,30px);letter-spacing:.02em;text-transform:uppercase;margin:10px 0 10px;color:var(--ink)}
+.fcard p{color:var(--dim);font-size:13px;line-height:1.65}
+.fcard .meta{display:block;margin-top:14px;font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;color:var(--dim);opacity:.8;text-transform:uppercase;line-height:1.9}
+@media (max-width:1150px){.flow{grid-template-columns:repeat(2,1fr);margin-inline:0}.flow::before{display:none}.fcard:last-child{grid-column:1/-1}}
+@media (max-width:600px){.flow{grid-template-columns:1fr}.fcard:last-child{grid-column:auto}}
+
+/* ---------- 05 · CREDENTIALS — glass value tiles ---------- */
+.nrow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1040px;margin-top:14px}
+.ncell{position:relative;border:1px solid var(--line);border-radius:20px;padding:52px 22px 24px;
+  background:linear-gradient(165deg,rgba(255,255,255,.045),rgba(255,255,255,.012) 55%,rgba(224,101,47,.04));
+  transition:transform .35s,border-color .35s}
+.ncell:hover{transform:translateY(-4px);border-color:rgba(224,101,47,.45)}
+.ncell .node{position:absolute;top:18px;left:20px;width:11px;height:11px;border-radius:50%;
+  background:var(--hot-fill);box-shadow:0 0 0 4px rgba(224,101,47,.15),0 0 14px rgba(224,101,47,.5)}
+.ncell .v{font-family:var(--display);font-size:clamp(34px,3.6vw,58px);line-height:1;letter-spacing:.005em;color:var(--ink);text-transform:uppercase}
 .ncell .v i{font-style:normal;color:var(--hot)}
-.ncell .l{margin-top:16px;font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;color:var(--dim);text-transform:uppercase;line-height:1.9}
-.cred-note{margin:44px 0 26px;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;line-height:2;max-width:72ch}
-@media (max-width:820px){.nrow{grid-template-columns:1fr 1fr;gap:36px 6vw}}
-@media (max-width:480px){.ncell .v{font-size:clamp(34px,10vw,48px)}}
+.ncell .l{margin-top:14px;font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase;line-height:1.9}
+.cred-note{margin:40px 0 24px;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;line-height:2;max-width:72ch}
+@media (max-width:900px){.nrow{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.nrow{grid-template-columns:1fr}}
+
+/* ---------- LANGUAGE TOGGLE ---------- */
+#nav .lang{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em}
+#nav .lang a{color:var(--dim);transition:color .3s;padding:4px 2px}
+#nav .lang a:hover{color:var(--ink)}
+#nav .lang a.on{color:var(--hot)}
+#nav .lang i{font-style:normal;color:var(--line)}
+#mmenu .mlang{display:block;font-family:var(--mono);font-size:13px;color:var(--hot);margin-bottom:14px}
+
+/* ---------- ARABIC (ar.html) ---------- */
+@font-face{font-family:'Almarai';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/almarai-arabic-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0898-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC}
+@font-face{font-family:'Almarai';font-style:normal;font-weight:800;font-display:swap;src:url(fonts/almarai-arabic-800.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0898-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC}
+html[lang="ar"] *{letter-spacing:0!important}
+html[lang="ar"] body,html[lang="ar"] h1,html[lang="ar"] h2,html[lang="ar"] h3,html[lang="ar"] p,html[lang="ar"] a,html[lang="ar"] button,html[lang="ar"] span,html[lang="ar"] div,html[lang="ar"] summary,html[lang="ar"] li,html[lang="ar"] figcaption{font-family:'Almarai','Space Grotesk',system-ui,sans-serif}
+html[lang="ar"] h1,html[lang="ar"] h2,html[lang="ar"] h3,html[lang="ar"] .ncell .v,html[lang="ar"] .wordmark{font-weight:800}
+html[lang="ar"] #hero h1{font-size:clamp(30px,4.8vw,76px);line-height:1.22}
+html[lang="ar"] h2.wipe,html[lang="ar"] #reels h2,html[lang="ar"] #services h2,html[lang="ar"] #faq h2,html[lang="ar"] #contact h2,html[lang="ar"] #process h2,html[lang="ar"] #confidence h2,html[lang="ar"] #credentials h2{font-size:clamp(28px,4.6vw,68px);line-height:1.2;text-transform:none}
+html[lang="ar"] .hero-copy{text-align:right}
+html[lang="ar"] .fcard .node{left:auto;right:18px}
+html[lang="ar"] .fcard .mini b{left:auto;right:14px}
+html[lang="ar"] .ncell .node{left:auto;right:20px}
+html[lang="ar"] .fcard h3{font-size:clamp(19px,1.7vw,26px);text-transform:none}
+html[lang="ar"] .faq summary{font-size:clamp(15px,1.5vw,21px);text-transform:none}
+html[lang="ar"] .label,html[lang="ar"] .stepk,html[lang="ar"] .meta,html[lang="ar"] .cred-note,html[lang="ar"] .ncell .l,html[lang="ar"] .work-note,html[lang="ar"] .intro,html[lang="ar"] .fcard p{font-size:12px;line-height:1.9}
+html[lang="ar"] .plist .item h3{text-transform:none;font-size:clamp(16px,1.6vw,22px)}
+html[lang="ar"] #hero .sub{font-size:15px;line-height:2;max-width:52ch}
+html[lang="ar"] .btn,html[lang="ar"] #nav .cta{font-size:12px}

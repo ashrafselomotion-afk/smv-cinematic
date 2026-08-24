@@ -50,16 +50,18 @@ appear on the public website. Nothing in this file is published. Items marked
 - OG/social share image: current og.jpg is a generated skyline frame; replace with
   one approved flagship-project frame (no unapproved emblems or client marks).
 
-## Arabic localisation (not yet implemented)
+## Arabic localisation (partial — ar.html live)
 
-- The العربية navigation item is NOT rendered anywhere: no Arabic experience exists
-  yet, and the plan forbids a language button that leads nowhere.
+- ar.html is a full single-page Arabic homepage (RTL, Almarai font, plan-approved
+  hero copy; remaining sections localised by the engineer). TODO: CLIENT VERIFICATION —
+  review by an Arabic government-communications editor before tenders rely on it.
 - Approved Arabic hero copy from the content plan (master line, eyebrow, body, CTAs)
   is ready in `SMV-premium-website-content-plan.md` §15 for when RTL routing exists.
 - Required for launch: full RTL layout, Arabic metadata, localised case-study depth,
   review by an Arabic government-communications editor.
-- Untranslated content: every page (Home, Work, Government Production, Capabilities,
-  Approach, About, Contact, Privacy, 404) is English-only today.
+- Still English-only: Work, Government Production, Capabilities, Approach, About,
+  Contact (brief form), Privacy, 404. The Arabic page links to the English form and
+  says so explicitly.
 
 ## Legal
 

@@ -17,7 +17,8 @@ try {
     const g = c.getContext('2d');
     const grad = g.createRadialGradient(32,32,0,32,32,32);
     grad.addColorStop(0,'rgba(255,255,255,1)');
-    grad.addColorStop(.35,'rgba(255,255,255,.7)');
+    grad.addColorStop(.55,'rgba(255,255,255,.85)');
+    grad.addColorStop(.8,'rgba(255,255,255,.12)');
     grad.addColorStop(1,'rgba(255,255,255,0)');
     g.fillStyle = grad; g.fillRect(0,0,64,64);
     return new THREE.CanvasTexture(c);
@@ -27,7 +28,7 @@ try {
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       // hollow-ish sphere so the center stays clear behind the logo
-      const r = spread * (0.35 + 0.65 * Math.cbrt(Math.random()));
+      const r = spread * (0.62 + 0.38 * Math.cbrt(Math.random()));
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       pos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
@@ -44,9 +45,9 @@ try {
     return new THREE.Points(geo, mat);
   }
 
-  const starsFar  = makePoints(420, 0xB8BCC6, 0.42, 95);
-  const starsNear = makePoints(110, 0xE8E8EC, 0.8, 55);
-  const embers    = makePoints(16,  0xE0652F, 1.1, 70);
+  const starsFar  = makePoints(360, 0xB8BCC6, 0.3, 95);
+  const starsNear = makePoints(90,  0xE8E8EC, 0.5, 62);
+  const embers    = makePoints(12,  0xE0652F, 0.6, 75);
   const field = new THREE.Group();
   field.add(starsFar, starsNear, embers);
   scene.add(field);
@@ -62,7 +63,7 @@ try {
     starsNear.material.color.set(light ? 0x1E1E22 : 0xFFFFFF);
     [starsFar, starsNear, embers].forEach(p => {
       p.material.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
-      p.material.opacity = light ? 0.3 : 0.6;
+      p.material.opacity = light ? 0.22 : 0.45;
       p.material.needsUpdate = true;
     });
   }
@@ -73,7 +74,7 @@ try {
 
   function size(){
     const w = canvas.clientWidth, h = canvas.clientHeight;
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
