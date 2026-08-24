@@ -11,7 +11,7 @@ h(){ shasum -a 256 "$1" | cut -c1-8; }
 HC=$(h "$T/site.min.css"); HJ=$(h "$T/site.min.js"); HT=$(h "$T/theme.min.js"); HP=$(h "$T/page.min.js"); HM=$(h "$T/space.min.js")
 rm -f assets/site.*.min.css assets/site.*.min.js assets/theme.*.min.js assets/page.*.min.js assets/space.*.min.js
 cp "$T/site.min.css" "assets/site.$HC.min.css"; cp "$T/site.min.js" "assets/site.$HJ.min.js"; cp "$T/theme.min.js" "assets/theme.$HT.min.js"; cp "$T/page.min.js" "assets/page.$HP.min.js"; cp "$T/space.min.js" "assets/space.$HM.min.js"
-for f in *.html; do
+for f in *.html ar/*.html; do
   sed -i '' -E "s#assets/site\.[0-9a-f]{8}\.min\.css#assets/site.$HC.min.css#g; s#assets/site\.[0-9a-f]{8}\.min\.js#assets/site.$HJ.min.js#g; s#assets/theme\.[0-9a-f]{8}\.min\.js#assets/theme.$HT.min.js#g; s#assets/page\.[0-9a-f]{8}\.min\.js#assets/page.$HP.min.js#g; s#assets/space\.[0-9a-f]{8}\.min\.js#assets/space.$HM.min.js#g" "$f"
 done
 for f in "$T/site.min.css" "$T/site.min.js" "$T/page.min.js" "$T/space.min.js"; do printf "%s raw=%s gz=%s\n" "$(basename $f)" "$(wc -c <"$f")" "$(gzip -c "$f" | wc -c)"; done

@@ -2,6 +2,8 @@
 async function initSpace(){
 try {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const saveData = !!(navigator.connection && navigator.connection.saveData);
+  if (reduced || saveData) return;              // 37 · module is never fetched
   const THREE = await import('./vendor/three.module.min.js');
   const canvas = document.getElementById('space');
 
@@ -101,16 +103,34 @@ try {
   }
 
   const clock = new THREE.Clock();
-  renderer.setAnimationLoop(() => {
-    if (document.hidden) return;
+  let running = false, onScreen = true;
+  const frame = () => {
     const t = clock.getElapsedTime();
-    if (!reduced) {
-      starsFar.rotation.y  = t * 0.006;
-      starsNear.rotation.y = -t * 0.01;
-      embers.rotation.y    = t * 0.015;
-    }
+    starsFar.rotation.y  = t * 0.006;
+    starsNear.rotation.y = -t * 0.01;
+    embers.rotation.y    = t * 0.015;
     renderer.render(scene, camera);
-  });
+  };
+  function run(on){
+    on = on && !document.hidden && onScreen;
+    if (on === running) return;
+    running = on;
+    renderer.setAnimationLoop(on ? frame : null);   // 38 · loop fully stops when idle
+  }
+  run(true);
+  document.addEventListener('visibilitychange', () => run(!document.hidden));
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(es => { onScreen = es[0].isIntersecting; run(onScreen); },
+      { threshold: 0 }).observe(canvas);
+  }
+  function dispose(){
+    run(false);
+    [starsFar, starsNear, embers].forEach(p => { p.geometry.dispose(); p.material.dispose(); });
+    dot.dispose();
+    renderer.dispose();
+  }
+  addEventListener('pagehide', dispose, { once:true });
+  window.__smvSpaceDispose = dispose;
 } catch (err) {
   // WebGL/CDN unavailable — the pure-black background stays
   console.warn('space scene skipped:', err);
@@ -175,16 +195,23 @@ async function initHeroGL(){
     let tx=.5, ty=.5, hoverT=0;
     addEventListener('pointermove', e => { const r = canvas.getBoundingClientRect(); tx = (e.clientX - r.left)/r.width; ty = 1 - (e.clientY - r.top)/r.height; hoverT = 1; }, { passive:true });
     addEventListener('pointerleave', () => { hoverT = 0; });
-    const clock = new THREE.Clock(); let visible = true;
-    new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(document.getElementById('hero'));
+    const clock = new THREE.Clock(); let visible = true, glRunning = false;
+    const glRun = on => {
+      on = on && visible && !document.hidden;
+      if (on === glRunning) return;
+      glRunning = on;
+      renderer.setAnimationLoop(on ? glFrame : null);
+    };
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; glRun(visible); }).observe(document.getElementById('hero'));
+    document.addEventListener('visibilitychange', () => glRun(!document.hidden));
     document.documentElement.classList.add('gl');
-    renderer.setAnimationLoop(() => {
-      if (!visible || document.hidden) return;
+    function glFrame(){
       u.uTime.value = clock.getElapsedTime();
       u.uMouse.value.x += (tx - u.uMouse.value.x)*.06; u.uMouse.value.y += (ty - u.uMouse.value.y)*.06;
       u.uHover.value += (hoverT - u.uHover.value)*.05; hoverT *= .98;
       renderer.render(scene, cam);
-    });
+    }
+    glRun(true);
   } catch (err) { console.warn('hero shader skipped:', err); }
 }
 if (document.readyState === 'complete') initHeroGL(); else addEventListener('load', initHeroGL, { once:true });

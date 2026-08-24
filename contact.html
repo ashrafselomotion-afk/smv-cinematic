@@ -6,24 +6,34 @@
 <meta name="color-scheme" content="dark light">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; form-action 'self' https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; manifest-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<script src="assets/theme.0c7589c8.min.js"></script>
+<script src="assets/theme.639c8ba9.min.js"></script>
 <title>Start a Production Brief | SMV UAE</title>
 <meta name="description" content="Brief SMV on a government film, official event, public campaign, live production or institutional content assignment in the UAE.">
-<meta name="theme-color" content="#111418">
+<meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#DDE0E4" media="(prefers-color-scheme: light)">
 <link rel="canonical" href="https://ashrafselomotion-afk.github.io/smv-cinematic/contact.html">
+<link rel="alternate" hreflang="en" href="https://ashrafselomotion-afk.github.io/smv-cinematic/contact.html">
+<link rel="alternate" hreflang="ar" href="https://ashrafselomotion-afk.github.io/smv-cinematic/ar/contact.html">
+<link rel="alternate" hreflang="x-default" href="https://ashrafselomotion-afk.github.io/smv-cinematic/contact.html">
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="manifest" href="site.webmanifest">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_AE">
+<meta property="og:locale:alternate" content="ar_AE">
 <meta property="og:site_name" content="SMV — Singer Media Vision">
 <meta property="og:title" content="Start a Production Brief | SMV UAE">
 <meta property="og:description" content="Brief SMV on a government film, official event, public campaign, live production or institutional content assignment in the UAE.">
 <meta property="og:url" content="https://ashrafselomotion-afk.github.io/smv-cinematic/contact.html">
 <meta property="og:image" content="https://ashrafselomotion-afk.github.io/smv-cinematic/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SMV — UAE government and institutional film production">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Start a Production Brief | SMV UAE">
 <meta name="twitter:description" content="Brief SMV on a government film, official event, public campaign, live production or institutional content assignment in the UAE.">
 <meta name="twitter:image" content="https://ashrafselomotion-afk.github.io/smv-cinematic/og.jpg">
-<link rel="stylesheet" href="assets/site.2f08d25b.min.css">
+<meta name="twitter:image:alt" content="SMV — UAE government and institutional film production">
+<link rel="stylesheet" href="assets/site.14e7a796.min.css">
 </head>
 <body>
 <a class="skip" href="#main">SKIP TO CONTENT</a>
@@ -37,12 +47,12 @@
     <a href="about.html">ABOUT</a>
     <a href="contact.html" aria-current="page">CONTACT</a>
   </div>
-  <div class="lang" aria-label="Language"><a href="ar.html" lang="ar" hreflang="ar">AR</a><i>/</i><a href="index.html">EN</a></div>
+  <div class="lang" aria-label="Language"><a href="ar/contact.html" lang="ar" hreflang="ar">AR</a><i>/</i><a href="contact.html" class="on" aria-current="page">EN</a></div>
   <button id="themeBtn" type="button" aria-label="Toggle light and dark mode"></button>
   <a class="cta" href="contact.html">START A CONFIDENTIAL BRIEF</a>
   <button id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mmenu"><span></span></button>
 </nav>
-<div id="mmenu" aria-hidden="true">
+<nav id="mmenu" aria-label="Mobile menu" aria-hidden="true">
   <a class="big" href="work.html"><small>01</small>WORK</a>
   <a class="big" href="government-production.html"><small>02</small>GOVERNMENT PRODUCTION</a>
   <a class="big" href="capabilities.html"><small>03</small>CAPABILITIES</a>
@@ -50,22 +60,24 @@
   <a class="big" href="about.html"><small>05</small>ABOUT</a>
   <a class="big" href="contact.html"><small>06</small>CONTACT</a>
   <div class="foot">
-    <a class="mlang" href="ar.html" lang="ar" hreflang="ar">العربية</a>
+    <a class="mlang" href="ar/contact.html" lang="ar" hreflang="ar">العربية</a>
     <span>UNITED ARAB EMIRATES</span>
     <a class="cta" href="contact.html">START A CONFIDENTIAL BRIEF</a>
   </div>
-</div>
+</nav>
 <main id="main">
 <section class="page-hero">
   <p class="eyebrow"><i></i>START A BRIEF</p>
   <h1>TELL US WHAT THE COMMUNICATION MUST ACHIEVE.</h1>
   <p class="lead">Share the objective, key dates and required outputs. We will review the brief and respond with the questions needed to define scope, schedule and the right production team.</p>
-  <p class="form-note">NEED AN NDA BEFORE SHARING DETAILS? SELECT "CONFIDENTIAL ASSIGNMENT" BELOW AND PROVIDE ONLY THE INFORMATION YOU ARE COMFORTABLE SENDING AT THIS STAGE.</p>
+  <p class="form-note">NEED AN NDA BEFORE SHARING DETAILS? TICK "CONFIDENTIAL ASSIGNMENT" BELOW AND SEND ONLY WHAT YOU ARE COMFORTABLE SHARING AT THIS STAGE. WE WILL AGREE A SUITABLE EXCHANGE METHOD BEFORE ANY SENSITIVE MATERIAL IS SENT.</p>
 </section>
 <section class="page-sec" id="brief-sec">
-  <p id="sentMsg" hidden>✓ THANK YOU. YOUR BRIEF HAS BEEN RECEIVED. OUR TEAM WILL RESPOND THROUGH YOUR WORK EMAIL.</p>
-  <form id="brief" action="https://formsubmit.co/mustafasinger@smv.ae" method="POST">
-    <input type="hidden" name="_subject" value="Confidential brief — SMV website">
+  <p id="sentMsg" role="status" aria-live="polite" hidden>✓ THANK YOU. YOUR BRIEF HAS BEEN RECEIVED. OUR TEAM WILL RESPOND THROUGH YOUR WORK EMAIL.</p>
+  <div id="formErrors" role="alert" hidden></div>
+  <form id="brief" novalidate action="https://formsubmit.co/mustafasinger@smv.ae" method="POST">
+    <input type="hidden" name="_subject" value="Website brief — SMV">
+    <input type="hidden" name="_t" id="bT" value="">
     <input type="hidden" name="_template" value="table">
     <input type="hidden" name="_captcha" value="false">
     <input type="hidden" name="_next" value="https://ashrafselomotion-afk.github.io/smv-cinematic/contact.html?sent=1">
@@ -78,6 +90,7 @@
       <div class="f"><label for="bRole">Role / department</label><input id="bRole" name="role_department" type="text" autocomplete="organization-title"></div>
       <div class="f"><label for="bType">Project type *</label>
         <select id="bType" name="project_type" required>
+          <option value="" selected disabled class="ph">Select a project type…</option>
           <option>Government film</option><option>Official event or summit</option><option>National occasion</option><option>Public campaign</option><option>Live broadcast</option><option>Photography</option><option>Aerial</option><option>Post-production</option><option>Not sure yet</option>
         </select></div>
       <div class="f full"><label for="bObjective">What should this communication achieve? *</label><textarea id="bObjective" name="communication_objective" required></textarea></div>
@@ -89,15 +102,16 @@
       <div class="f"><label for="bLang">Arabic / English requirements</label><input id="bLang" name="language_requirements" type="text"></div>
       <div class="f"><label for="bProc">Procurement route</label>
         <select id="bProc" name="procurement_route">
+          <option value="" selected disabled class="ph">Select a route…</option>
           <option>Direct brief</option><option>Request for quotation</option><option>Tender or RFP</option><option>Vendor registration</option><option>Not confirmed</option>
         </select></div>
       <div class="f"><label for="bRef">Reference or tender number</label><input id="bRef" name="reference_number" type="text"></div>
       <div class="f checks"><input id="bConf" name="confidential_assignment" type="checkbox" value="Yes"><label for="bConf">This is a confidential or unreleased assignment.</label></div>
-      <div class="f checks"><input id="bConsent" name="privacy_consent" type="checkbox" value="Yes" required><label for="bConsent">I have read the <a href="privacy.html">Privacy Notice</a> and consent to SMV using these details to respond to this enquiry. *</label></div>
-      <p class="privacy-note">We use the information you provide only to assess and respond to your enquiry, in line with our Privacy Notice. Do not include classified, restricted or personally sensitive material in this form. If you cannot submit the form, email <a href="mailto:mustafasinger@smv.ae" style="color:var(--hot)">mustafasinger@smv.ae</a>.</p>
+      <div class="f checks"><input id="bConsent" name="privacy_consent" type="checkbox" value="Yes" required><label for="bConsent">I have read the <a class="newtab" href="privacy.html" target="_blank" rel="noopener">Privacy Notice<span class="sr-only"> (opens in a new tab)</span></a> and consent to SMV using these details to respond to this enquiry. *</label></div>
+      <p class="privacy-note"><strong>How this form is delivered.</strong> Your brief is sent over HTTPS to the form-relay service FormSubmit, which forwards it to SMV by email. Email is not end-to-end encrypted and passes through that provider, so this form is not a secure channel for classified, restricted or personally sensitive material. Share only what is appropriate at this stage and we will agree a suitable exchange method for anything sensitive. We use what you send only to assess and respond to your enquiry, in line with our <a class="newtab" target="_blank" rel="noopener" href="privacy.html" style="color:var(--hot)">Privacy Notice<span class="sr-only"> (opens in a new tab)</span></a>. If you would rather not use the form, email <a href="mailto:mustafasinger@smv.ae" style="color:var(--hot)">mustafasinger@smv.ae</a>.</p>
     </div>
     <div class="row">
-      <span class="note">Enquiries are acknowledged by email</span>
+      <span class="note">Delivered by email via FormSubmit · not a secure channel</span>
       <button type="submit">SEND BRIEF →</button>
     </div>
   </form>
@@ -122,6 +136,6 @@
     <span>UNITED ARAB EMIRATES</span>
   </div>
 </footer>
-<script defer src="assets/page.c412b630.min.js"></script>
+<script defer src="assets/page.6a462ddb.min.js"></script>
 </body>
 </html>

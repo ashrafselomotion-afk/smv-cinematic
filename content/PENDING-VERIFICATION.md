@@ -50,18 +50,28 @@ appear on the public website. Nothing in this file is published. Items marked
 - OG/social share image: current og.jpg is a generated skyline frame; replace with
   one approved flagship-project frame (no unapproved emblems or client marks).
 
-## Arabic localisation (partial — ar.html live)
+## Arabic localisation (complete route parity — /ar/)
 
-- ar.html is a full single-page Arabic homepage (RTL, Almarai font, plan-approved
-  hero copy; remaining sections localised by the engineer). TODO: CLIENT VERIFICATION —
-  review by an Arabic government-communications editor before tenders rely on it.
-- Approved Arabic hero copy from the content plan (master line, eyebrow, body, CTAs)
-  is ready in `SMV-premium-website-content-plan.md` §15 for when RTL routing exists.
-- Required for launch: full RTL layout, Arabic metadata, localised case-study depth,
-  review by an Arabic government-communications editor.
-- Still English-only: Work, Government Production, Capabilities, Approach, About,
-  Contact (brief form), Privacy, 404. The Arabic page links to the English form and
-  says so explicitly.
+- Full Arabic route parity now exists under `/ar/`: index, work, government-production,
+  capabilities, approach, about, contact (Arabic brief form) and privacy. `ar.html`
+  remains as a compatibility redirect to `/ar/`.
+- TODO: CLIENT VERIFICATION — the Arabic copy was localised by the engineer from the
+  approved English content plan. An Arabic government-communications editor must review
+  official terminology, entity names, honorifics and policy language before tenders
+  rely on it. The plan's approved Arabic hero copy (§15) is used verbatim.
+- Language switch preserves the route in both directions; reciprocal hreflang plus
+  x-default are published on every page.
+
+## Captions and transcripts (blocker)
+
+- Audio audit (ffprobe, 2026-08-24): `media/hero.mp4`, `media/hero-480.mp4` and all
+  sixteen `media/reels/rNN.mp4` clips contain NO audio stream. Captions are therefore
+  not applicable to them; each work-page video states "Silent clip — contains no audio"
+  in its accessible name.
+- `media/showreel.mp4` DOES carry an AAC stereo track. It is an 8-second placeholder.
+  BLOCKER — before the real showreel ships we need, for any meaningful audio:
+  the script / dialogue list or an approved transcript, speaker identification, and
+  confirmation of whether the bed is music-only. No captions have been invented.
 
 ## Legal
 

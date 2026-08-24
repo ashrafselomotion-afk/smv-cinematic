@@ -1,0 +1,16 @@
+{
+  "name": "smv-cinematic",
+  "private": true,
+  "version": "1.0.0",
+  "description": "SMV — Singer Media Vision. Static bilingual site.",
+  "scripts": {
+    "build": "bash scripts/build.sh",
+    "serve": "python3 -m http.server 8742",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "@axe-core/playwright": "^4.10.0"
+  }
+}

@@ -6,24 +6,34 @@
 <meta name="color-scheme" content="dark light">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; form-action 'self' https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; manifest-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<script src="assets/theme.0c7589c8.min.js"></script>
+<script src="assets/theme.639c8ba9.min.js"></script>
 <title>Selected Film Production Work | SMV UAE</title>
 <meta name="description" content="Selected government, institutional, event, campaign, aerial and live production work created by SMV across the UAE.">
-<meta name="theme-color" content="#111418">
+<meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#DDE0E4" media="(prefers-color-scheme: light)">
 <link rel="canonical" href="https://ashrafselomotion-afk.github.io/smv-cinematic/work.html">
+<link rel="alternate" hreflang="en" href="https://ashrafselomotion-afk.github.io/smv-cinematic/work.html">
+<link rel="alternate" hreflang="ar" href="https://ashrafselomotion-afk.github.io/smv-cinematic/ar/work.html">
+<link rel="alternate" hreflang="x-default" href="https://ashrafselomotion-afk.github.io/smv-cinematic/work.html">
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="manifest" href="site.webmanifest">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_AE">
+<meta property="og:locale:alternate" content="ar_AE">
 <meta property="og:site_name" content="SMV — Singer Media Vision">
 <meta property="og:title" content="Selected Film Production Work | SMV UAE">
 <meta property="og:description" content="Selected government, institutional, event, campaign, aerial and live production work created by SMV across the UAE.">
 <meta property="og:url" content="https://ashrafselomotion-afk.github.io/smv-cinematic/work.html">
 <meta property="og:image" content="https://ashrafselomotion-afk.github.io/smv-cinematic/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SMV — UAE government and institutional film production">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Selected Film Production Work | SMV UAE">
 <meta name="twitter:description" content="Selected government, institutional, event, campaign, aerial and live production work created by SMV across the UAE.">
 <meta name="twitter:image" content="https://ashrafselomotion-afk.github.io/smv-cinematic/og.jpg">
-<link rel="stylesheet" href="assets/site.2f08d25b.min.css">
+<meta name="twitter:image:alt" content="SMV — UAE government and institutional film production">
+<link rel="stylesheet" href="assets/site.14e7a796.min.css">
 </head>
 <body>
 <a class="skip" href="#main">SKIP TO CONTENT</a>
@@ -37,12 +47,12 @@
     <a href="about.html">ABOUT</a>
     <a href="contact.html">CONTACT</a>
   </div>
-  <div class="lang" aria-label="Language"><a href="ar.html" lang="ar" hreflang="ar">AR</a><i>/</i><a href="index.html">EN</a></div>
+  <div class="lang" aria-label="Language"><a href="ar/work.html" lang="ar" hreflang="ar">AR</a><i>/</i><a href="work.html" class="on" aria-current="page">EN</a></div>
   <button id="themeBtn" type="button" aria-label="Toggle light and dark mode"></button>
   <a class="cta" href="contact.html">START A CONFIDENTIAL BRIEF</a>
   <button id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mmenu"><span></span></button>
 </nav>
-<div id="mmenu" aria-hidden="true">
+<nav id="mmenu" aria-label="Mobile menu" aria-hidden="true">
   <a class="big" href="work.html"><small>01</small>WORK</a>
   <a class="big" href="government-production.html"><small>02</small>GOVERNMENT PRODUCTION</a>
   <a class="big" href="capabilities.html"><small>03</small>CAPABILITIES</a>
@@ -50,11 +60,11 @@
   <a class="big" href="about.html"><small>05</small>ABOUT</a>
   <a class="big" href="contact.html"><small>06</small>CONTACT</a>
   <div class="foot">
-    <a class="mlang" href="ar.html" lang="ar" hreflang="ar">العربية</a>
+    <a class="mlang" href="ar/work.html" lang="ar" hreflang="ar">العربية</a>
     <span>UNITED ARAB EMIRATES</span>
     <a class="cta" href="contact.html">START A CONFIDENTIAL BRIEF</a>
   </div>
-</div>
+</nav>
 <main id="main">
 <section class="page-hero">
   <p class="eyebrow"><i></i>SELECTED WORK</p>
@@ -63,72 +73,81 @@
 </section>
 <section class="page-sec">
   <p class="work-note">REPRESENTATIVE FOOTAGE SHOWN. APPROVED CASE STUDIES AND CLIENT REFERENCES ARE SHARED PRIVATELY WITH AUTHORISED TEAMS — <a href="contact.html#credentials" style="color:var(--hot)">REQUEST CREDENTIALS</a>.</p>
+  <h2 class="sr-only">Selected projects</h2>
+  <div class="filters" role="group" aria-label="Filter selected work">
+    <button type="button" class="on" data-filter="all" aria-pressed="true">ALL</button>
+    <button type="button" data-filter="events" aria-pressed="false">SUMMITS &amp; EVENTS</button>
+    <button type="button" data-filter="institutional" aria-pressed="false">INSTITUTIONAL FILMS</button>
+    <button type="button" data-filter="aerial" aria-pressed="false">AERIAL</button>
+    <button type="button" data-filter="social" aria-pressed="false">SOCIAL</button>
+  </div>
+  <p class="filter-status" id="filterStatus" role="status" aria-live="polite"></p>
   <div class="reel-wrap" style="margin-top:40px">
     <div class="reel-grid" aria-label="Selected work gallery">
-    <figure class="reel" aria-label="Selected Event Production">
-      <video src="media/reels/r01.mp4" poster="media/reels/r01.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: selected event production"></video>
-      <figcaption><span class="label">01 / SUMMITS &amp; EVENTS</span><h3>SELECTED EVENT PRODUCTION</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Official Event Coverage">
-      <video src="media/reels/r02.mp4" poster="media/reels/r02.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: official event coverage"></video>
-      <figcaption><span class="label">02 / SUMMITS &amp; EVENTS</span><h3>OFFICIAL EVENT COVERAGE</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Institutional Film">
-      <video src="media/reels/r03.mp4" poster="media/reels/r03.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: institutional film"></video>
-      <figcaption><span class="label">03 / INSTITUTIONAL FILMS</span><h3>INSTITUTIONAL FILM</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Destination Film">
-      <video src="media/reels/r04.mp4" poster="media/reels/r04.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: destination film"></video>
-      <figcaption><span class="label">04 / AERIAL</span><h3>DESTINATION FILM</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Institutional Film">
-      <video src="media/reels/r05.mp4" poster="media/reels/r05.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: institutional film"></video>
-      <figcaption><span class="label">05 / INSTITUTIONAL FILMS</span><h3>INSTITUTIONAL FILM</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Selected Event Production">
-      <video src="media/reels/r06.mp4" poster="media/reels/r06.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: selected event production"></video>
-      <figcaption><span class="label">06 / SUMMITS &amp; EVENTS</span><h3>SELECTED EVENT PRODUCTION</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Institutional Film">
-      <video src="media/reels/r07.mp4" poster="media/reels/r07.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: institutional film"></video>
-      <figcaption><span class="label">07 / INSTITUTIONAL FILMS</span><h3>INSTITUTIONAL FILM</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Destination Film">
-      <video src="media/reels/r08.mp4" poster="media/reels/r08.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: destination film"></video>
-      <figcaption><span class="label">08 / AERIAL</span><h3>DESTINATION FILM</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Official Event Coverage">
-      <video src="media/reels/r09.mp4" poster="media/reels/r09.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: official event coverage"></video>
-      <figcaption><span class="label">09 / SUMMITS &amp; EVENTS</span><h3>OFFICIAL EVENT COVERAGE</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Social Cutdown">
-      <video src="media/reels/r10.mp4" poster="media/reels/r10.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: social cutdown"></video>
-      <figcaption><span class="label">10 / SOCIAL</span><h3>SOCIAL CUTDOWN</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Institutional Film">
-      <video src="media/reels/r11.mp4" poster="media/reels/r11.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: institutional film"></video>
-      <figcaption><span class="label">11 / INSTITUTIONAL FILMS</span><h3>INSTITUTIONAL FILM</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Destination Film">
-      <video src="media/reels/r12.mp4" poster="media/reels/r12.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: destination film"></video>
-      <figcaption><span class="label">12 / AERIAL</span><h3>DESTINATION FILM</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Selected Event Production">
-      <video src="media/reels/r13.mp4" poster="media/reels/r13.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: selected event production"></video>
-      <figcaption><span class="label">13 / SUMMITS &amp; EVENTS</span><h3>SELECTED EVENT PRODUCTION</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Institutional Film">
-      <video src="media/reels/r14.mp4" poster="media/reels/r14.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: institutional film"></video>
-      <figcaption><span class="label">14 / INSTITUTIONAL FILMS</span><h3>INSTITUTIONAL FILM</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Official Event Coverage">
-      <video src="media/reels/r15.mp4" poster="media/reels/r15.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: official event coverage"></video>
-      <figcaption><span class="label">15 / SUMMITS &amp; EVENTS</span><h3>OFFICIAL EVENT COVERAGE</h3></figcaption>
-    </figure>
-    <figure class="reel" aria-label="Social Cutdown">
-      <video src="media/reels/r16.mp4" poster="media/reels/r16.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Play film: social cutdown"></video>
-      <figcaption><span class="label">16 / SOCIAL</span><h3>SOCIAL CUTDOWN</h3></figcaption>
-    </figure>
+      <figure class="reel" data-cat="events">
+        <video src="media/reels/r01.mp4" poster="media/reels/r01.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 01: Summit & Forum Coverage. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">01 / SUMMITS &amp; EVENTS</span><h3>Summit & Forum Coverage</h3><span class="meta-line">Multi-camera coverage · Deliverables: Event film · daily highlights · press clips</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="events">
+        <video src="media/reels/r02.mp4" poster="media/reels/r02.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 02: Ceremony & Protocol Coverage. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">02 / SUMMITS &amp; EVENTS</span><h3>Ceremony & Protocol Coverage</h3><span class="meta-line">Protocol-led capture · Deliverables: Ceremony film · official stills · social cutdowns</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="institutional">
+        <video src="media/reels/r03.mp4" poster="media/reels/r03.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 03: Institutional Profile Film. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">03 / INSTITUTIONAL FILMS</span><h3>Institutional Profile Film</h3><span class="meta-line">Narrative film · Deliverables: Hero film · interviews · subtitled versions</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="aerial">
+        <video src="media/reels/r04.mp4" poster="media/reels/r04.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 04: Destination Film — Coastline. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">04 / AERIAL</span><h3>Destination Film — Coastline</h3><span class="meta-line">Licensed aerial capture · Deliverables: Aerial sequences · location plates · masters</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="institutional">
+        <video src="media/reels/r05.mp4" poster="media/reels/r05.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 05: Policy & Initiative Film. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">05 / INSTITUTIONAL FILMS</span><h3>Policy & Initiative Film</h3><span class="meta-line">Explanatory film · Deliverables: Launch film · explainer · social package</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="events">
+        <video src="media/reels/r06.mp4" poster="media/reels/r06.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 06: Exhibition & Pavilion Coverage. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">06 / SUMMITS &amp; EVENTS</span><h3>Exhibition & Pavilion Coverage</h3><span class="meta-line">Venue coverage · Deliverables: Recap film · stand-up clips · photography</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="institutional">
+        <video src="media/reels/r07.mp4" poster="media/reels/r07.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 07: Annual Report Film. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">07 / INSTITUTIONAL FILMS</span><h3>Annual Report Film</h3><span class="meta-line">Milestone storytelling · Deliverables: Report film · motion graphics · chaptered cuts</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="aerial">
+        <video src="media/reels/r08.mp4" poster="media/reels/r08.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 08: Destination Film — Desert Interior. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">08 / AERIAL</span><h3>Destination Film — Desert Interior</h3><span class="meta-line">Licensed aerial capture · Deliverables: Aerial sequences · time-lapse · masters</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="events">
+        <video src="media/reels/r09.mp4" poster="media/reels/r09.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 09: Conference Keynote Package. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">09 / SUMMITS &amp; EVENTS</span><h3>Conference Keynote Package</h3><span class="meta-line">Stage capture · Deliverables: Keynote edits · speaker clips · press assets</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="social">
+        <video src="media/reels/r10.mp4" poster="media/reels/r10.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 10: Social Cutdown Set. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">10 / SOCIAL</span><h3>Social Cutdown Set</h3><span class="meta-line">Channel versioning · Deliverables: Vertical cuts · captions · platform exports</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="institutional">
+        <video src="media/reels/r11.mp4" poster="media/reels/r11.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 11: Public Awareness Campaign Film. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">11 / INSTITUTIONAL FILMS</span><h3>Public Awareness Campaign Film</h3><span class="meta-line">Campaign film · Deliverables: Campaign film · cutdowns · bilingual versions</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="aerial">
+        <video src="media/reels/r12.mp4" poster="media/reels/r12.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 12: Aerial Infrastructure Sequence. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">12 / AERIAL</span><h3>Aerial Infrastructure Sequence</h3><span class="meta-line">Specialised capture · Deliverables: Aerial passes · stabilised moves · masters</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="events">
+        <video src="media/reels/r13.mp4" poster="media/reels/r13.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 13: Official Delegation Coverage. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">13 / SUMMITS &amp; EVENTS</span><h3>Official Delegation Coverage</h3><span class="meta-line">Discreet coverage · Deliverables: Arrival and tour coverage · stills · press clips</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="institutional">
+        <video src="media/reels/r14.mp4" poster="media/reels/r14.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 14: Service Explainer Film. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">14 / INSTITUTIONAL FILMS</span><h3>Service Explainer Film</h3><span class="meta-line">Explanatory film · Deliverables: Explainer · motion graphics · subtitles</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="events">
+        <video src="media/reels/r15.mp4" poster="media/reels/r15.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 15: Forum Daily Highlights. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">15 / SUMMITS &amp; EVENTS</span><h3>Forum Daily Highlights</h3><span class="meta-line">Same-day editing · Deliverables: Daily highlight films · selects · social cuts</span></figcaption>
+      </figure>
+      <figure class="reel" data-cat="social">
+        <video src="media/reels/r16.mp4" poster="media/reels/r16.webp" muted loop playsinline controls preload="none" width="540" height="960" aria-label="Project 16: Vertical Reel Set. Silent clip — contains no audio."></video>
+        <figcaption><span class="label">16 / SOCIAL</span><h3>Vertical Reel Set</h3><span class="meta-line">Channel versioning · Deliverables: Vertical reels · captions · archive files</span></figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -152,6 +171,6 @@
     <span>UNITED ARAB EMIRATES</span>
   </div>
 </footer>
-<script defer src="assets/page.c412b630.min.js"></script>
+<script defer src="assets/page.6a462ddb.min.js"></script>
 </body>
 </html>
