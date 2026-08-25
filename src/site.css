@@ -678,7 +678,6 @@ html.show-all .reveal,html.show-all .service-stop,html.show-all .fcard,html.show
 html.show-all #hero h1 .l>span{transform:none!important}
 @media print{
   .reveal,.fcard,.ncell,.service-stop,h1,h2,h3,p,.intro,.label{opacity:1!important;transform:none!important;visibility:visible!important}
-  .reel-preview video{opacity:1!important}
   #hero h1 .l>span{transform:none!important}
   #nav,#mmenu,#space,#cur,#progress,#chapter,#leader,.band{display:none!important}
   .hero-copy .eyebrow,.hero-copy .sub,.hero-ctas,.hero-copy .trust{opacity:1!important}
@@ -759,10 +758,9 @@ html.modal-open #nav{padding-right:0}
 /* 12 · Latin runs inside RTL copy */
 [dir="rtl"] bdi{unicode-bidi:isolate}
 
-/* 39 · preview videos idle by default; the poster carries the frame */
-.reel-preview video{opacity:0;transition:opacity .5s}
-.reel-preview.is-live video{opacity:1}
-html:not(.js) .reel-preview video{opacity:1}
+/* 39 · preview videos stay visible (the poster is the frame); only playback is
+   on demand, so the gallery never looks empty before the pointer arrives. */
+.reel-preview video{opacity:1}
 
 /* hero pause control */
 .hero-pause{position:absolute;right:max(5vw,calc((100% - 1040px)/2));bottom:9vh;z-index:3;

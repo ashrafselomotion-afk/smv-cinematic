@@ -504,7 +504,10 @@
       const h = (last.top + last.height / 2) - base.top - top;
       journey.style.setProperty('--rail-top', top + 'px');
       journey.style.setProperty('--rail-h', Math.max(h, 1) + 'px');
-      plen = livePath.getTotalLength() || 1;
+      /* The rail uses vector-effect:non-scaling-stroke, so its dash pattern is
+         measured in screen pixels — not the path's 1000 user units. Feeding it
+         getTotalLength() left the fill short by the difference. */
+      plen = Math.max(h, 1);
       livePath.style.strokeDasharray = String(plen);
       livePath.style.strokeDashoffset = String(plen);
     }

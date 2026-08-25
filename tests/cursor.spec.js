@@ -105,3 +105,45 @@ test('section 04 rail draws and stops activate while scrolling', async ({ page }
   expect(seen[2].drawn).toBeGreaterThanOrEqual(95);
   expect(seen[2].active).toBeGreaterThan(seen[0].active);
 });
+
+test('preview gallery is visible without hovering', async ({ page }) => {
+  for (const p of ['/index.html','/ar/index.html']) {
+    await page.goto(p);
+    await page.waitForTimeout(1500);
+    await page.evaluate(() => {
+      const e = document.getElementById('reels').getBoundingClientRect();
+      window.scrollTo(0, e.top + scrollY + 400);
+    });
+    await page.waitForTimeout(1200);
+    const opacities = await page.evaluate(() =>
+      [...document.querySelectorAll('.reel-preview video')].map(v => +getComputedStyle(v).opacity));
+    expect(opacities.length).toBe(16);
+    for (const o of opacities) expect(o, `${p} preview hidden before hover`).toBeGreaterThan(0.9);
+  }
+});
+
+test('section 04 rail reaches the last node', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/index.html');
+  await page.waitForTimeout(1800);
+  const box = await page.evaluate(() => {
+    const e = document.getElementById('confidence').getBoundingClientRect();
+    return { top: e.top + scrollY, h: e.height };
+  });
+  await page.evaluate(y => window.scrollTo(0, y), box.top + 0.97 * box.h);
+  await page.waitForTimeout(1200);
+  const s = await page.evaluate(() => {
+    const svg = document.querySelector('.service-line');
+    const lp = document.querySelector('.service-line-live');
+    const len = parseFloat(lp.style.strokeDasharray) || 1;
+    const off = parseFloat(lp.style.strokeDashoffset) || 0;
+    const railH = svg.getBoundingClientRect().height;
+    return { shortfall: Math.round(railH - railH * (1 - off / len)),
+             dashMatchesPixels: Math.abs(len - railH) < 2,
+             lastLit: document.querySelectorAll('.service-stop')[5].classList.contains('is-active') };
+  });
+  // the dash length must be in screen pixels, or the fill stops short of the end
+  expect(s.dashMatchesPixels).toBe(true);
+  expect(s.shortfall).toBeLessThanOrEqual(2);
+  expect(s.lastLit).toBe(true);
+});
