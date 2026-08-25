@@ -42,50 +42,66 @@ test.describe('mouse pointer is never hidden without a replacement', () => {
   });
 });
 
-test('section 04 uses the card layout on desktop and stays compact', async ({ page }) => {
+test('section 04 journey: compact spacing, rail pinned to the nodes', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   for (const p of ['/index.html','/ar/index.html']) {
     await page.goto(p);
-    await page.waitForTimeout(1200);
+    await page.waitForTimeout(1600);
     const s = await page.evaluate(() => {
       const sec = document.getElementById('confidence');
-      const rows = sec.querySelectorAll('.flow-3');
+      const journey = sec.querySelector('.service-journey');
+      const nodes = [...sec.querySelectorAll('.service-node')];
+      const svg = sec.querySelector('.service-line');
+      const sr = svg.getBoundingClientRect();
+      const first = nodes[0].getBoundingClientRect();
+      const last = nodes[nodes.length - 1].getBoundingClientRect();
+      const cx = sr.left + sr.width / 2;
       return {
-        cards: sec.querySelectorAll('.fcard').length,
-        rows: rows.length,
-        cols: getComputedStyle(rows[0]).gridTemplateColumns.split(' ').length,
-        height: Math.round(sec.getBoundingClientRect().height),
-        legacyTimeline: sec.querySelectorAll('.service-journey, .service-line').length
+        stops: sec.querySelectorAll('.service-stop').length,
+        sectionH: Math.round(sec.getBoundingClientRect().height),
+        stopH: Math.round(sec.querySelector('.service-stop').getBoundingClientRect().height),
+        railTopGap: Math.round(sr.top - (first.top + first.height / 2)),
+        railBottomGap: Math.round(sr.bottom - (last.top + last.height / 2)),
+        nodeOffsets: nodes.map(n => { const r = n.getBoundingClientRect(); return Math.round(r.left + r.width / 2 - cx); })
       };
     });
-    expect(s.cards).toBe(6);
-    expect(s.rows).toBe(2);
-    expect(s.cols).toBe(3);
-    expect(s.legacyTimeline).toBe(0);
-    expect(s.height).toBeLessThan(1800);
+    expect(s.stops, `${p} stop count`).toBe(6);
+    // the rail must begin and end exactly on the first and last node
+    expect(Math.abs(s.railTopGap), `${p} rail overshoots the top`).toBeLessThanOrEqual(2);
+    expect(Math.abs(s.railBottomGap), `${p} rail overshoots the bottom`).toBeLessThanOrEqual(2);
+    // every node sits on the rail
+    for (const o of s.nodeOffsets) expect(Math.abs(o), `${p} node off the rail`).toBeLessThanOrEqual(2);
+    // spacing must stay content-driven, not a reserved 56vh per stop
+    expect(s.stopH, `${p} stop is too tall`).toBeLessThan(360);
+    expect(s.sectionH, `${p} section is too tall`).toBeLessThan(2600);
   }
 });
 
-test('mini panels never collide with their captions', async ({ page }) => {
+test('section 04 rail draws and stops activate while scrolling', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  for (const p of ['/index.html','/ar/index.html']) {
-    await page.goto(p);
-    await page.waitForTimeout(1200);
-    const collisions = await page.evaluate(() => {
-      const out = [];
-      document.querySelectorAll('.mini').forEach((m, i) => {
-        const label = m.querySelector('b'); if (!label) return;
-        const lr = label.getBoundingClientRect();
-        [...m.children].forEach(c => {
-          if (c === label) return;
-          const cr = c.getBoundingClientRect();
-          const oy = Math.min(cr.bottom, lr.bottom) - Math.max(cr.top, lr.top);
-          const ox = Math.min(cr.right, lr.right) - Math.max(cr.left, lr.left);
-          if (oy > 2 && ox > 2) out.push(`${i}:${c.className}`);
-        });
-      });
-      return out;
-    });
-    expect(collisions, `${p} mini collisions`).toEqual([]);
+  await page.goto('/index.html');
+  await page.waitForTimeout(1800);
+  const box = await page.evaluate(() => {
+    const e = document.getElementById('confidence').getBoundingClientRect();
+    return { top: e.top + scrollY, h: e.height };
+  });
+  const seen = [];
+  for (const f of [0.1, 0.4, 0.9]) {
+    await page.evaluate(y => window.scrollTo(0, y), box.top + f * box.h);
+    await page.waitForTimeout(900);
+    seen.push(await page.evaluate(() => {
+      const lp = document.querySelector('.service-line-live');
+      const len = parseFloat(lp.style.strokeDasharray) || 1;
+      const off = parseFloat(lp.style.strokeDashoffset) || 0;
+      return {
+        drawn: Math.round((1 - off / len) * 100),
+        active: [...document.querySelectorAll('.service-stop')].findIndex(s => s.classList.contains('is-active'))
+      };
+    }));
   }
+  // the rail must progress, not sit frozen at its initial value
+  expect(seen[1].drawn).toBeGreaterThan(seen[0].drawn);
+  expect(seen[2].drawn).toBeGreaterThan(seen[1].drawn);
+  expect(seen[2].drawn).toBeGreaterThanOrEqual(95);
+  expect(seen[2].active).toBeGreaterThan(seen[0].active);
 });

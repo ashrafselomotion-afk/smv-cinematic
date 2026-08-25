@@ -484,6 +484,59 @@
   ScrollTrigger.create({ start:0, end:'max', onUpdate(self){ document.documentElement.classList.toggle('nav-hide', self.direction === 1 && self.scroll() > 600); } });
 
 
+  /* ---------- 04 · SERVICE JOURNEY (rail draws with scroll, stops light up) ---------- */
+  const journey = document.querySelector('.service-journey');
+  if (journey) {
+    const stops = [...journey.querySelectorAll('.service-stop')];
+    const nodes = stops.map(s => s.querySelector('.service-node'));
+    const svg = journey.querySelector('.service-line');
+    const livePath = journey.querySelector('.service-line-live');
+    let plen = 1;
+
+    /* The rail must start at the first node and end at the last one — spanning the
+       whole block made it overshoot both ends. Measure and pin it. */
+    function sizeRail(){
+      if (!nodes.length) return;
+      const base = journey.getBoundingClientRect();
+      const first = nodes[0].getBoundingClientRect();
+      const last = nodes[nodes.length - 1].getBoundingClientRect();
+      const top = (first.top + first.height / 2) - base.top;
+      const h = (last.top + last.height / 2) - base.top - top;
+      journey.style.setProperty('--rail-top', top + 'px');
+      journey.style.setProperty('--rail-h', Math.max(h, 1) + 'px');
+      plen = livePath.getTotalLength() || 1;
+      livePath.style.strokeDasharray = String(plen);
+      livePath.style.strokeDashoffset = String(plen);
+    }
+
+    function update(){
+      const first = nodes[0].getBoundingClientRect();
+      const last = nodes[nodes.length - 1].getBoundingClientRect();
+      const start = first.top + first.height / 2;
+      const end = last.top + last.height / 2;
+      const mark = innerHeight * 0.55;                       // the reading line
+      const span = Math.max(end - start, 1);
+      const progress = Math.max(0, Math.min(1, (mark - start) / span));
+      livePath.style.strokeDashoffset = String(plen * (1 - progress));
+      let active = -1;
+      nodes.forEach((n, i) => { if (n.getBoundingClientRect().top < mark) active = i; });
+      stops.forEach((s, i) => s.classList.toggle('is-active', i === active));
+    }
+
+    sizeRail(); update();
+    addEventListener('resize', () => { sizeRail(); update(); });
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve())
+      .then(() => { sizeRail(); update(); ScrollTrigger.refresh(); });
+    /* A trigger scoped to the section measures its range once and can go stale when
+       the layout settles later. Drive the rail from the page-wide scroll instead and
+       skip the work whenever the section is nowhere near the viewport. */
+    ScrollTrigger.create({ start: 0, end: 'max', onUpdate(){
+      const r = journey.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > innerHeight + 200) return;
+      update();
+    }, onRefresh(){ sizeRail(); update(); } });
+  }
+
   /* ---------- STATS COUNT-UP ---------- */
   document.querySelectorAll('[data-count]').forEach(el=>{
     const target = +el.dataset.count;
