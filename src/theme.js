@@ -13,6 +13,8 @@
     if (r || save) d.classList.add('lite');
     var seen = sessionStorage.getItem('smv-leader');
     if (!r && !save && !seen && innerWidth > 820) { d.classList.add('leader'); sessionStorage.setItem('smv-leader','1'); }
-    if (matchMedia('(hover:hover) and (pointer:fine)').matches && !r) d.classList.add('cur');
+    /* the 'cur' class is added by site.js, and only on pages that actually
+       render and drive the custom cursor — otherwise the native pointer would
+       be hidden with nothing replacing it. */
   }catch(e){}
 })();

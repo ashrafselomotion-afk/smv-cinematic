@@ -318,7 +318,11 @@ html.leader #leader{display:flex}
 #cur{position:fixed;left:0;top:0;z-index:1100;pointer-events:none;display:none}
 @media (hover:hover) and (pointer:fine){
   html.cur #cur{display:block}
-  html.cur,html.cur a,html.cur button,html.cur [role=button],html.cur input,html.cur textarea,html.cur select,html.cur label{cursor:none}
+  html.cur,html.cur a,html.cur button,html.cur [role=button],html.cur label{cursor:none}
+  /* never hide the pointer where the OS control matters */
+  html.cur video,html.cur video *,html.cur input,html.cur textarea,html.cur select,
+  html.cur #feed,html.cur #feed *,html.cur #rp,html.cur #rp *{cursor:auto}
+  html.cur input[type=range]{cursor:pointer}
 }
 #cur .dot{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--hot-fill);transition:opacity .2s}
 #cur .ring{position:absolute;left:-18px;top:-18px;width:36px;height:36px;border-radius:50%;border:1px solid rgba(224,101,47,.8);display:grid;place-items:center;
@@ -621,7 +625,7 @@ display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-siz
 .fcard .node{position:absolute;top:18px;left:18px;width:14px;height:14px;border-radius:50%;
   background:var(--hot-fill);box-shadow:0 0 0 5px rgba(224,101,47,.16),0 0 18px rgba(224,101,47,.55)}
 .fcard .mini{position:relative;margin:34px 0 20px;height:96px;border-radius:12px;overflow:hidden;
-  background:rgba(10,13,17,.72);border:1px solid rgba(255,255,255,.07);padding:16px 14px}
+  background:rgba(10,13,17,.72);border:1px solid rgba(255,255,255,.07);padding:14px 14px 30px}
 :root[data-theme="light"] .fcard .mini{background:rgba(18,20,24,.85)}
 .fcard .mini b{position:absolute;left:14px;bottom:10px;font-family:var(--mono);font-weight:400;
   font-size:8px;letter-spacing:.24em;color:rgba(244,242,238,.55)}
@@ -847,3 +851,13 @@ html.nav-hide #nav{animation:none}
   html.js #hero h1 .l>span,html.js .hero-copy .eyebrow,html.js .hero-copy .sub,
   html.js .hero-ctas,html.js .hero-copy .trust,html.js #nav{animation:none}
 }
+
+
+/* section 04 · three-up confidence rows, same card language as the approach flow */
+.flow-3{grid-template-columns:repeat(3,1fr);margin-top:26px}
+.flow-3 + .flow-3{margin-top:16px}
+.flow-3::before{left:6%;right:6%}
+.flow-3 .fcard .mini{height:96px}
+.flow-3 .fcard h3{font-size:clamp(18px,1.5vw,24px)}
+@media (max-width:1000px){.flow-3{grid-template-columns:repeat(2,1fr)}.flow-3::before{display:none}}
+@media (max-width:600px){.flow-3{grid-template-columns:1fr}}

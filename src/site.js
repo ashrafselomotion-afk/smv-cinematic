@@ -328,6 +328,8 @@
 
   /* ---------- CUSTOM CURSOR ---------- */
   const cur = document.getElementById('cur');
+  const wantsCursor = matchMedia('(hover:hover) and (pointer:fine)').matches && !reduced;
+  if (cur && wantsCursor) document.documentElement.classList.add('cur');
   if (cur && document.documentElement.classList.contains('cur')) {
     const label = document.getElementById('curLabel');
     const cx = gsap.quickTo(cur, 'x', { duration:.18, ease:'power3.out' }), cy = gsap.quickTo(cur, 'y', { duration:.18, ease:'power3.out' });
@@ -481,26 +483,6 @@
   /* ---------- Aceternity · Floating Navbar (hide on scroll down, show on up) ---------- */
   ScrollTrigger.create({ start:0, end:'max', onUpdate(self){ document.documentElement.classList.toggle('nav-hide', self.direction === 1 && self.scroll() > 600); } });
 
-  /* ---------- SERVICE JOURNEY (production confidence line-draw) ---------- */
-  const journey = document.querySelector('.service-journey');
-  if (journey) {
-    const stops = [...journey.querySelectorAll('.service-stop')];
-    const livePath = journey.querySelector('.service-line-live');
-    let plen = 1;
-    const sizePath = () => { plen = livePath.getTotalLength() || 1; livePath.style.strokeDasharray = String(plen); livePath.style.strokeDashoffset = String(plen); };
-    const updateJourney = () => {
-      const rect = journey.getBoundingClientRect();
-      const travel = Math.max(rect.height - innerHeight * .55, 1);
-      const progress = Math.max(0, Math.min(1, (innerHeight * .42 - rect.top) / travel));
-      livePath.style.strokeDashoffset = String(plen * (1 - progress));
-      let active = 0;
-      stops.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * .58) active = i; });
-      stops.forEach((s, i) => s.classList.toggle('is-active', i === active));
-    };
-    sizePath(); updateJourney();
-    ScrollTrigger.create({ trigger: journey, start: 'top bottom', end: 'bottom top',
-      onUpdate: updateJourney, onRefresh(){ sizePath(); updateJourney(); } });
-  }
 
   /* ---------- STATS COUNT-UP ---------- */
   document.querySelectorAll('[data-count]').forEach(el=>{
