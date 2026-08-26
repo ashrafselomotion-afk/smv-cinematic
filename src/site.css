@@ -873,3 +873,9 @@ html.nav-hide #nav{animation:none}
   [dir="rtl"] .service-stop{padding:28px 64px 28px 0}
   [dir="rtl"] .service-node{left:auto;right:32px}
 }
+
+
+/* Centred sections: a max-width block needs auto inline margins, otherwise it
+   hugs the inline-start edge while its text centres inside it (mirrored in RTL). */
+#contact .intro,#contact .work-note,#contact .cred-note,#contact p{margin-inline:auto}
+#credentials .cred-note,#credentials .intro{margin-inline:auto}

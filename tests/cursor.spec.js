@@ -147,3 +147,29 @@ test('section 04 rail reaches the last node', async ({ page }) => {
   expect(s.shortfall).toBeLessThanOrEqual(2);
   expect(s.lastLit).toBe(true);
 });
+
+test('centred sections keep every block on the same axis (EN + AR)', async ({ page }) => {
+  const PAGES = ['/index.html','/ar/index.html','/contact.html','/ar/contact.html','/404.html'];
+  for (const p of PAGES) {
+    await page.goto(p);
+    await page.waitForTimeout(1400);
+    const off = await page.evaluate(() => {
+      const out = [];
+      document.querySelectorAll('section,footer').forEach(sec => {
+        const cs = getComputedStyle(sec);
+        if (cs.textAlign !== 'center') return;
+        const sr = sec.getBoundingClientRect();
+        const axis = (sr.left + parseFloat(cs.paddingLeft) + sr.right - parseFloat(cs.paddingRight)) / 2;
+        sec.querySelectorAll(':scope > *').forEach(el => {
+          const r = el.getBoundingClientRect();
+          if (r.width < 5 || r.height < 5) return;
+          if (getComputedStyle(el).position === 'absolute') return;
+          const d = Math.round(r.left + r.width / 2 - axis);
+          if (Math.abs(d) > 8) out.push(`${sec.id || sec.tagName} > ${el.tagName}.${String(el.className).slice(0,16)} off ${d}px`);
+        });
+      });
+      return out;
+    });
+    expect(off, `${p} has off-axis blocks in a centred section`).toEqual([]);
+  }
+});
