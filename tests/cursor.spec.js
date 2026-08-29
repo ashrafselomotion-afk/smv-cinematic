@@ -187,8 +187,8 @@ test('Drive-hosted reel plays in the viewer without being downloaded', async ({ 
   for (const p of ['/index.html','/ar/index.html']) {
     await page.goto(p);
     await page.waitForTimeout(1600);
-    const card = page.locator('.reel[data-drive]');
-    await expect(card, `${p} has no Drive-backed reel`).toHaveCount(1);
+    const card = page.locator('.reel[data-drive]').first();
+    await expect(page.locator('.reel[data-drive]'), `${p} Drive-backed reels`).toHaveCount(3);
 
     // the tile shows Drive's own thumbnail and never carries a local source
     const tile = await card.evaluate(c => {
@@ -201,15 +201,45 @@ test('Drive-hosted reel plays in the viewer without being downloaded', async ({ 
     await bring(page, '.reel[data-drive]');
     await card.locator('.reel-open').click({ force: true });
 
-    // the viewer swaps in Drive's player frame
-    const frame = page.locator('.feed-frame');
-    await expect(frame).toHaveCount(1);
-    await expect.poll(() => page.evaluate(() => document.querySelector('.feed-frame').getAttribute('src') || ''),
-      { timeout: 15000 }).toMatch(/drive\.google\.com\/file\/d\/.+\/preview/);
+    // the viewer swaps in Drive's player for each Drive-backed entry, and the
+    // one actually on screen is the one that loads
+    await expect(page.locator('.feed-frame')).toHaveCount(3);
+    await expect.poll(() => page.evaluate(() => {
+      const col = document.getElementById('feedCol');
+      const cr = col.getBoundingClientRect();
+      const active = [...document.querySelectorAll('.feed-item')].find(it => {
+        const r = it.getBoundingClientRect();
+        return r.top >= cr.top - 40 && r.top < cr.top + cr.height * 0.6;
+      });
+      const fr = active && active.querySelector('.feed-frame');
+      return fr ? (fr.getAttribute('src') || '') : 'no-frame';
+    }), { timeout: 15000 }).toMatch(/drive\.google\.com\/file\/d\/.+\/preview/);
 
     // closing must unload the frame — cross-origin playback cannot be paused
     await page.keyboard.press('Escape');
     await expect(page.locator('#feed')).not.toHaveClass(/open/);
     expect(await page.evaluate(() => !!document.querySelector('.feed-frame[src]'))).toBe(false);
+  }
+});
+
+test('work page plays Drive-hosted projects inline', async ({ page }) => {
+  await page.route('https://drive.google.com/**', route =>
+    route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub</h1>' }));
+  for (const p of ['/work.html','/ar/work.html']) {
+    await page.goto(p);
+    await page.waitForTimeout(1200);
+    const frames = page.locator('.reel .reel-frame');
+    await expect(frames, `${p} Drive frames`).toHaveCount(3);
+    // each frame must point at Drive's player and sit inside its card
+    const ok = await page.evaluate(() => [...document.querySelectorAll('.reel .reel-frame')].every(f => {
+      const card = f.closest('.reel').getBoundingClientRect();
+      const r = f.getBoundingClientRect();
+      return /drive\.google\.com\/file\/d\/.+\/preview/.test(f.getAttribute('src') || '')
+        && r.width > 0 && Math.abs(r.width - card.width) < 3;
+    }));
+    expect(ok).toBe(true);
+    // every project title stays unique
+    const titles = await page.locator('.reel h3').allTextContents();
+    expect(new Set(titles).size).toBe(16);
   }
 });

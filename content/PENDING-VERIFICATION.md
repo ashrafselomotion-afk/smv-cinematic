@@ -43,8 +43,19 @@ appear on the public website. Nothing in this file is published. Items marked
 - Government / institutional showreel (60–90 s): current showreel.mp4 is an 8-second
   placeholder loop. The "Play government & institutional reel — 01:30" control text
   from the plan is NOT used until a real reel exists.
-- Portfolio media: all 16 reel clips are licensed placeholder footage with neutral
-  service-category titles. Replace with owned footage and approved project names.
+- Portfolio media: 3 of the 16 reels are now real SMV work, streamed from the
+  client's Google Drive (nothing is downloaded or re-hosted):
+    01 Corporate Event Coverage      — "IIS-Padel Day"        (1KwjgBcCAM3bsXj_SMcksknbN5n4rZdiS)
+    08 Destination Film — Desert     — "EWD_IIS 2026 V09"     (1-qYes5pGYCvIFzun37PnKlRvgkFFX6lr)
+    11 Programme Campaign Film       — "Elite Engineer Summer Camp" (1mK5Yppsdzv10UZU-Sqi4MENGCwfpBnbF)
+  Titles use the neutral assignment-type taxonomy. TODO: CLIENT VERIFICATION —
+  the Padel Day footage shows third-party marks (Invest in Sharjah, Sharjah
+  Business Council UAE, PBCS and others) on the event signage; written approval
+  is needed before naming any of those entities in copy. No entity is named today.
+  The remaining 13 clips are still licensed placeholder footage.
+- Drive as a host: Drive is not a CDN — it applies view quotas, can throttle, and
+  serves Google's own player chrome and accessibility defects. Move final films to
+  the repo or a CDN before tender use; each card swaps with a one-line change.
 - Social profiles (LinkedIn · Instagram · Vimeo): links removed — no live profiles
   supplied. Do not publish dead links.
 - OG/social share image: current og.jpg is a generated skyline frame; replace with

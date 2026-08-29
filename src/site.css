@@ -74,7 +74,7 @@ html.menu-open #menuBtn span{background:transparent}
 html.menu-open #menuBtn span::before{top:0;transform:rotate(45deg)}
 html.menu-open #menuBtn span::after{top:0;transform:rotate(-45deg)}
 #mmenu{position:fixed;inset:0;z-index:790;background:var(--bg);display:flex;flex-direction:column;justify-content:center;
-  padding:0 8vw;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+  padding:0 8vw;opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 html.menu-open #mmenu{opacity:1;visibility:visible}
 html.menu-open{overflow:hidden}
 html.menu-open #smooth-wrapper{pointer-events:none}
@@ -386,7 +386,7 @@ html.gl .wipe .line{overflow:hidden;display:block}
 .faq details[open] summary{color:var(--hot)}
 .faq p{color:var(--dim);font-size:15px;line-height:1.7;padding:0 4px 24px;max-width:62ch}
 /* vertical feed */
-#feed{position:fixed;inset:0;z-index:950;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+#feed{position:fixed;inset:0;z-index:950;opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s linear .35s}
 #feed.open{opacity:1;visibility:visible}
 #feed .feed-bg{position:absolute;inset:0;background:rgba(6,8,12,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 #feed .feed-top{position:absolute;left:0;right:0;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:22px 5vw;font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;color:rgba(255,255,255,.7)}
@@ -403,7 +403,7 @@ html.gl .wipe .line{overflow:hidden;display:block}
 .feed-item .cap h3{color:#fff;font-size:clamp(18px,2vw,26px);line-height:1.05}
 .feed-item .frame::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(12,14,18,0) 60%,rgba(12,14,18,.8));pointer-events:none}
 /* showreel player */
-#rp{position:fixed;inset:0;z-index:960;display:grid;place-items:center;padding:max(64px,4vw) 4vw 4vw;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+#rp{position:fixed;inset:0;z-index:960;display:grid;place-items:center;padding:max(64px,4vw) 4vw 4vw;opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s linear .35s}
 #rp.open{opacity:1;visibility:visible}
 #rp .rp-bg{position:absolute;inset:0;background:rgba(6,8,12,.96)}
 #rpClose{position:absolute;top:22px;right:5vw;z-index:3;font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.25);border-radius:999px}
@@ -896,3 +896,16 @@ html.nav-hide #nav{animation:none}
 .feed-item .feed-frame{width:100%;max-height:100%;border:0;border-radius:18px;background:#000;
   display:block;margin:auto}
 #feed.no-sound #feedMute{display:none}
+
+/* Work page: a Drive-hosted project fills its card with Google's player */
+.reel .reel-frame{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2;background:#000}
+.reel:has(.reel-frame)::after{background:linear-gradient(rgba(12,14,18,0) 62%,rgba(12,14,18,.9))}
+.reel:has(.reel-frame) figcaption{bottom:14px;z-index:3}
+
+
+/* Opening must make the panel focusable on the very first frame: keep the fade,
+   but flip visibility with no delay (a discrete property inside a transition
+   otherwise switches at the midpoint, stranding keyboard focus outside). */
+html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
+#feed.open{transition:opacity .35s,visibility 0s}
+#rp.open{transition:opacity .35s,visibility 0s}
