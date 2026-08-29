@@ -59,6 +59,11 @@ test('mobile interactive targets are at least 44x44', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   for (const p of ['/index.html','/ar/index.html','/contact.html']) {
     await page.goto(p);
+    // the 44px rules ride on a media query; wait for layout rather than racing it
+    await page.waitForFunction(() => {
+      const b = document.getElementById('menuBtn');
+      return b && b.getBoundingClientRect().height >= 44;
+    }, null, { timeout: 8000 }).catch(() => {});
     const small = await page.evaluate(() => {
       const sel = '#menuBtn,#themeBtn,#nav .lang a,.filters button,#feedClose,#rpClose,#feedMute';
       return [...document.querySelectorAll(sel)].filter(el => {

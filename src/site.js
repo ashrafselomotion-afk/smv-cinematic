@@ -22,7 +22,9 @@
     label: f.querySelector('.label').textContent,
     cat:   f.dataset.cat,
     src:   f.querySelector('video').dataset.src,
-    poster:f.querySelector('video').poster
+    poster:f.querySelector('video').poster,
+    drive: f.dataset.drive || '',
+    ratio: f.dataset.ratio || '9/16'
   }));
   reels.forEach((f, i) => {
     const btn = f.querySelector('.reel-open') || f;
@@ -36,7 +38,7 @@
   };
   const canPlayPreview = () => !reduced && !saveData;
   const startPreview = card => {
-    if (!canPlayPreview()) return;
+    if (!canPlayPreview() || card.dataset.drive) return;   // Drive tiles show their thumbnail
     const v = card.querySelector('video'); if (!v) return;
     attach(v); card.classList.add('is-live');
     const p = v.play(); if (p && p.catch) p.catch(()=>{});
@@ -48,7 +50,10 @@
   };
   const near = (saveData || reduced) ? { observe(){}, unobserve(){}, disconnect(){} }
     : new IntersectionObserver(es => es.forEach(e => {
-        if (e.isIntersecting) { attach(e.target.querySelector('video')); near.unobserve(e.target); }
+        if (e.isIntersecting) {
+          if (!e.target.dataset.drive) attach(e.target.querySelector('video'));
+          near.unobserve(e.target);
+        }
       }), { rootMargin: '300px' });
   const offscreen = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) stopPreview(e.target);
@@ -110,14 +115,33 @@
     list.forEach((r, i) => {
       const it = document.createElement('div');
       it.className = 'feed-item'; it.dataset.i = i;
-      it.innerHTML = '<div class="frame">' +
-        '<video playsinline loop preload="none" poster="' + r.poster + '" data-src="' + r.src + '" aria-label="' + r.title + '"></video>' +
-        '<button type="button" class="feed-toggle" aria-pressed="false"></button>' +
+      const media = r.drive
+        ? '<iframe class="feed-frame" title="' + r.title + '" loading="lazy" style="aspect-ratio:' + r.ratio + '"' +
+          ' allow="autoplay; fullscreen; encrypted-media" allowfullscreen' +
+          ' referrerpolicy="strict-origin-when-cross-origin" data-drive="' + r.drive + '"></iframe>'
+        : '<video playsinline loop preload="none" poster="' + r.poster + '" data-src="' + r.src + '" aria-label="' + r.title + '"></video>' +
+          '<button type="button" class="feed-toggle" aria-pressed="false"></button>';
+      it.innerHTML = '<div class="frame">' + media +
         '<div class="cap"><span class="label">' + r.label + '</span><h3>' + r.title + '</h3></div></div>';
       feedCol.appendChild(it);
     });
     feedVids = [...feedCol.querySelectorAll('video')];
+    const feedFrames = [...feedCol.querySelectorAll('.feed-frame')];
     if (feedIO) feedIO.disconnect();
+    if (feedFrames.length) {
+      const fio = new IntersectionObserver(es => es.forEach(e => {
+        const fr = e.target, i = +fr.closest('.feed-item').dataset.i;
+        if (e.isIntersecting) {
+          if (!fr.getAttribute('src'))
+            fr.src = 'https://drive.google.com/file/d/' + fr.dataset.drive + '/preview';
+          feedCount.textContent = String(i+1).padStart(2,'0') + ' / ' + String(list.length).padStart(2,'0');
+          feed.classList.add('no-sound');
+        } else if (fr.getAttribute('src')) {
+          fr.removeAttribute('src');            // cross-origin playback can only be stopped by unloading
+        }
+      }), { root: feedCol, threshold: .6 });
+      feedFrames.forEach(fr => fio.observe(fr));
+    }
     feedIO = new IntersectionObserver(es => es.forEach(e => {
       const v = e.target, item = v.closest('.feed-item'), i = +item.dataset.i;
       if (e.isIntersecting) {
@@ -125,6 +149,7 @@
         v.muted = feedMuted;
         if (!reduced) { const p = v.play(); if (p && p.catch) p.catch(()=>{}); }
         feedCount.textContent = String(i+1).padStart(2,'0') + ' / ' + String(list.length).padStart(2,'0');
+        feed.classList.remove('no-sound');
       } else v.pause();
     }), { root: feedCol, threshold: .6 });
     feedVids.forEach(v => {
@@ -164,6 +189,7 @@
     feed.classList.remove('open'); feed.setAttribute('aria-hidden','true');
     if (feedTrap) { document.removeEventListener('keydown', feedTrap, true); feedTrap = null; }
     feedVids.forEach(v => v.pause());
+    feedCol.querySelectorAll('.feed-frame[src]').forEach(fr => fr.removeAttribute('src'));
     M.setBackgroundInert(false); M.lockScroll(false);
     if (feedFocus && feedFocus.focus) feedFocus.focus();
   };
@@ -295,10 +321,24 @@
       const r = el.getBoundingClientRect();
       if (r.bottom < 120 || r.top > innerHeight - 40) smoother.scrollTo(el, false, 'center center');
     });
-    /* deep links arriving with a hash must clear the fixed nav */
+    /* Deep links arriving with a hash must clear the fixed nav. One early scroll is
+       not enough: fonts, reveals and image loads shift the page underneath it, so
+       re-apply until the layout settles — and stop the moment the visitor scrolls. */
     if (location.hash) {
-      const t = document.querySelector(location.hash);
-      if (t) requestAnimationFrame(() => smoother.scrollTo(t, false, 'top 120px'));
+      const target = document.querySelector(location.hash);
+      if (target) {
+        let settled = false;
+        const land = () => { if (!settled) smoother.scrollTo(target, false, 'top 120px'); };
+        const stop = () => { settled = true; };
+        ['wheel','touchstart','keydown','pointerdown'].forEach(ev =>
+          addEventListener(ev, stop, { once: true, passive: true }));
+        requestAnimationFrame(land);
+        addEventListener('load', () => setTimeout(land, 80), { once: true });
+        (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve())
+          .then(() => { ScrollTrigger.refresh(); setTimeout(land, 120); });
+        [400, 900, 1500].forEach(ms => setTimeout(land, ms));
+        setTimeout(stop, 2000);
+      }
     }
   }
 

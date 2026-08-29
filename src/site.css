@@ -879,3 +879,20 @@ html.nav-hide #nav{animation:none}
    hugs the inline-start edge while its text centres inside it (mirrored in RTL). */
 #contact .intro,#contact .work-note,#contact .cred-note,#contact p{margin-inline:auto}
 #credentials .cred-note,#credentials .intro{margin-inline:auto}
+
+/* Google Drive embed mode for the showreel: Drive supplies its own player, so
+   our custom transport is hidden rather than shown non-functional. */
+#rpFrame{display:none;width:auto;height:100%;max-width:100%;flex:1 1 auto;min-height:0;
+  aspect-ratio:var(--rp-ar,16/9);border:0;border-radius:16px;background:#000;margin-inline:auto}
+#rp.rp-embed #rpVideo,#rp.rp-embed .rp-ui{display:none}
+#rp.rp-embed #rpFrame{display:block}
+#rp.rp-embed .rp-box{align-items:center}
+@media (max-width:700px){#rp.rp-embed #rpFrame{width:100%;height:auto}}
+
+/* Drive-backed reel: Google supplies the player, so the tile shows its thumbnail
+   and the viewer swaps the <video> for Drive's frame. */
+.reel[data-drive] video{object-fit:cover}
+.reel[data-drive] .play{background:var(--hot-fill);color:#111418;border-color:var(--hot-fill)}
+.feed-item .feed-frame{width:100%;max-height:100%;border:0;border-radius:18px;background:#000;
+  display:block;margin:auto}
+#feed.no-sound #feedMute{display:none}

@@ -1,7 +1,12 @@
 const { bring, clickAt } = require('./helpers');
 const { test, expect } = require('@playwright/test');
 
+test.describe.configure({ mode: 'serial' });
 test.describe('showreel dialog', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route('https://drive.google.com/**', route =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub</h1>' }));
+  });
   test('focus moves in, Escape closes, focus returns, background inert', async ({ page }) => {
     await page.goto('/index.html');
     const opener = page.locator('#openShowreel');
@@ -26,16 +31,44 @@ test.describe('showreel dialog', () => {
     expect(await page.evaluate(() => document.getElementById('nav').hasAttribute('inert'))).toBe(false);
   });
 
-  test('exposes play state, mute, time, duration and an accessible slider', async ({ page }) => {
+  test('player transport matches the configured source', async ({ page }) => {
     await page.goto('/index.html');
     await clickAt(page, '#openShowreel');
-    const range = page.locator('#rpRange');
-    await expect(range).toHaveAttribute('aria-label', /seek/i);
-    await expect(page.locator('#rpPlay')).toHaveAttribute('aria-pressed', /true|false/);
-    await expect(page.locator('#rpMute')).toHaveAttribute('aria-pressed', /true|false/);
-    await expect.poll(() => page.locator('#rpDur').textContent()).not.toBe('00:00:00');
-    await page.locator('#rpPlay').click();
-    await expect(page.locator('#rpPlay')).toHaveAttribute('aria-pressed', /true|false/);
+    const embed = await page.evaluate(() => !!document.getElementById('rp').dataset.drive);
+
+    if (embed) {
+      // Drive supplies its own player: the frame must load and be titled,
+      // and our non-functional custom transport must be hidden, not shown broken.
+      const frame = page.locator('#rpFrame');
+      await expect(frame).toBeVisible();
+      await expect(frame).toHaveAttribute('title', /showreel/i);
+      await expect.poll(() => page.evaluate(() => document.getElementById('rpFrame').getAttribute('src') || ''))
+        .toMatch(/drive\.google\.com\/file\/d\/.+\/preview/);
+      expect(await page.evaluate(() => getComputedStyle(document.querySelector('.rp-ui')).display)).toBe('none');
+      // the frame must fit inside the viewport at the declared aspect
+      const fits = await page.evaluate(() => {
+        const r = document.getElementById('rpFrame').getBoundingClientRect();
+        return r.top >= -1 && r.bottom <= innerHeight + 1 && r.width > 50;
+      });
+      expect(fits).toBe(true);
+    } else {
+      const range = page.locator('#rpRange');
+      await expect(range).toHaveAttribute('aria-label', /seek/i);
+      await expect(page.locator('#rpPlay')).toHaveAttribute('aria-pressed', /true|false/);
+      await expect(page.locator('#rpMute')).toHaveAttribute('aria-pressed', /true|false/);
+      await expect.poll(() => page.locator('#rpDur').textContent()).not.toBe('00:00:00');
+    }
+  });
+
+  test('closing the embed stops playback by clearing the frame', async ({ page }) => {
+    await page.goto('/index.html');
+    const embed = await page.evaluate(() => !!document.getElementById('rp').dataset.drive);
+    test.skip(!embed, 'self-hosted transport in use');
+    await clickAt(page, '#openShowreel');
+    await expect.poll(() => page.evaluate(() => !!document.getElementById('rpFrame').getAttribute('src'))).toBe(true);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#rp')).not.toHaveClass(/open/);
+    expect(await page.evaluate(() => document.getElementById('rpFrame').getAttribute('src'))).toBeNull();
   });
 });
 
@@ -55,9 +88,15 @@ test.describe('selected-work viewer', () => {
     await expect(page.locator('#feedCol .feed-item')).toHaveCount(n);
     await expect(page.locator('#feedCount')).toHaveText(new RegExp(`/ 0?${n}`));
 
-    // keyboard play/pause control exists inside the viewer
-    expect(await page.locator('.feed-item .feed-toggle').count()).toBe(n);
-    expect(await page.locator('.feed-item .feed-toggle').first().getAttribute('aria-pressed')).toMatch(/true|false/);
+    // every self-hosted item carries a keyboard play/pause control; Drive-backed
+    // items are played by Google's own frame instead.
+    const selfHosted = await page.locator('#feedCol .feed-item video').count();
+    const frames = await page.locator('#feedCol .feed-frame').count();
+    expect(selfHosted + frames).toBe(n);
+    expect(await page.locator('.feed-item .feed-toggle').count()).toBe(selfHosted);
+    if (selfHosted) {
+      expect(await page.locator('.feed-item .feed-toggle').first().getAttribute('aria-pressed')).toMatch(/true|false/);
+    }
 
     await page.keyboard.press('Escape');
     await expect(feed).not.toHaveClass(/open/);
@@ -68,6 +107,8 @@ test.describe('mobile menu', () => {
   test('traps focus, Escape closes, focus restored, background inert', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/capabilities.html');
+    // the shared runtime attaches the menu handler on load; don't race it
+    await page.waitForFunction(() => typeof window.__smvSetMenu === 'function', null, { timeout: 10000 });
     const btn = page.locator('#menuBtn');
     await btn.click();
     expect(await page.evaluate(() => document.documentElement.classList.contains('menu-open'))).toBe(true);

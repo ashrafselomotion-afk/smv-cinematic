@@ -1,3 +1,4 @@
+const { bring } = require('./helpers');
 const { test, expect } = require('@playwright/test');
 
 const INNER = ['/work.html','/contact.html','/capabilities.html','/approach.html','/about.html',
@@ -171,5 +172,44 @@ test('centred sections keep every block on the same axis (EN + AR)', async ({ pa
       return out;
     });
     expect(off, `${p} has off-axis blocks in a centred section`).toEqual([]);
+  }
+});
+
+test('Drive-hosted reel plays in the viewer without being downloaded', async ({ page }) => {
+  // Stub Google so the test asserts our wiring, not Google's uptime.
+  await page.route('https://drive.google.com/**', route => {
+    const u = route.request().url();
+    if (u.includes('/preview')) return route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub player</h1>' });
+    if (u.includes('/thumbnail')) return route.fulfill({ status: 200, contentType: 'image/gif',
+      body: Buffer.from('R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==', 'base64') });
+    return route.continue();
+  });
+  for (const p of ['/index.html','/ar/index.html']) {
+    await page.goto(p);
+    await page.waitForTimeout(1600);
+    const card = page.locator('.reel[data-drive]');
+    await expect(card, `${p} has no Drive-backed reel`).toHaveCount(1);
+
+    // the tile shows Drive's own thumbnail and never carries a local source
+    const tile = await card.evaluate(c => {
+      const v = c.querySelector('video');
+      return { poster: v.poster, localSrc: v.getAttribute('src') };
+    });
+    expect(tile.poster).toMatch(/drive\.google\.com\/thumbnail/);
+    expect(tile.localSrc).toBeNull();
+
+    await bring(page, '.reel[data-drive]');
+    await card.locator('.reel-open').click({ force: true });
+
+    // the viewer swaps in Drive's player frame
+    const frame = page.locator('.feed-frame');
+    await expect(frame).toHaveCount(1);
+    await expect.poll(() => page.evaluate(() => document.querySelector('.feed-frame').getAttribute('src') || ''),
+      { timeout: 15000 }).toMatch(/drive\.google\.com\/file\/d\/.+\/preview/);
+
+    // closing must unload the frame — cross-origin playback cannot be paused
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#feed')).not.toHaveClass(/open/);
+    expect(await page.evaluate(() => !!document.querySelector('.feed-frame[src]'))).toBe(false);
   }
 });

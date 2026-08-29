@@ -4,10 +4,14 @@ module.exports = defineConfig({
   timeout: 45000,
   expect: { timeout: 10000 },
   fullyParallel: true,
+  // The homepage pulls GSAP, Three.js, fonts and 16 clips per navigation; three
+  // workers starve each other on one machine and produce false failures.
+  workers: process.env.CI ? 2 : 2,
   reporter: [['list']],
   use: { baseURL: 'http://127.0.0.1:8742', trace: 'off', video: 'off' },
   webServer: {
-    command: 'python3 -m http.server 8742 --bind 127.0.0.1',
+    // threaded + gzip: the single-threaded http.server starved parallel workers
+    command: 'python3 scripts/serve-gzip.py 8742',
     url: 'http://127.0.0.1:8742/index.html',
     reuseExistingServer: true,
     timeout: 20000

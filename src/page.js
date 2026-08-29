@@ -50,8 +50,10 @@
   function trapTab(container){
     return function(e){
       if (e.key !== 'Tab') return;
-      const items = [...container.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null || el === document.activeElement);
+      let items = [...container.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null || el === document.activeElement);
+      if (!items.length) items = [...container.querySelectorAll(FOCUSABLE)];
       if (!items.length) { e.preventDefault(); return; }
+      if (!container.contains(document.activeElement)) { e.preventDefault(); items[0].focus(); return; }
       const first = items[0], last = items[items.length - 1];
       if (e.shiftKey && (document.activeElement === first || !container.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
@@ -111,7 +113,9 @@
       menuOpener = menuBtn;
       lockScroll(true); setBackgroundInert(true, mmenu);
       menuTrap = trapTab(mmenu); document.addEventListener('keydown', menuTrap, true);
-      const first = mmenu.querySelector(FOCUSABLE); if (first) first.focus();
+      /* the panel fades in, so a plain focus() call can land on a still-hidden
+         element and silently do nothing — retry until focus actually moves */
+      focusWhenReady(mmenu.querySelector(FOCUSABLE));
     } else {
       if (menuTrap) { document.removeEventListener('keydown', menuTrap, true); menuTrap = null; }
       setBackgroundInert(false); lockScroll(false);
@@ -137,7 +141,7 @@
     const buttons = [...filterBar.querySelectorAll('button')];
     const status = document.getElementById('filterStatus');
     const cards = () => [...document.querySelectorAll('.reel')];
-    function applyFilter(key, push){
+    function applyFilter(key, push, animate){
       const btn = buttons.find(b => b.dataset.filter === key) || buttons[0];
       key = btn.dataset.filter;
       buttons.forEach(b => {
@@ -148,7 +152,10 @@
       });
       const items = cards();
       const run = () => items.forEach(el => el.classList.toggle('is-hidden', key !== 'all' && el.dataset.cat !== key));
-      if (window.gsap && window.Flip && !reduced && !root.classList.contains('static-page')) {
+      /* The Flip transition absolutely-positions the cards mid-flight, which briefly
+         pushes them outside the grid — fine on interaction, but on first paint it
+         shows a horizontal scrollbar. Restore state instantly on load. */
+      if (animate && window.gsap && window.Flip && !reduced && !root.classList.contains('static-page')) {
         const state = Flip.getState(items);
         run();
         Flip.from(state, { duration:.7, ease:'power3.inOut', stagger:.02, absolute:true, scale:true,
@@ -166,10 +173,10 @@
         history.pushState({ work:key }, '', url);
       }
     }
-    buttons.forEach(b => b.addEventListener('click', () => applyFilter(b.dataset.filter, true)));
+    buttons.forEach(b => b.addEventListener('click', () => applyFilter(b.dataset.filter, true, true)));
     const fromURL = () => {
       const key = new URL(location.href).searchParams.get('work') || 'all';
-      applyFilter(buttons.some(b => b.dataset.filter === key) ? key : 'all', false);
+      applyFilter(buttons.some(b => b.dataset.filter === key) ? key : 'all', false, false);
     };
     addEventListener('popstate', fromURL);
     fromURL();
