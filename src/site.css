@@ -909,3 +909,5 @@ html.nav-hide #nav{animation:none}
 html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
 #feed.open{transition:opacity .35s,visibility 0s}
 #rp.open{transition:opacity .35s,visibility 0s}
+/* embedded-player tiles crop their poster to the card */
+.reel[data-youtube] video{object-fit:cover}

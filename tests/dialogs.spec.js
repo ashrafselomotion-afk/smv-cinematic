@@ -4,8 +4,8 @@ const { test, expect } = require('@playwright/test');
 test.describe.configure({ mode: 'serial' });
 test.describe('showreel dialog', () => {
   test.beforeEach(async ({ page }) => {
-    await page.route('https://drive.google.com/**', route =>
-      route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub</h1>' }));
+    for (const host of ['https://drive.google.com/**','https://www.youtube-nocookie.com/**'])
+      await page.route(host, route => route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub</h1>' }));
   });
   test('focus moves in, Escape closes, focus returns, background inert', async ({ page }) => {
     await page.goto('/index.html');

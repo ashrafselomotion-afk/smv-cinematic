@@ -18,9 +18,11 @@ for (const p of PAGES) {
     await page.waitForTimeout(600);
     const res = await new AxeBuilder({ page })
       .withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa'])
-      // Third-party players (Google Drive) ship their own markup and their own
-      // a11y defects; we are accountable for our document, not theirs.
+      // Third-party players (Google Drive, YouTube) ship their own markup and
+      // their own a11y defects; we are accountable for our document, not theirs.
       .exclude('iframe[src*="drive.google.com"]')
+      .exclude('iframe[src*="youtube-nocookie.com"]')
+      .exclude('iframe[src*="youtube.com"]')
       .analyze();
     const bad = res.violations.filter(v => ['serious','critical'].includes(v.impact));
     if (bad.length) console.log(p, JSON.stringify(bad.map(v => ({ id:v.id, impact:v.impact, nodes:v.nodes.length, target:v.nodes[0]?.target })), null, 1));

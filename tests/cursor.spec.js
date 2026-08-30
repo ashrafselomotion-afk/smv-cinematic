@@ -36,9 +36,12 @@ test.describe('mouse pointer is never hidden without a replacement', () => {
     });
   }
 
-  test('native media controls keep a usable pointer', async ({ page }) => {
+  test('embedded players keep a usable pointer', async ({ page }) => {
     await page.goto('/work.html');
-    const c = await page.evaluate(() => getComputedStyle(document.querySelector('video')).cursor);
+    const c = await page.evaluate(() => {
+      const el = document.querySelector('.reel-frame') || document.querySelector('video');
+      return el ? getComputedStyle(el).cursor : 'auto';
+    });
     expect(c).not.toBe('none');
   });
 });
@@ -118,7 +121,7 @@ test('preview gallery is visible without hovering', async ({ page }) => {
     await page.waitForTimeout(1200);
     const opacities = await page.evaluate(() =>
       [...document.querySelectorAll('.reel-preview video')].map(v => +getComputedStyle(v).opacity));
-    expect(opacities.length).toBe(16);
+    expect(opacities.length).toBeGreaterThanOrEqual(8);
     for (const o of opacities) expect(o, `${p} preview hidden before hover`).toBeGreaterThan(0.9);
   }
 });
@@ -175,8 +178,12 @@ test('centred sections keep every block on the same axis (EN + AR)', async ({ pa
   }
 });
 
-test('Drive-hosted reel plays in the viewer without being downloaded', async ({ page }) => {
+test('embedded reels play in the viewer without being downloaded', async ({ page }) => {
   // Stub Google so the test asserts our wiring, not Google's uptime.
+  await page.route('https://www.youtube-nocookie.com/**', route =>
+    route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub player</h1>' }));
+  await page.route('https://i.ytimg.com/**', route => route.fulfill({ status: 200, contentType: 'image/gif',
+    body: Buffer.from('R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==', 'base64') }));
   await page.route('https://drive.google.com/**', route => {
     const u = route.request().url();
     if (u.includes('/preview')) return route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub player</h1>' });
@@ -187,19 +194,19 @@ test('Drive-hosted reel plays in the viewer without being downloaded', async ({ 
   for (const p of ['/index.html','/ar/index.html']) {
     await page.goto(p);
     await page.waitForTimeout(1600);
-    const card = page.locator('.reel[data-drive]').first();
-    const driveCount = await page.locator('.reel[data-drive]').count();
-    expect(driveCount, `${p} Drive-backed reels`).toBeGreaterThanOrEqual(10);
+    const card = page.locator('.reel[data-drive], .reel[data-youtube]').first();
+    const driveCount = await page.locator('.reel[data-drive], .reel[data-youtube]').count();
+    expect(driveCount, `${p} embedded reels`).toBe(await page.locator('.reel').count());
 
     // the tile shows Drive's own thumbnail and never carries a local source
     const tile = await card.evaluate(c => {
       const v = c.querySelector('video');
       return { poster: v.poster, localSrc: v.getAttribute('src') };
     });
-    expect(tile.poster).toMatch(/drive\.google\.com\/thumbnail/);
+    expect(tile.poster).toMatch(/drive\.google\.com\/thumbnail|i\.ytimg\.com/);
     expect(tile.localSrc).toBeNull();
 
-    await bring(page, '.reel[data-drive]');
+    await bring(page, '.reel[data-drive], .reel[data-youtube]');
     await card.locator('.reel-open').click({ force: true });
 
     // the viewer swaps in Drive's player for each Drive-backed entry, and the
@@ -214,7 +221,7 @@ test('Drive-hosted reel plays in the viewer without being downloaded', async ({ 
       });
       const fr = active && active.querySelector('.feed-frame');
       return fr ? (fr.getAttribute('src') || '') : 'no-frame';
-    }), { timeout: 15000 }).toMatch(/drive\.google\.com\/file\/d\/.+\/preview/);
+    }), { timeout: 15000 }).toMatch(/drive\.google\.com\/file\/d\/.+\/preview|youtube-nocookie\.com\/embed\//);
 
     // closing must unload the frame — cross-origin playback cannot be paused
     await page.keyboard.press('Escape');
@@ -223,24 +230,24 @@ test('Drive-hosted reel plays in the viewer without being downloaded', async ({ 
   }
 });
 
-test('work page plays Drive-hosted projects inline', async ({ page }) => {
-  await page.route('https://drive.google.com/**', route =>
-    route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub</h1>' }));
+test('work page plays embedded projects inline', async ({ page }) => {
+  for (const host of ['https://drive.google.com/**','https://www.youtube-nocookie.com/**'])
+    await page.route(host, route => route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub</h1>' }));
   for (const p of ['/work.html','/ar/work.html']) {
     await page.goto(p);
     await page.waitForTimeout(1200);
     const frames = page.locator('.reel .reel-frame');
-    expect(await frames.count(), `${p} Drive frames`).toBeGreaterThanOrEqual(10);
+    expect(await frames.count(), `${p} embedded frames`).toBe(await page.locator('.reel').count());
     // each frame must point at Drive's player and sit inside its card
     const ok = await page.evaluate(() => [...document.querySelectorAll('.reel .reel-frame')].every(f => {
       const card = f.closest('.reel').getBoundingClientRect();
       const r = f.getBoundingClientRect();
-      return /drive\.google\.com\/file\/d\/.+\/preview/.test(f.getAttribute('src') || '')
+      return /drive\.google\.com\/file\/d\/.+\/preview|youtube-nocookie\.com\/embed\//.test(f.getAttribute('src') || '')
         && r.width > 0 && Math.abs(r.width - card.width) < 3;
     }));
     expect(ok).toBe(true);
     // every project title stays unique
     const titles = await page.locator('.reel h3').allTextContents();
-    expect(new Set(titles).size).toBe(16);
+    expect(new Set(titles).size).toBe(titles.length);
   }
 });

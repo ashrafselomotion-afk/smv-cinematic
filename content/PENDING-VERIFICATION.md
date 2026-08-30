@@ -43,33 +43,32 @@ appear on the public website. Nothing in this file is published. Items marked
 - Government / institutional showreel (60–90 s): current showreel.mp4 is an 8-second
   placeholder loop. The "Play government & institutional reel — 01:30" control text
   from the plan is NOT used until a real reel exists.
-- Portfolio media: 12 of the 16 reels are now real SMV work, streamed from the
-  client's Google Drive (nothing downloaded or re-hosted). Card / source file:
-    01 Corporate Event Coverage       — IIS-Padel Day
-    02 Event Highlights Film          — Shurooq 02 Highlight
-    04 Destination Film — Waterfront  — Shurooq Recap 2025
-    06 Exhibition Recap Film          — SPC · SIBF Recap
-    08 Destination Film — Desert      — EWD_IIS 2026 V09
-    09 Forum Teaser Film              — Teaser · SIF 2026
-    11 Programme Campaign Film        — Elite Engineer Summer Camp
-    12 Aerial City Film               — IIS Recap Final
-    13 Business Forum Film            — ملتقى الأعمال
-    14 Facility & Capability Film     — IIS MITE
-    15 Corporate Hospitality Coverage — IIS Golf Day
-    16 Destination Film — Dubai       — Shurooq Recap
-  Cards 03, 05, 07 and 10 remain licensed placeholder footage.
-  Card 16 moved from the social to the aerial category to match its content;
-  filter counts are now events 6 / institutional 5 / aerial 4 / social 1, and the
-  tests read the inventory rather than hard-coded numbers.
-  TODO: CLIENT VERIFICATION — source file names and on-screen signage identify
-  real clients (Invest in Sharjah / IIS, Shurooq, Sharjah Publishing City, SIBF,
-  SIF, Sharjah Business Council UAE, PBCS). Published titles use the neutral
-  assignment-type taxonomy and name NO entity anywhere. Written approval is
-  required before any of those names appear in copy, a case study or a logo
-  strip — at which point they become the evidence the site currently lacks.
-- Drive as a host: Drive is not a CDN — it applies view quotas, can throttle, and
-  serves Google's own player chrome and accessibility defects. Move final films to
-  the repo or a CDN before tender use; each card swaps with a one-line change.
+- Portfolio media: the gallery is now 8 cards, ALL real SMV work, embedded from
+  YouTube in privacy-enhanced mode (youtube-nocookie.com). Placeholder stock
+  footage and all Google Drive embeds have been removed from the site:
+    01 Corporate Event Coverage       — IIS Padel Day          UcxfNIPYMUI
+    02 Forum Teaser Film              — Teaser SIF 2026        b6FAIS3Yk3o
+    03 Business Forum Film            — ملتقى الأعمال          w2XlbF3ZWlY
+    04 Corporate Hospitality Coverage — IIS Golf Day           uX9oIbEAAK8
+    05 Destination Film — Desert      — EWD IIS 2026 V09       W0hkSjVUeaE
+    06 Aerial City Film               — IIS Recap Final        iBA6uHFnDqg
+    07 Programme Campaign Film        — Elite Engineer Camp    zokK5QEN5dE
+    08 Facility & Capability Film     — IIS MITE               o1lR2OGh2GE
+  Categories: events 4 / aerial 2 / institutional 2. The SOCIAL filter was
+  removed because no published item belongs to it.
+  NOT carried over (no YouTube version supplied): Shurooq Recap 2025, Shurooq 02
+  Highlight, Shurooq Recap, SPC · SIBF Recap. Send YouTube links and they return.
+  The unused local clips remain in `media/reels/` but are no longer referenced.
+  TODO: CLIENT VERIFICATION — video titles and on-screen signage identify real
+  clients (Invest in Sharjah / IIS, SIF, Sharjah Business Council UAE, PBCS).
+  Published card titles use the neutral assignment-type taxonomy and name NO
+  entity. Written approval is required before any name appears in copy, a case
+  study or a logo strip.
+- Third-party embed disclosure: the privacy notice (EN + AR) now states that
+  YouTube's player is loaded only when a visitor opens a film, and that Google
+  may set cookies and process technical data at that point. The earlier blanket
+  "this website sets no cookies" claim would have been inaccurate once players
+  were embedded.
 - Social profiles (LinkedIn · Instagram · Vimeo): links removed — no live profiles
   supplied. Do not publish dead links.
 - OG/social share image: current og.jpg is a generated skyline frame; replace with

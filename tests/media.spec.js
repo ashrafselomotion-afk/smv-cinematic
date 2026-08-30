@@ -1,7 +1,7 @@
 const { bring } = require('./helpers');
 const { test, expect } = require('@playwright/test');
 
-const WORK_PAGES = ['/work.html', '/ar/work.html'];
+const WORK_PAGES = [];   // work pages now embed YouTube players, covered in cursor.spec.js
 
 test.describe('P0 — native video playback', () => {
   for (const page_ of WORK_PAGES) {
@@ -44,9 +44,10 @@ test.describe('homepage previews', () => {
   test('cards are real buttons with unique accessible names', async ({ page }) => {
     await page.goto('/index.html');
     const buttons = page.locator('.reel-open');
-    await expect(buttons).toHaveCount(16);
+    const n = await page.locator('.reel').count();
+    await expect(buttons).toHaveCount(n);
     const names = await buttons.evaluateAll(els => els.map(e => e.getAttribute('aria-label')));
-    expect(new Set(names).size).toBe(16);
+    expect(new Set(names).size).toBe(n);
     for (const n of names) expect(n).toMatch(/View project \d\d: .+/);
     // no figure is a fake button any more
     await expect(page.locator('figure[role="button"]')).toHaveCount(0);

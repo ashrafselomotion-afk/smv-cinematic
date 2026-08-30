@@ -24,6 +24,7 @@
     src:   f.querySelector('video').dataset.src,
     poster:f.querySelector('video').poster,
     drive: f.dataset.drive || '',
+    yt:    f.dataset.youtube || '',
     ratio: f.dataset.ratio || '9/16'
   }));
   reels.forEach((f, i) => {
@@ -38,7 +39,7 @@
   };
   const canPlayPreview = () => !reduced && !saveData;
   const startPreview = card => {
-    if (!canPlayPreview() || card.dataset.drive) return;   // Drive tiles show their thumbnail
+    if (!canPlayPreview() || card.dataset.drive || card.dataset.youtube) return;  // embeds show their poster
     const v = card.querySelector('video'); if (!v) return;
     attach(v); card.classList.add('is-live');
     const p = v.play(); if (p && p.catch) p.catch(()=>{});
@@ -51,7 +52,7 @@
   const near = (saveData || reduced) ? { observe(){}, unobserve(){}, disconnect(){} }
     : new IntersectionObserver(es => es.forEach(e => {
         if (e.isIntersecting) {
-          if (!e.target.dataset.drive) attach(e.target.querySelector('video'));
+          if (!e.target.dataset.drive && !e.target.dataset.youtube) attach(e.target.querySelector('video'));
           near.unobserve(e.target);
         }
       }), { rootMargin: '300px' });
@@ -106,6 +107,11 @@
   }
 
   /* ---------- 6/7 · SELECTED WORK VIEWER (accessible dialog) ---------- */
+  /* Embedded players: YouTube in privacy-enhanced mode, or Google Drive. */
+  const embedURL = r => r.yt
+    ? 'https://www.youtube-nocookie.com/embed/' + r.yt + '?rel=0&modestbranding=1'
+    : 'https://drive.google.com/file/d/' + r.drive + '/preview';
+
   const feed = document.getElementById('feed'), feedCol = document.getElementById('feedCol'),
         feedCount = document.getElementById('feedCount'), feedMute = document.getElementById('feedMute'),
         feedClose = document.getElementById('feedClose');
@@ -115,10 +121,10 @@
     list.forEach((r, i) => {
       const it = document.createElement('div');
       it.className = 'feed-item'; it.dataset.i = i;
-      const media = r.drive
+      const media = (r.drive || r.yt)
         ? '<iframe class="feed-frame" title="' + r.title + '" loading="lazy" style="aspect-ratio:' + r.ratio + '"' +
-          ' allow="autoplay; fullscreen; encrypted-media" allowfullscreen' +
-          ' referrerpolicy="strict-origin-when-cross-origin" data-drive="' + r.drive + '"></iframe>'
+          ' allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen' +
+          ' referrerpolicy="strict-origin-when-cross-origin" data-embed="' + embedURL(r) + '"></iframe>'
         : '<video playsinline loop preload="none" poster="' + r.poster + '" data-src="' + r.src + '" aria-label="' + r.title + '"></video>' +
           '<button type="button" class="feed-toggle" aria-pressed="false"></button>';
       it.innerHTML = '<div class="frame">' + media +
@@ -132,8 +138,7 @@
       const fio = new IntersectionObserver(es => es.forEach(e => {
         const fr = e.target, i = +fr.closest('.feed-item').dataset.i;
         if (e.isIntersecting) {
-          if (!fr.getAttribute('src'))
-            fr.src = 'https://drive.google.com/file/d/' + fr.dataset.drive + '/preview';
+          if (!fr.getAttribute('src')) fr.src = fr.dataset.embed;
           feedCount.textContent = String(i+1).padStart(2,'0') + ' / ' + String(list.length).padStart(2,'0');
           feed.classList.add('no-sound');
         } else if (fr.getAttribute('src')) {

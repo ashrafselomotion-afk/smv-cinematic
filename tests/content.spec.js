@@ -10,13 +10,14 @@ test.describe('filters', () => {
       document.querySelectorAll('.reel').forEach(r => { c[r.dataset.cat] = (c[r.dataset.cat] || 0) + 1; });
       return c;
     });
-    const social = page.locator('[data-filter="social"]');
-    await social.click();
-    await expect(social).toHaveAttribute('aria-pressed', 'true');
-    await expect(page).toHaveURL(/\?work=social/);
+    const first = Object.keys(counts)[0];
+    const btn = page.locator(`[data-filter="${first}"]`);
+    await btn.click();
+    await expect(btn).toHaveAttribute('aria-pressed', 'true');
+    await expect(page).toHaveURL(new RegExp(`\\?work=${first}`));
     await expect(page.locator('#filterStatus'))
-      .toHaveText(new RegExp(`Showing ${counts.social} project`));
-    await expect(page.locator('.reel:not(.is-hidden)')).toHaveCount(counts.social);
+      .toHaveText(new RegExp(`Showing ${counts[first]} project`));
+    await expect(page.locator('.reel:not(.is-hidden)')).toHaveCount(counts[first]);
 
     // restore from URL on a fresh load
     await page.goto('/work.html?work=aerial');
@@ -133,7 +134,7 @@ test.describe('arabic parity and routing', () => {
     await page.goto('/ar/work.html');
     const ar = await page.locator('.reel').count();
     expect(ar).toBe(en);
-    expect(ar).toBe(16);
+    expect(ar).toBeGreaterThanOrEqual(8);
   });
 
   test('ar.html keeps working as a compatibility route', async ({ page }) => {
@@ -179,7 +180,7 @@ test('no horizontal overflow anywhere', async ({ page }) => {
 test('portfolio items carry unique, specific context', async ({ page }) => {
   await page.goto('/work.html');
   const titles = await page.locator('.reel h3').allTextContents();
-  expect(new Set(titles).size).toBe(16);
+  expect(new Set(titles).size).toBe(titles.length);
   const metas = await page.locator('.reel .meta-line').allTextContents();
   expect(metas.every(m => m.includes('Deliverables'))).toBe(true);
 });
