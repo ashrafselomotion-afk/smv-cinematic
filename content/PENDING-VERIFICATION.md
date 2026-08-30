@@ -43,11 +43,18 @@ appear on the public website. Nothing in this file is published. Items marked
 - Government / institutional showreel (60–90 s): current showreel.mp4 is an 8-second
   placeholder loop. The "Play government & institutional reel — 01:30" control text
   from the plan is NOT used until a real reel exists.
-- Portfolio media: the gallery is 22 cards, ALL real SMV work, embedded from
+- Portfolio media: the gallery is 23 cards, ALL real SMV work, embedded from
   YouTube in privacy-enhanced mode (youtube-nocookie.com). No placeholder stock
   footage and no Google Drive embeds remain anywhere on the site.
   Category filters were removed at the client's request — the gallery is now a
   single numbered set, and card captions no longer show a category.
+  The "representative footage shown" disclaimer was removed at the client's
+  request. It was correct while the grid held stock placeholders; now that every
+  card is real SMV work it no longer applies. Note this also removed the only
+  in-gallery pointer to "case studies and client references shared privately" —
+  the Request Credentials CTA elsewhere on the page still covers that.
+  Two distinct cuts of the SIBF assignment are published (Exhibition Recap Film
+  and Visitor Engagement Coverage) — different footage, same event.
   Six of the newest films came from Invest in Sharjah's channel with no
   descriptive titles ("Video by investinsharjah …"); each was named from its own
   opening frame: Leadership Interview Film, Trade Stand Coverage, Stand Host
