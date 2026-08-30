@@ -43,27 +43,35 @@ appear on the public website. Nothing in this file is published. Items marked
 - Government / institutional showreel (60–90 s): current showreel.mp4 is an 8-second
   placeholder loop. The "Play government & institutional reel — 01:30" control text
   from the plan is NOT used until a real reel exists.
-- Portfolio media: the gallery is now 8 cards, ALL real SMV work, embedded from
-  YouTube in privacy-enhanced mode (youtube-nocookie.com). Placeholder stock
-  footage and all Google Drive embeds have been removed from the site:
-    01 Corporate Event Coverage       — IIS Padel Day          UcxfNIPYMUI
-    02 Forum Teaser Film              — Teaser SIF 2026        b6FAIS3Yk3o
-    03 Business Forum Film            — ملتقى الأعمال          w2XlbF3ZWlY
-    04 Corporate Hospitality Coverage — IIS Golf Day           uX9oIbEAAK8
-    05 Destination Film — Desert      — EWD IIS 2026 V09       W0hkSjVUeaE
-    06 Aerial City Film               — IIS Recap Final        iBA6uHFnDqg
-    07 Programme Campaign Film        — Elite Engineer Camp    zokK5QEN5dE
-    08 Facility & Capability Film     — IIS MITE               o1lR2OGh2GE
-  Categories: events 4 / aerial 2 / institutional 2. The SOCIAL filter was
-  removed because no published item belongs to it.
-  NOT carried over (no YouTube version supplied): Shurooq Recap 2025, Shurooq 02
-  Highlight, Shurooq Recap, SPC · SIBF Recap. Send YouTube links and they return.
-  The unused local clips remain in `media/reels/` but are no longer referenced.
-  TODO: CLIENT VERIFICATION — video titles and on-screen signage identify real
-  clients (Invest in Sharjah / IIS, SIF, Sharjah Business Council UAE, PBCS).
-  Published card titles use the neutral assignment-type taxonomy and name NO
-  entity. Written approval is required before any name appears in copy, a case
-  study or a logo strip.
+- Portfolio media: the gallery is 15 cards, ALL real SMV work, embedded from
+  YouTube in privacy-enhanced mode (youtube-nocookie.com). No placeholder stock
+  footage and no Google Drive embeds remain anywhere on the site.
+    events (5)        Corporate Event Coverage        UcxfNIPYMUI
+                      Forum Teaser Film               b6FAIS3Yk3o
+                      Business Forum Film             w2XlbF3ZWlY
+                      Corporate Hospitality Coverage  uX9oIbEAAK8
+                      Event Highlights Film           EPzLfNBLiOk
+    aerial (4)        Destination Film — Desert       W0hkSjVUeaE
+                      Aerial City Film                iBA6uHFnDqg
+                      Destination Film — Dubai        4mHy4RB2rmk
+                      Destination Film — Waterfront   aWC9Td5NBm0
+    institutional (2) Programme Campaign Film         zokK5QEN5dE
+                      Facility & Capability Film      o1lR2OGh2GE
+    social (4)        Destination Social Reel         hr-hqFVQP44
+                      Family Activation Reel          dz6wZsmHjVc
+                      Public Programme Reel           r0J20J07j9c
+                      Workshop Activity Reel          3e5xUAE76Dk
+  The SOCIAL filter is back: the four channel-first vertical films belong to it.
+  Unused local clips remain in `media/reels/` but nothing references them — safe
+  to delete to shrink the repository.
+  TODO: CLIENT VERIFICATION — source video titles identify real clients (Invest
+  in Sharjah / IIS, Shurooq / shurooqsharjah, SIF, Sharjah Business Council UAE,
+  PBCS) and some footage shows their signage. Published card titles use the
+  neutral assignment-type taxonomy and name NO entity. Written approval is
+  required before any name appears in copy, a case study or a logo strip.
+  NOTE: four of the social films feature identifiable children at public events.
+  Confirm the client holds usage/consent for those individuals before this stays
+  published.
 - Third-party embed disclosure: the privacy notice (EN + AR) now states that
   YouTube's player is loaded only when a visitor opens a film, and that Google
   may set cookies and process technical data at that point. The earlier blanket
