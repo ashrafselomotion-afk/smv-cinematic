@@ -43,14 +43,15 @@ appear on the public website. Nothing in this file is published. Items marked
 - Government / institutional showreel (60–90 s): current showreel.mp4 is an 8-second
   placeholder loop. The "Play government & institutional reel — 01:30" control text
   from the plan is NOT used until a real reel exists.
-- Portfolio media: the gallery is 15 cards, ALL real SMV work, embedded from
+- Portfolio media: the gallery is 16 cards, ALL real SMV work, embedded from
   YouTube in privacy-enhanced mode (youtube-nocookie.com). No placeholder stock
   footage and no Google Drive embeds remain anywhere on the site.
-    events (5)        Corporate Event Coverage        UcxfNIPYMUI
+    events (6)        Corporate Event Coverage        UcxfNIPYMUI
                       Forum Teaser Film               b6FAIS3Yk3o
                       Business Forum Film             w2XlbF3ZWlY
                       Corporate Hospitality Coverage  uX9oIbEAAK8
                       Event Highlights Film           EPzLfNBLiOk
+                      Exhibition Recap Film           npX6wzxs-NY
     aerial (4)        Destination Film — Desert       W0hkSjVUeaE
                       Aerial City Film                iBA6uHFnDqg
                       Destination Film — Dubai        4mHy4RB2rmk
