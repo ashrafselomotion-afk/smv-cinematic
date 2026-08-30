@@ -43,36 +43,27 @@ appear on the public website. Nothing in this file is published. Items marked
 - Government / institutional showreel (60–90 s): current showreel.mp4 is an 8-second
   placeholder loop. The "Play government & institutional reel — 01:30" control text
   from the plan is NOT used until a real reel exists.
-- Portfolio media: the gallery is 16 cards, ALL real SMV work, embedded from
+- Portfolio media: the gallery is 22 cards, ALL real SMV work, embedded from
   YouTube in privacy-enhanced mode (youtube-nocookie.com). No placeholder stock
   footage and no Google Drive embeds remain anywhere on the site.
-    events (6)        Corporate Event Coverage        UcxfNIPYMUI
-                      Forum Teaser Film               b6FAIS3Yk3o
-                      Business Forum Film             w2XlbF3ZWlY
-                      Corporate Hospitality Coverage  uX9oIbEAAK8
-                      Event Highlights Film           EPzLfNBLiOk
-                      Exhibition Recap Film           npX6wzxs-NY
-    aerial (4)        Destination Film — Desert       W0hkSjVUeaE
-                      Aerial City Film                iBA6uHFnDqg
-                      Destination Film — Dubai        4mHy4RB2rmk
-                      Destination Film — Waterfront   aWC9Td5NBm0
-    institutional (2) Programme Campaign Film         zokK5QEN5dE
-                      Facility & Capability Film      o1lR2OGh2GE
-    social (4)        Destination Social Reel         hr-hqFVQP44
-                      Family Activation Reel          dz6wZsmHjVc
-                      Public Programme Reel           r0J20J07j9c
-                      Workshop Activity Reel          3e5xUAE76Dk
-  The SOCIAL filter is back: the four channel-first vertical films belong to it.
+  Category filters were removed at the client's request — the gallery is now a
+  single numbered set, and card captions no longer show a category.
+  Six of the newest films came from Invest in Sharjah's channel with no
+  descriptive titles ("Video by investinsharjah …"); each was named from its own
+  opening frame: Leadership Interview Film, Trade Stand Coverage, Stand Host
+  Reel, Sector Spotlight Film, Delegation Welcome Reel, Presenter Piece Film.
+  Four uploads have no maxresdefault thumbnail, so their srcset stops at
+  sddefault — a test now guards against advertising a size YouTube lacks.
   Unused local clips remain in `media/reels/` but nothing references them — safe
   to delete to shrink the repository.
   TODO: CLIENT VERIFICATION — source video titles identify real clients (Invest
   in Sharjah / IIS, Shurooq / shurooqsharjah, SIF, Sharjah Business Council UAE,
-  PBCS) and some footage shows their signage. Published card titles use the
-  neutral assignment-type taxonomy and name NO entity. Written approval is
+  PBCS) and some footage shows their signage and staff. Published card titles use
+  the neutral assignment-type taxonomy and name NO entity. Written approval is
   required before any name appears in copy, a case study or a logo strip.
-  NOTE: four of the social films feature identifiable children at public events.
-  Confirm the client holds usage/consent for those individuals before this stays
-  published.
+  NOTE: several films feature identifiable individuals — children at public
+  events, and named-organisation staff and speakers on camera. Confirm the client
+  holds usage/consent for those individuals before this stays published.
 - Third-party embed disclosure: the privacy notice (EN + AR) now states that
   YouTube's player is loaded only when a visitor opens a film, and that Google
   may set cookies and process technical data at that point. The earlier blanket

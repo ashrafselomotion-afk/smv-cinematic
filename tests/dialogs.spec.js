@@ -73,32 +73,22 @@ test.describe('showreel dialog', () => {
 });
 
 test.describe('selected-work viewer', () => {
-  test('opens filtered and reports the filtered count', async ({ page }) => {
+  test('opens on the chosen card and lists the whole gallery', async ({ page }) => {
     await page.goto('/index.html');
-    await clickAt(page, '[data-filter="aerial"]');
-    await page.waitForTimeout(900);
+    await bring(page, '.reel');
+    const total = await page.locator('.reel').count();
 
-    const visible = page.locator('.reel:not(.is-hidden)');
-    const n = await visible.count();
-    const expected = await page.evaluate(() =>
-      [...document.querySelectorAll('.reel')].filter(r => r.dataset.cat === 'aerial').length);
-    expect(n).toBe(expected);
-
-    await visible.first().locator('.reel-open').click({ force: true });
+    // activate the card directly: this asserts the viewer's behaviour, not
+    // pixel hit-testing (covered separately), and cannot race the smooth scroll
+    await page.evaluate(() => document.querySelector('.reel .reel-open').click());
     const feed = page.locator('#feed');
     await expect(feed).toHaveClass(/open/);
-    await expect(page.locator('#feedCol .feed-item')).toHaveCount(n);
-    await expect(page.locator('#feedCount')).toHaveText(new RegExp(`/ 0?${n}`));
+    await expect(page.locator('#feedCol .feed-item')).toHaveCount(total);
+    await expect(page.locator('#feedCount')).toHaveText(new RegExp(`/ ${String(total).padStart(2, '0')}`));
 
-    // every self-hosted item carries a keyboard play/pause control; Drive-backed
-    // items are played by Google's own frame instead.
-    const selfHosted = await page.locator('#feedCol .feed-item video').count();
-    const frames = await page.locator('#feedCol .feed-frame').count();
-    expect(selfHosted + frames).toBe(n);
-    expect(await page.locator('.feed-item .feed-toggle').count()).toBe(selfHosted);
-    if (selfHosted) {
-      expect(await page.locator('.feed-item .feed-toggle').first().getAttribute('aria-pressed')).toMatch(/true|false/);
-    }
+    // every entry is an embedded player; none ship a local video
+    expect(await page.locator('#feedCol .feed-frame').count()).toBe(total);
+    expect(await page.locator('#feedCol video').count()).toBe(0);
 
     await page.keyboard.press('Escape');
     await expect(feed).not.toHaveClass(/open/);

@@ -258,3 +258,26 @@ test('work page plays embedded projects inline', async ({ page }) => {
     expect(new Set(titles).size).toBe(titles.length);
   }
 });
+
+test('thumbnail srcsets never advertise a missing size', async ({ page, request }) => {
+  await page.goto('/index.html');
+  await page.waitForTimeout(1200);
+  const urls = await page.evaluate(() => {
+    const out = new Set();
+    document.querySelectorAll('.reel-thumb').forEach(img => {
+      (img.getAttribute('srcset') || '').split(',').forEach(part => {
+        const u = part.trim().split(/\s+/)[0];
+        if (u) out.add(u);
+      });
+      if (img.getAttribute('src')) out.add(img.getAttribute('src'));
+    });
+    return [...out];
+  });
+  expect(urls.length).toBeGreaterThan(20);
+  const bad = [];
+  for (const u of urls) {
+    const r = await request.get(u);
+    if (r.status() !== 200) bad.push(`${r.status()} ${u}`);
+  }
+  expect(bad, 'srcset offers a thumbnail YouTube does not have').toEqual([]);
+});

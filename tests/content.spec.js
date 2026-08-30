@@ -1,36 +1,15 @@
 const { test, expect } = require('@playwright/test');
 
-test.describe('filters', () => {
-  test('use aria-pressed, announce count, sync to URL and restore on load/back', async ({ page }) => {
-    await page.goto('/work.html');
-    await expect(page.locator('.filters[role="tablist"]')).toHaveCount(0);
-    // counts follow the real inventory rather than a frozen number
-    const counts = await page.evaluate(() => {
-      const c = {};
-      document.querySelectorAll('.reel').forEach(r => { c[r.dataset.cat] = (c[r.dataset.cat] || 0) + 1; });
-      return c;
-    });
-    const first = Object.keys(counts)[0];
-    const btn = page.locator(`[data-filter="${first}"]`);
-    await btn.click();
-    await expect(btn).toHaveAttribute('aria-pressed', 'true');
-    await expect(page).toHaveURL(new RegExp(`\\?work=${first}`));
-    await expect(page.locator('#filterStatus'))
-      .toHaveText(new RegExp(`Showing ${counts[first]} project`));
-    await expect(page.locator('.reel:not(.is-hidden)')).toHaveCount(counts[first]);
-
-    // restore from URL on a fresh load
-    await page.goto('/work.html?work=aerial');
-    await expect(page.locator('[data-filter="aerial"]')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('.reel:not(.is-hidden)')).toHaveCount(counts.aerial);
-
-    // back navigation restores the previous filter
-    await page.goto('/work.html');
-    await page.locator('[data-filter="events"]').click();
-    await expect(page).toHaveURL(/\?work=events/);
-    await page.goBack();
-    await expect(page.locator('[data-filter="all"]')).toHaveAttribute('aria-pressed', 'true');
-  });
+test('gallery has no category filters and every card is uniquely titled', async ({ page }) => {
+  for (const p of ['/work.html','/ar/work.html','/index.html','/ar/index.html']) {
+    await page.goto(p);
+    await page.waitForTimeout(800);
+    await expect(page.locator('.filters')).toHaveCount(0);
+    await expect(page.locator('#filterStatus')).toHaveCount(0);
+    const titles = await page.locator('.reel h3').allTextContents();
+    expect(titles.length).toBeGreaterThanOrEqual(20);
+    expect(new Set(titles).size).toBe(titles.length);
+  }
 });
 
 test.describe('contact form', () => {
