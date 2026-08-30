@@ -21,8 +21,8 @@
     title: f.querySelector('h3').textContent,
     label: f.querySelector('.label').textContent,
     cat:   f.dataset.cat,
-    src:   f.querySelector('video').dataset.src,
-    poster:f.querySelector('video').poster,
+    src:   (f.querySelector('video') || {}).dataset ? f.querySelector('video').dataset.src : '',
+    poster:(f.querySelector('.reel-thumb') || {}).currentSrc || (f.querySelector('.reel-thumb') || {}).src || '',
     drive: f.dataset.drive || '',
     yt:    f.dataset.youtube || '',
     ratio: f.dataset.ratio || '9/16'
@@ -31,7 +31,7 @@
     const btn = f.querySelector('.reel-open') || f;
     btn.addEventListener('click', () => openLB(i));
   });
-  const vids = reels.map(f => f.querySelector('video'));
+  const vids = reels.map(f => f.querySelector('video')).filter(Boolean);
   /* Save-Data / reduced motion: posters only — never fetch preview footage */
   const attach = v => {
     if (!v || saveData || reduced) return;

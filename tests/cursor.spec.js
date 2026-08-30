@@ -119,10 +119,16 @@ test('preview gallery is visible without hovering', async ({ page }) => {
       window.scrollTo(0, e.top + scrollY + 400);
     });
     await page.waitForTimeout(1200);
-    const opacities = await page.evaluate(() =>
-      [...document.querySelectorAll('.reel-preview video')].map(v => +getComputedStyle(v).opacity));
-    expect(opacities.length).toBeGreaterThanOrEqual(8);
-    for (const o of opacities) expect(o, `${p} preview hidden before hover`).toBeGreaterThan(0.9);
+    const tiles = await page.evaluate(() =>
+      [...document.querySelectorAll('.reel-preview .reel-thumb')].map(i => ({
+        opacity: +getComputedStyle(i).opacity,
+        loaded: i.complete && i.naturalWidth > 0
+      })));
+    expect(tiles.length).toBeGreaterThanOrEqual(8);
+    for (const t of tiles) {
+      expect(t.opacity, `${p} preview hidden before hover`).toBeGreaterThan(0.9);
+      expect(t.loaded, `${p} thumbnail failed to load`).toBe(true);
+    }
   }
 });
 
@@ -200,11 +206,12 @@ test('embedded reels play in the viewer without being downloaded', async ({ page
 
     // the tile shows Drive's own thumbnail and never carries a local source
     const tile = await card.evaluate(c => {
-      const v = c.querySelector('video');
-      return { poster: v.poster, localSrc: v.getAttribute('src') };
+      const img = c.querySelector('.reel-thumb');
+      return { poster: img.currentSrc || img.src, lazy: img.loading, hasVideo: !!c.querySelector('video') };
     });
-    expect(tile.poster).toMatch(/drive\.google\.com\/thumbnail|i\.ytimg\.com/);
-    expect(tile.localSrc).toBeNull();
+    expect(tile.poster).toMatch(/i\.ytimg\.com/);
+    expect(tile.lazy).toBe('lazy');
+    expect(tile.hasVideo, 'embedded cards must not ship a local video element').toBe(false);
 
     await bring(page, '.reel[data-drive], .reel[data-youtube]');
     await card.locator('.reel-open').click({ force: true });

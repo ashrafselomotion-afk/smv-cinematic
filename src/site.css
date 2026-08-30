@@ -155,10 +155,10 @@ section,footer,.marquee{position:relative;z-index:1}
 .reel{aspect-ratio:9/16;border-radius:18px;overflow:hidden;position:relative;
   background:var(--panel);border:1px solid var(--line);cursor:pointer;transition:transform .4s,border-color .4s}
 .reel:hover,.reel:focus-visible{transform:translateY(-6px);border-color:rgba(224,101,47,.55)}
-.reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reel video,.reel .reel-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 /* Homepage previews delegate activation to the surrounding button, so the video
    itself must not swallow the pointer. Pages with native controls keep them. */
-.reel-preview video{pointer-events:none}
+.reel-preview video,.reel-preview .reel-thumb{pointer-events:none}
 .reel::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(12,14,18,0) 55%,rgba(12,14,18,.86));pointer-events:none;z-index:1}
 /* native-control cards: keep the scrim clear of the control strip */
 .reel:not(.reel-preview)::after{background:linear-gradient(rgba(12,14,18,0) 40%,rgba(12,14,18,.8) 78%,rgba(12,14,18,0) 88%)}
@@ -910,4 +910,4 @@ html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
 #feed.open{transition:opacity .35s,visibility 0s}
 #rp.open{transition:opacity .35s,visibility 0s}
 /* embedded-player tiles crop their poster to the card */
-.reel[data-youtube] video{object-fit:cover}
+.reel[data-youtube] .reel-thumb{object-fit:cover}

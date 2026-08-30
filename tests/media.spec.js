@@ -53,11 +53,15 @@ test.describe('homepage previews', () => {
     await expect(page.locator('figure[role="button"]')).toHaveCount(0);
   });
 
-  test('preview videos do not all autoplay indefinitely', async ({ page }) => {
+  test('gallery tiles are images, so nothing autoplays in the grid', async ({ page }) => {
     await page.goto('/index.html');
     await page.waitForTimeout(1500);
-    const playing = await page.evaluate(() =>
-      [...document.querySelectorAll('.reel-preview video')].filter(v => !v.paused).length);
-    expect(playing).toBe(0);
+    const state = await page.evaluate(() => ({
+      videos: document.querySelectorAll('.reel-preview video').length,
+      playing: [...document.querySelectorAll('.reel-preview video')].filter(v => !v.paused).length,
+      thumbs: document.querySelectorAll('.reel-preview .reel-thumb').length
+    }));
+    expect(state.playing).toBe(0);
+    expect(state.thumbs).toBeGreaterThanOrEqual(8);
   });
 });
