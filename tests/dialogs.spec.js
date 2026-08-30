@@ -80,7 +80,9 @@ test.describe('selected-work viewer', () => {
 
     const visible = page.locator('.reel:not(.is-hidden)');
     const n = await visible.count();
-    expect(n).toBe(3);
+    const expected = await page.evaluate(() =>
+      [...document.querySelectorAll('.reel')].filter(r => r.dataset.cat === 'aerial').length);
+    expect(n).toBe(expected);
 
     await visible.first().locator('.reel-open').click({ force: true });
     const feed = page.locator('#feed');

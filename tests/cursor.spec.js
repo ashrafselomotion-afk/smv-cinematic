@@ -188,7 +188,8 @@ test('Drive-hosted reel plays in the viewer without being downloaded', async ({ 
     await page.goto(p);
     await page.waitForTimeout(1600);
     const card = page.locator('.reel[data-drive]').first();
-    await expect(page.locator('.reel[data-drive]'), `${p} Drive-backed reels`).toHaveCount(3);
+    const driveCount = await page.locator('.reel[data-drive]').count();
+    expect(driveCount, `${p} Drive-backed reels`).toBeGreaterThanOrEqual(10);
 
     // the tile shows Drive's own thumbnail and never carries a local source
     const tile = await card.evaluate(c => {
@@ -203,7 +204,7 @@ test('Drive-hosted reel plays in the viewer without being downloaded', async ({ 
 
     // the viewer swaps in Drive's player for each Drive-backed entry, and the
     // one actually on screen is the one that loads
-    await expect(page.locator('.feed-frame')).toHaveCount(3);
+    await expect(page.locator('.feed-frame')).toHaveCount(driveCount);
     await expect.poll(() => page.evaluate(() => {
       const col = document.getElementById('feedCol');
       const cr = col.getBoundingClientRect();
@@ -229,7 +230,7 @@ test('work page plays Drive-hosted projects inline', async ({ page }) => {
     await page.goto(p);
     await page.waitForTimeout(1200);
     const frames = page.locator('.reel .reel-frame');
-    await expect(frames, `${p} Drive frames`).toHaveCount(3);
+    expect(await frames.count(), `${p} Drive frames`).toBeGreaterThanOrEqual(10);
     // each frame must point at Drive's player and sit inside its card
     const ok = await page.evaluate(() => [...document.querySelectorAll('.reel .reel-frame')].every(f => {
       const card = f.closest('.reel').getBoundingClientRect();

@@ -4,16 +4,24 @@ test.describe('filters', () => {
   test('use aria-pressed, announce count, sync to URL and restore on load/back', async ({ page }) => {
     await page.goto('/work.html');
     await expect(page.locator('.filters[role="tablist"]')).toHaveCount(0);
+    // counts follow the real inventory rather than a frozen number
+    const counts = await page.evaluate(() => {
+      const c = {};
+      document.querySelectorAll('.reel').forEach(r => { c[r.dataset.cat] = (c[r.dataset.cat] || 0) + 1; });
+      return c;
+    });
     const social = page.locator('[data-filter="social"]');
     await social.click();
     await expect(social).toHaveAttribute('aria-pressed', 'true');
     await expect(page).toHaveURL(/\?work=social/);
-    await expect(page.locator('#filterStatus')).toHaveText(/Showing 2 projects/);
+    await expect(page.locator('#filterStatus'))
+      .toHaveText(new RegExp(`Showing ${counts.social} project`));
+    await expect(page.locator('.reel:not(.is-hidden)')).toHaveCount(counts.social);
 
     // restore from URL on a fresh load
     await page.goto('/work.html?work=aerial');
     await expect(page.locator('[data-filter="aerial"]')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('.reel:not(.is-hidden)')).toHaveCount(3);
+    await expect(page.locator('.reel:not(.is-hidden)')).toHaveCount(counts.aerial);
 
     // back navigation restores the previous filter
     await page.goto('/work.html');

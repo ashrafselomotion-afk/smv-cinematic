@@ -43,16 +43,30 @@ appear on the public website. Nothing in this file is published. Items marked
 - Government / institutional showreel (60–90 s): current showreel.mp4 is an 8-second
   placeholder loop. The "Play government & institutional reel — 01:30" control text
   from the plan is NOT used until a real reel exists.
-- Portfolio media: 3 of the 16 reels are now real SMV work, streamed from the
-  client's Google Drive (nothing is downloaded or re-hosted):
-    01 Corporate Event Coverage      — "IIS-Padel Day"        (1KwjgBcCAM3bsXj_SMcksknbN5n4rZdiS)
-    08 Destination Film — Desert     — "EWD_IIS 2026 V09"     (1-qYes5pGYCvIFzun37PnKlRvgkFFX6lr)
-    11 Programme Campaign Film       — "Elite Engineer Summer Camp" (1mK5Yppsdzv10UZU-Sqi4MENGCwfpBnbF)
-  Titles use the neutral assignment-type taxonomy. TODO: CLIENT VERIFICATION —
-  the Padel Day footage shows third-party marks (Invest in Sharjah, Sharjah
-  Business Council UAE, PBCS and others) on the event signage; written approval
-  is needed before naming any of those entities in copy. No entity is named today.
-  The remaining 13 clips are still licensed placeholder footage.
+- Portfolio media: 12 of the 16 reels are now real SMV work, streamed from the
+  client's Google Drive (nothing downloaded or re-hosted). Card / source file:
+    01 Corporate Event Coverage       — IIS-Padel Day
+    02 Event Highlights Film          — Shurooq 02 Highlight
+    04 Destination Film — Waterfront  — Shurooq Recap 2025
+    06 Exhibition Recap Film          — SPC · SIBF Recap
+    08 Destination Film — Desert      — EWD_IIS 2026 V09
+    09 Forum Teaser Film              — Teaser · SIF 2026
+    11 Programme Campaign Film        — Elite Engineer Summer Camp
+    12 Aerial City Film               — IIS Recap Final
+    13 Business Forum Film            — ملتقى الأعمال
+    14 Facility & Capability Film     — IIS MITE
+    15 Corporate Hospitality Coverage — IIS Golf Day
+    16 Destination Film — Dubai       — Shurooq Recap
+  Cards 03, 05, 07 and 10 remain licensed placeholder footage.
+  Card 16 moved from the social to the aerial category to match its content;
+  filter counts are now events 6 / institutional 5 / aerial 4 / social 1, and the
+  tests read the inventory rather than hard-coded numbers.
+  TODO: CLIENT VERIFICATION — source file names and on-screen signage identify
+  real clients (Invest in Sharjah / IIS, Shurooq, Sharjah Publishing City, SIBF,
+  SIF, Sharjah Business Council UAE, PBCS). Published titles use the neutral
+  assignment-type taxonomy and name NO entity anywhere. Written approval is
+  required before any of those names appear in copy, a case study or a logo
+  strip — at which point they become the evidence the site currently lacks.
 - Drive as a host: Drive is not a CDN — it applies view quotas, can throttle, and
   serves Google's own player chrome and accessibility defects. Move final films to
   the repo or a CDN before tender use; each card swaps with a one-line change.
