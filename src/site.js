@@ -13,60 +13,36 @@
     return m ? m[1] + 'media/' : 'media/';
   })();
 
-  /* ---------- SELECTED WORK: lazy sources + demand-driven playback (39) ---------- */
+  /* ---------- SELECTED WORK: stage + numbered switcher ---------- */
   let openLB = function(){}, closeLB = function(){};
-  const track = document.getElementById('reelTrack');
-  const reels = track ? [...track.querySelectorAll('.reel')] : [];
-  const REELS = reels.map(f => ({
-    title: f.querySelector('h3').textContent,
-    label: f.querySelector('.label').textContent,
-    cat:   f.dataset.cat,
-    src:   (f.querySelector('video') || {}).dataset ? f.querySelector('video').dataset.src : '',
-    poster:(f.querySelector('.reel-thumb') || {}).currentSrc || (f.querySelector('.reel-thumb') || {}).src || '',
-    drive: f.dataset.drive || '',
-    yt:    f.dataset.youtube || '',
-    ratio: f.dataset.ratio || '9/16'
+  const swList = document.getElementById('swList');
+  const swItems = swList ? [...swList.querySelectorAll('.sw-item')] : [];
+  const REELS = swItems.map(b => ({
+    title: b.dataset.title, label: b.dataset.meta, cat: '',
+    src: '', poster: '', drive: '', yt: b.dataset.youtube || '',
+    ratio: b.dataset.ratio || '9/16'
   }));
-  reels.forEach((f, i) => {
-    const btn = f.querySelector('.reel-open') || f;
-    btn.addEventListener('click', () => openLB(i));
-  });
-  const vids = reels.map(f => f.querySelector('video')).filter(Boolean);
-  /* Save-Data / reduced motion: posters only — never fetch preview footage */
-  const attach = v => {
-    if (!v || saveData || reduced) return;
-    if (!v.getAttribute('src')) { v.src = v.dataset.src; v.preload = 'metadata'; }
-  };
-  const canPlayPreview = () => !reduced && !saveData;
-  const startPreview = card => {
-    if (!canPlayPreview() || card.dataset.drive || card.dataset.youtube) return;  // embeds show their poster
-    const v = card.querySelector('video'); if (!v) return;
-    attach(v); card.classList.add('is-live');
-    const p = v.play(); if (p && p.catch) p.catch(()=>{});
-  };
-  const stopPreview = card => {
-    const v = card.querySelector('video'); if (!v) return;
-    if (!v.paused) v.pause();
-    card.classList.remove('is-live');
-  };
-  const near = (saveData || reduced) ? { observe(){}, unobserve(){}, disconnect(){} }
-    : new IntersectionObserver(es => es.forEach(e => {
-        if (e.isIntersecting) {
-          if (!e.target.dataset.drive && !e.target.dataset.youtube) attach(e.target.querySelector('video'));
-          near.unobserve(e.target);
-        }
-      }), { rootMargin: '300px' });
-  const offscreen = new IntersectionObserver(es => es.forEach(e => {
-    if (!e.isIntersecting) stopPreview(e.target);
-  }), { threshold: .01 });
-  reels.forEach(card => {
-    near.observe(card); offscreen.observe(card);
-    card.addEventListener('pointerenter', () => startPreview(card));
-    card.addEventListener('pointerleave', () => stopPreview(card));
-    card.addEventListener('focusin', () => startPreview(card));
-    card.addEventListener('focusout', () => stopPreview(card));
-  });
-  document.addEventListener('visibilitychange', () => { if (document.hidden) reels.forEach(stopPreview); });
+  if (swItems.length) {
+    const stage = document.querySelector('.sw-stage');
+    const shots = [...stage.querySelectorAll('img')];
+    const title = document.getElementById('swTitle'), meta = document.getElementById('swMeta');
+    let active = 0;
+    const show = i => {
+      if (i === active) return;
+      active = i;
+      shots.forEach(s => s.classList.toggle('on', +s.dataset.i === i));
+      swItems.forEach((b, n) => b.setAttribute('aria-current', String(n === i)));
+      title.textContent = swItems[i].dataset.title;
+      meta.textContent = swItems[i].dataset.meta;
+    };
+    swItems.forEach((b, i) => {
+      b.addEventListener('click', () => { show(i); openLB(i); });
+      b.addEventListener('pointerenter', () => show(i));
+      b.addEventListener('focus', () => show(i));
+    });
+    const swOpen = document.getElementById('swOpen');
+    if (swOpen) swOpen.addEventListener('click', () => openLB(active));
+  }
 
   /* ---------- HERO VIDEO: poster first, motion/data aware, pause control (13) ---------- */
   const vid = document.querySelector('#hero .vid');
@@ -173,12 +149,9 @@
     });
   }
   openLB = function(i){
-    if (!feed) return;
-    const key = window.__smvFilter || 'all';
-    feedList = key === 'all' ? REELS : REELS.filter(r => r.cat === key);
-    const cardTitle = reels[i] && reels[i].querySelector('h3').textContent;
-    let idx = feedList.findIndex(r => r.title === cardTitle && r.src === REELS[i].src);
-    if (idx < 0) idx = 0;
+    if (!feed || !REELS.length) return;
+    feedList = REELS;
+    const idx = Math.max(0, Math.min(i | 0, feedList.length - 1));
     buildFeed(feedList);
     feedFocus = document.activeElement;
     feed.classList.add('open'); feed.setAttribute('aria-hidden','false'); feed.removeAttribute('inert');
@@ -288,9 +261,6 @@
     document.addEventListener('visibilitychange', () => { if (document.hidden) rpV.pause(); });
   }
 
-  /* pause previews whenever a dialog opens */
-  document.addEventListener('smv:filter', () => { if (feed && feed.classList.contains('open')) closeLB(); });
-
   /* ---------- SPOTLIGHT TILES ---------- */
   document.querySelectorAll('.tile').forEach(t => {
     t.addEventListener('pointermove', e => {
@@ -388,7 +358,7 @@
   /* ---------- SCROLL PROGRESS + CHAPTER RAIL ---------- */
   gsap.to('#progress i', { scaleX:1, ease:'none', scrollTrigger:{ trigger:document.body, start:'top top', end:'bottom bottom', scrub:.3 } });
   const chNum = document.getElementById('chapterNum'), chName = document.getElementById('chapterName');
-  document.querySelectorAll('[data-chapter]').forEach((sec, i) => {
+  if (chNum && chName) document.querySelectorAll('[data-chapter]').forEach((sec, i) => {
     ScrollTrigger.create({ trigger:sec, start:'top 55%', end:'bottom 55%',
       onToggle(s){ if (s.isActive) { chNum.textContent = String(i+1).padStart(2,'0'); chName.textContent = sec.dataset.chapter; document.documentElement.classList.add('chapters'); } },
       onLeaveBack(){ if (i === 0) document.documentElement.classList.remove('chapters'); } });

@@ -1,14 +1,42 @@
 const { test, expect } = require('@playwright/test');
 
-test('gallery has no category filters and every card is uniquely titled', async ({ page }) => {
+test('no category filters survive anywhere', async ({ page }) => {
   for (const p of ['/work.html','/ar/work.html','/index.html','/ar/index.html']) {
     await page.goto(p);
     await page.waitForTimeout(800);
     await expect(page.locator('.filters')).toHaveCount(0);
     await expect(page.locator('#filterStatus')).toHaveCount(0);
-    const titles = await page.locator('.reel h3').allTextContents();
-    expect(titles.length).toBeGreaterThanOrEqual(20);
+  }
+});
+
+test('the full gallery lives on the projects page and every card is uniquely titled', async ({ page }) => {
+  for (const p of ['/work.html','/ar/work.html']) {
+    await page.goto(p);
+    await page.waitForTimeout(800);
+    const titles = await page.locator('#panelVideo .reel h3').allTextContents();
+    expect(titles.length, `${p} films`).toBeGreaterThanOrEqual(20);
     expect(new Set(titles).size).toBe(titles.length);
+  }
+});
+
+test('the homepage shows a selected-work shortlist, not the whole gallery', async ({ page }) => {
+  for (const p of ['/index.html','/ar/index.html']) {
+    await page.goto(p);
+    await page.waitForTimeout(800);
+    // the 23-card grid moved to the projects page
+    await expect(page.locator('.reel')).toHaveCount(0);
+    const items = page.locator('#swList .sw-item');
+    const n = await items.count();
+    expect(n, `${p} shortlist`).toBeGreaterThanOrEqual(3);
+    expect(n, `${p} shortlist stays a shortlist`).toBeLessThan(10);
+    const titles = await items.evaluateAll(els => els.map(e => e.dataset.title));
+    expect(new Set(titles).size).toBe(n);
+    expect(titles.every(Boolean)).toBe(true);
+    // exactly one is current, and it drives the stage caption
+    await expect(page.locator('#swList .sw-item[aria-current="true"]')).toHaveCount(1);
+    await expect(page.locator('#swTitle')).toHaveText(titles[0]);
+    // and it points at the full set
+    await expect(page.locator('.sw-all')).toHaveAttribute('href', /work\.html/);
   }
 });
 
@@ -109,9 +137,9 @@ test.describe('arabic parity and routing', () => {
 
   test('portfolio inventory matches between locales', async ({ page }) => {
     await page.goto('/work.html');
-    const en = await page.locator('.reel').count();
+    const en = await page.locator('#panelVideo .reel').count();
     await page.goto('/ar/work.html');
-    const ar = await page.locator('.reel').count();
+    const ar = await page.locator('#panelVideo .reel').count();
     expect(ar).toBe(en);
     expect(ar).toBeGreaterThanOrEqual(8);
   });
@@ -158,8 +186,73 @@ test('no horizontal overflow anywhere', async ({ page }) => {
 
 test('portfolio items carry unique, specific context', async ({ page }) => {
   await page.goto('/work.html');
-  const titles = await page.locator('.reel h3').allTextContents();
+  const titles = await page.locator('#panelVideo .reel h3').allTextContents();
   expect(new Set(titles).size).toBe(titles.length);
-  const metas = await page.locator('.reel .meta-line').allTextContents();
+  const metas = await page.locator('#panelVideo .reel .meta-line').allTextContents();
   expect(metas.every(m => m.includes('Deliverables'))).toBe(true);
+});
+
+
+test.describe('projects — videography / photography', () => {
+  for (const [p, filmsHeading, stillsHeading] of [
+    ['/work.html', /Films\./i, /Stills in focus\./i],
+    ['/ar/work.html', /الأفلام\./, /الصورة الثابتة\./]
+  ]) {
+    test(`${p} switches panels and keeps one tab selected`, async ({ page }) => {
+      await page.goto(p);
+      await page.waitForFunction(() => !!document.querySelector('.pv-switch [role=tab]'), null, { timeout: 8000 });
+      const video = page.locator('#tabVideo'), photo = page.locator('#tabPhoto');
+
+      // videography opens by default
+      await expect(video).toHaveAttribute('aria-selected', 'true');
+      await expect(photo).toHaveAttribute('aria-selected', 'false');
+      await expect(page.locator('#panelVideo')).toBeVisible();
+      await expect(page.locator('#panelPhoto')).toBeHidden();
+      await expect(page.locator('#panelVideo h2')).toHaveText(filmsHeading);
+
+      // only the selected tab is in the tab order
+      expect(await video.getAttribute('tabindex')).not.toBe('-1');
+      expect(await photo.getAttribute('tabindex')).toBe('-1');
+
+      await photo.click();
+      await expect(photo).toHaveAttribute('aria-selected', 'true');
+      await expect(video).toHaveAttribute('aria-selected', 'false');
+      await expect(page.locator('#panelPhoto')).toBeVisible();
+      await expect(page.locator('#panelVideo')).toBeHidden();
+      await expect(page.locator('#panelPhoto h2')).toHaveText(stillsHeading);
+      // the choice is shareable
+      expect(page.url()).toContain('view=photography');
+
+      // ...and restorable
+      await page.goto(p + '?view=photography');
+      await page.waitForFunction(() => !!document.querySelector('.pv-switch [role=tab]'), null, { timeout: 8000 });
+      await expect(page.locator('#tabPhoto')).toHaveAttribute('aria-selected', 'true');
+      await expect(page.locator('#panelPhoto')).toBeVisible();
+    });
+  }
+
+  test('arrow keys move between tabs, in the reading direction of the page', async ({ page }) => {
+    for (const [p, forward] of [['/work.html', 'ArrowRight'], ['/ar/work.html', 'ArrowLeft']]) {
+      await page.goto(p);
+      await page.waitForFunction(() => !!document.querySelector('.pv-switch [role=tab]'), null, { timeout: 8000 });
+      await page.locator('#tabVideo').focus();
+      await page.keyboard.press(forward);
+      await expect(page.locator('#tabPhoto')).toHaveAttribute('aria-selected', 'true');
+      expect(await page.evaluate(() => document.activeElement.id)).toBe('tabPhoto');
+      await page.keyboard.press('Home');
+      await expect(page.locator('#tabVideo')).toHaveAttribute('aria-selected', 'true');
+    }
+  });
+
+  test('the photography panel states honestly that nothing is published yet', async ({ page }) => {
+    for (const p of ['/work.html','/ar/work.html']) {
+      await page.goto(p + '?view=photography');
+      await page.waitForFunction(() => !!document.querySelector('.pv-switch [role=tab]'), null, { timeout: 8000 });
+      // no fabricated stills, and no square-bracket placeholder text
+      await expect(page.locator('#panelPhoto img')).toHaveCount(0);
+      const copy = await page.locator('#panelPhoto').innerText();
+      expect(copy).not.toMatch(/\[[^\]]+\]/);
+      expect(copy.trim().length, `${p} empty state says nothing`).toBeGreaterThan(20);
+    }
+  });
 });

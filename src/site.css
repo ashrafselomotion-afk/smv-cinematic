@@ -911,3 +911,70 @@ html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
 #rp.open{transition:opacity .35s,visibility 0s}
 /* embedded-player tiles crop their poster to the card */
 .reel[data-youtube] .reel-thumb{object-fit:cover}
+
+/* ================= SELECTED WORK — stage + numbered switcher ================= */
+.selwork{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;
+  gap:clamp(28px,4vw,64px);max-width:1040px;margin-top:38px}
+/* every featured film is shot vertically, so the stage is portrait — a 16/9 stage
+   would only display YouTube's blurred filler either side of the real frame. */
+.sw-stage{position:relative;border-radius:20px;overflow:hidden;background:var(--panel);
+  border:1px solid var(--line);aspect-ratio:9/16;width:auto;height:min(62vh,600px);
+  margin-inline:0}
+.sw-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center;opacity:0;transition:opacity .45s ease}
+.sw-stage img.on{opacity:1}
+.sw-stage::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(12,14,18,0) 55%,rgba(12,14,18,.8))}
+.sw-open{position:absolute;inset:0;z-index:3;background:transparent;border:0;cursor:pointer}
+.sw-open:focus-visible{outline:2px solid var(--hot);outline-offset:-4px}
+.sw-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
+  width:72px;height:72px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(224,101,47,.92);color:#111418;pointer-events:none;transition:transform .35s}
+.sw-stage:hover .sw-play{transform:translate(-50%,-50%) scale(1.08)}
+.sw-play .tri{width:0;height:0;margin-left:4px;border-left:16px solid currentColor;
+  border-top:11px solid transparent;border-bottom:11px solid transparent}
+.sw-cap{position:absolute;left:20px;right:20px;bottom:18px;z-index:2}
+.sw-cap b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(17px,1.8vw,26px);letter-spacing:.02em;color:#fff}
+.sw-cap span{display:block;margin-top:5px;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.22em;color:rgba(255,255,255,.7);text-transform:uppercase}
+
+.sw-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.sw-item{width:100%;display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:center;
+  text-align:start;padding:20px 2px;background:transparent;border:0;border-bottom:1px solid var(--line);
+  cursor:pointer;position:relative;color:var(--ink)}
+.sw-item .n{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--dim)}
+.sw-item .t{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.02em;
+  font-size:clamp(14px,1.25vw,18px);line-height:1.2}
+.sw-item::after{content:'';position:absolute;inset-inline-start:0;bottom:-1px;height:2px;width:0;
+  background:var(--hot-fill);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+.sw-item[aria-current="true"]::after{width:52px}
+.sw-item[aria-current="true"] .n{color:var(--hot)}
+.sw-item:hover .t{color:var(--hot)}
+.sw-item:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.sw-all{display:inline-flex;align-items:center;gap:12px;margin-top:30px;padding:17px 30px;
+  border-radius:999px;border:1px solid var(--line);font-family:var(--mono);font-size:10px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--ink);transition:border-color .3s,background .3s}
+.sw-all:hover{border-color:var(--hot-fill);background:rgba(224,101,47,.12)}
+@media (max-width:900px){.selwork{grid-template-columns:1fr;gap:26px}
+  .sw-stage{height:min(64vh,520px);margin-inline:auto}}
+
+/* ================= PROJECTS — videography / photography switch ================= */
+.pv-switch{display:inline-flex;gap:6px;padding:6px;border-radius:999px;border:1px solid var(--line);
+  background:var(--tile);margin-top:30px}
+.pv-switch button{padding:13px 26px;border-radius:999px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--dim);background:transparent;
+  transition:background .3s,color .3s;min-height:44px}
+.pv-switch button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.pv-switch button:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.pv-panel[hidden]{display:none}
+.pv-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--hot);
+  text-transform:uppercase;margin-bottom:14px}
+
+/* photography archive: honest empty state until stills are supplied */
+.photo-empty{border:1px dashed var(--line);border-radius:22px;padding:clamp(30px,5vw,58px);
+  max-width:760px;background:var(--tile)}
+.photo-empty h3{font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(20px,2.4vw,32px);color:var(--ink);margin-bottom:16px}
+.photo-empty p{color:var(--dim);font-size:15px;line-height:1.8;max-width:56ch}
+.photo-empty .cta-link{margin-top:22px;display:inline-flex}

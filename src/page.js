@@ -182,6 +182,41 @@
     fromURL();
   }
 
+  /* ---------- projects: videography / photography tabs ---------- */
+  const tablist = document.querySelector('.pv-switch');
+  if (tablist) {
+    const tabs = [...tablist.querySelectorAll('[role=tab]')];
+    const panelOf = t => document.getElementById(t.getAttribute('aria-controls'));
+    function select(tab, focus){
+      tabs.forEach(t => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        const panel = panelOf(t);
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tab.focus();
+      const url = new URL(location.href);
+      const key = tab.id === 'tabPhoto' ? 'photography' : 'videography';
+      if (key === 'videography') url.searchParams.delete('view'); else url.searchParams.set('view', key);
+      history.replaceState(null, '', url);
+    }
+    tabs.forEach(t => t.addEventListener('click', () => select(t, false)));
+    tablist.addEventListener('keydown', e => {
+      const i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+      const rtl = getComputedStyle(tablist).direction === 'rtl';
+      let next = null;
+      if (e.key === 'ArrowRight') next = tabs[(i + (rtl ? -1 : 1) + tabs.length) % tabs.length];
+      if (e.key === 'ArrowLeft')  next = tabs[(i + (rtl ? 1 : -1) + tabs.length) % tabs.length];
+      if (e.key === 'Home') next = tabs[0];
+      if (e.key === 'End')  next = tabs[tabs.length - 1];
+      if (next) { e.preventDefault(); select(next, true); }
+    });
+    const want = new URL(location.href).searchParams.get('view');
+    if (want === 'photography') select(document.getElementById('tabPhoto'), false);
+  }
+
   /* ---------- 26-30 · brief form: validation, submit state, success ---------- */
   const form = document.getElementById('brief');
   if (form) {

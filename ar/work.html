@@ -35,7 +35,7 @@
 <meta name="twitter:image:alt" content="SMV — إنتاج الأفلام للجهات الحكومية والمؤسسات في دولة الإمارات">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/almarai-arabic-800.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/almarai-arabic-400.woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.a4efcc78.min.css">
+<link rel="stylesheet" href="../assets/site.078b6013.min.css">
 </head>
 <body>
 <a class="skip" href="#main">تجاوز إلى المحتوى</a>
@@ -66,8 +66,15 @@
   <p class="lead">مجموعة مختارة من الإنتاجات عبر الاتصالات الحكومية والمناسبات الوطنية والقمم والسرد المؤسسي والوجهات والمحتوى المباشر. وتُعرض بعض المهام الرسمية بتفاصيل محدودة بحسب الاتفاق.</p>
 </section>
 <section class="page-sec">
-  <h2 class="sr-only">الأعمال المختارة</h2>
-  <div class="reel-wrap" style="margin-top:34px">
+  <div class="pv-switch" role="tablist" aria-label="اختر التخصص">
+    <button type="button" id="tabVideo" role="tab" aria-selected="true" aria-controls="panelVideo">الفيديو</button>
+    <button type="button" id="tabPhoto" role="tab" aria-selected="false" aria-controls="panelPhoto" tabindex="-1">التصوير الفوتوغرافي</button>
+  </div>
+
+  <div class="pv-panel" id="panelVideo" role="tabpanel" aria-labelledby="tabVideo" tabindex="0">
+    <p class="pv-kicker">في الحركة</p>
+    <h2>الأفلام.</h2>
+    <div class="reel-wrap" style="margin-top:34px">
     <div class="reel-grid" aria-label="معرض الأعمال المختارة">
       <figure class="reel" data-cat="events">
         <iframe class="reel-frame" title="تغطية فعالية مؤسسية" loading="lazy" src="https://www.youtube-nocookie.com/embed/UcxfNIPYMUI?rel=0&amp;modestbranding=1" allow="fullscreen; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -163,6 +170,17 @@
       </figure>
     </div>
   </div>
+  </div>
+
+  <div class="pv-panel" id="panelPhoto" role="tabpanel" aria-labelledby="tabPhoto" tabindex="0" hidden>
+    <p class="pv-kicker">الأرشيف</p>
+    <h2>الصورة الثابتة.</h2>
+    <div class="photo-empty">
+      <h3>أرشيف الصور قيد التجهيز.</h3>
+      <p>تشمل أعمالنا الفوتوغرافية التغطيات الصحفية والصور التنفيذية ولقطات المراسم وتوثيق المواقع، وتُفهرس وتُنشر مع الاعتمادات التي تتطلبها كل مجموعة. ولا ننشر هنا شيئاً قبل اكتمال تلك الاعتمادات.</p>
+      <a class="cta-link" href="contact.html">اطلب أرشيف الصور <span class="arr">→</span></a>
+    </div>
+  </div>
 </section>
 <section class="page-sec">
   <h2>هل تخططون لمهمة مماثلة؟</h2>
@@ -184,6 +202,6 @@
     <span>الإمارات العربية المتحدة</span>
   </div>
 </footer>
-<script defer src="../assets/page.b9a934a7.min.js"></script>
+<script defer src="../assets/page.19d12e55.min.js"></script>
 </body>
 </html>

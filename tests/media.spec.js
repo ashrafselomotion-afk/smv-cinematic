@@ -40,28 +40,50 @@ test.describe('P0 — native video playback', () => {
   }
 });
 
-test.describe('homepage previews', () => {
-  test('cards are real buttons with unique accessible names', async ({ page }) => {
+test.describe('projects grid', () => {
+  test('every project player is named, and no figure fakes a button', async ({ page }) => {
+    for (const p of ['/work.html','/ar/work.html']) {
+      await page.goto(p);
+      const frames = page.locator('#panelVideo .reel .reel-frame');
+      const n = await page.locator('#panelVideo .reel').count();
+      expect(n, `${p} projects`).toBeGreaterThanOrEqual(20);
+      await expect(frames).toHaveCount(n);
+      // an iframe's accessible name is its title, and each must identify its own film
+      const titles = await frames.evaluateAll(els => els.map(e => e.getAttribute('title')));
+      expect(titles.every(t => t && t.trim().length > 3), `${p} unnamed player`).toBe(true);
+      expect(new Set(titles).size).toBe(n);
+      // the card heading and the player name agree
+      const heads = await page.locator('#panelVideo .reel h3').allTextContents();
+      expect(titles.map(t => t.trim())).toEqual(heads.map(h => h.trim()));
+      // no figure is a fake button any more
+      await expect(page.locator('figure[role="button"]')).toHaveCount(0);
+    }
+  });
+});
+
+test.describe('homepage selected work', () => {
+  test('the shortlist is buttons with unique accessible names', async ({ page }) => {
     await page.goto('/index.html');
-    const buttons = page.locator('.reel-open');
-    const n = await page.locator('.reel').count();
-    await expect(buttons).toHaveCount(n);
-    const names = await buttons.evaluateAll(els => els.map(e => e.getAttribute('aria-label')));
+    const items = page.locator('#swList .sw-item');
+    const n = await items.count();
+    expect(n).toBeGreaterThanOrEqual(3);
+    expect(await items.evaluateAll(els => els.every(e => e.tagName === 'BUTTON'))).toBe(true);
+    const names = await items.evaluateAll(els => els.map(e => e.textContent.replace(/\s+/g, ' ').trim()));
     expect(new Set(names).size).toBe(n);
-    for (const n of names) expect(n).toMatch(/View project \d\d: .+/);
-    // no figure is a fake button any more
-    await expect(page.locator('figure[role="button"]')).toHaveCount(0);
+    // the stage's own control is a button too, with its own label
+    await expect(page.locator('#swOpen')).toHaveAttribute('aria-label', /.+/);
   });
 
-  test('gallery tiles are images, so nothing autoplays in the grid', async ({ page }) => {
+  test('the stage is an image, so nothing autoplays on the homepage', async ({ page }) => {
     await page.goto('/index.html');
     await page.waitForTimeout(1500);
     const state = await page.evaluate(() => ({
-      videos: document.querySelectorAll('.reel-preview video').length,
-      playing: [...document.querySelectorAll('.reel-preview video')].filter(v => !v.paused).length,
-      thumbs: document.querySelectorAll('.reel-preview .reel-thumb').length
+      videos: document.querySelectorAll('.sw-stage video, .reel video').length,
+      frames: document.querySelectorAll('.selwork iframe').length,
+      shots: document.querySelectorAll('.sw-stage img').length
     }));
-    expect(state.playing).toBe(0);
-    expect(state.thumbs).toBeGreaterThanOrEqual(8);
+    expect(state.videos, 'no video element in the selected-work block').toBe(0);
+    expect(state.frames, 'no player is embedded until the viewer opens').toBe(0);
+    expect(state.shots).toBeGreaterThanOrEqual(3);
   });
 });

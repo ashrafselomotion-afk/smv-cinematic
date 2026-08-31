@@ -62,7 +62,7 @@ test('arabic theme toggle label is localized', async ({ page }) => {
 
 test('mobile interactive targets are at least 44x44', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const p of ['/index.html','/ar/index.html','/contact.html']) {
+  for (const p of ['/index.html','/ar/index.html','/contact.html','/work.html','/ar/work.html']) {
     await page.goto(p);
     // the 44px rules ride on a media query; wait for layout rather than racing it
     await page.waitForFunction(() => {
@@ -70,7 +70,8 @@ test('mobile interactive targets are at least 44x44', async ({ page }) => {
       return b && b.getBoundingClientRect().height >= 44;
     }, null, { timeout: 8000 }).catch(() => {});
     const small = await page.evaluate(() => {
-      const sel = '#menuBtn,#themeBtn,#nav .lang a,.filters button,#feedClose,#rpClose,#feedMute';
+      const sel = '#menuBtn,#themeBtn,#nav .lang a,.filters button,#feedClose,#rpClose,#feedMute,'
+                + '.pv-switch [role=tab],.sw-item,.sw-all';
       return [...document.querySelectorAll(sel)].filter(el => {
         const r = el.getBoundingClientRect();
         return r.width > 0 && r.height > 0 && (r.width < 44 || r.height < 44);

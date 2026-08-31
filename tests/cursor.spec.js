@@ -110,25 +110,39 @@ test('section 04 rail draws and stops activate while scrolling', async ({ page }
   expect(seen[2].active).toBeGreaterThan(seen[0].active);
 });
 
-test('preview gallery is visible without hovering', async ({ page }) => {
+test('the selected-work stage is visible without hovering, and switches on pointer', async ({ page }) => {
   for (const p of ['/index.html','/ar/index.html']) {
     await page.goto(p);
     await page.waitForTimeout(1500);
     await page.evaluate(() => {
       const e = document.getElementById('reels').getBoundingClientRect();
-      window.scrollTo(0, e.top + scrollY + 400);
+      window.scrollTo(0, e.top + scrollY + 200);
     });
     await page.waitForTimeout(1200);
-    const tiles = await page.evaluate(() =>
-      [...document.querySelectorAll('.reel-preview .reel-thumb')].map(i => ({
-        opacity: +getComputedStyle(i).opacity,
-        loaded: i.complete && i.naturalWidth > 0
-      })));
-    expect(tiles.length).toBeGreaterThanOrEqual(8);
-    for (const t of tiles) {
-      expect(t.opacity, `${p} preview hidden before hover`).toBeGreaterThan(0.9);
-      expect(t.loaded, `${p} thumbnail failed to load`).toBe(true);
-    }
+
+    const stage = await page.evaluate(() => {
+      const imgs = [...document.querySelectorAll('.sw-stage img')];
+      const on = imgs.find(i => i.classList.contains('on'));
+      return {
+        count: imgs.length,
+        shown: imgs.filter(i => +getComputedStyle(i).opacity > 0.9).length,
+        activeOpacity: on ? +getComputedStyle(on).opacity : -1,
+        activeLoaded: !!on && on.complete && on.naturalWidth > 0,
+        title: document.getElementById('swTitle').textContent.trim()
+      };
+    });
+    expect(stage.count, `${p} stage layers`).toBeGreaterThanOrEqual(3);
+    expect(stage.activeOpacity, `${p} stage hidden before hover`).toBeGreaterThan(0.9);
+    expect(stage.activeLoaded, `${p} stage frame failed to load`).toBe(true);
+    expect(stage.shown, `${p} only one frame is visible at a time`).toBe(1);
+
+    // hovering a later entry swaps the stage and the caption
+    const third = page.locator('#swList .sw-item').nth(2);
+    const wanted = await third.evaluate(el => el.dataset.title);
+    await third.hover({ force: true });
+    await expect(page.locator('#swTitle')).toHaveText(wanted);
+    await expect(third).toHaveAttribute('aria-current', 'true');
+    expect(await page.evaluate(() => document.querySelectorAll('.sw-stage img.on').length)).toBe(1);
   }
 });
 
@@ -200,21 +214,25 @@ test('embedded reels play in the viewer without being downloaded', async ({ page
   for (const p of ['/index.html','/ar/index.html']) {
     await page.goto(p);
     await page.waitForTimeout(1600);
-    const card = page.locator('.reel[data-drive], .reel[data-youtube]').first();
-    const driveCount = await page.locator('.reel[data-drive], .reel[data-youtube]').count();
-    expect(driveCount, `${p} embedded reels`).toBe(await page.locator('.reel').count());
+    const items = page.locator('#swList .sw-item');
+    const driveCount = await items.count();
+    expect(driveCount, `${p} shortlist entries`).toBeGreaterThanOrEqual(3);
+    expect(await page.locator('#swList .sw-item[data-youtube]').count(),
+      `${p} every entry is an embed`).toBe(driveCount);
 
-    // the tile shows Drive's own thumbnail and never carries a local source
-    const tile = await card.evaluate(c => {
-      const img = c.querySelector('.reel-thumb');
-      return { poster: img.currentSrc || img.src, lazy: img.loading, hasVideo: !!c.querySelector('video') };
+    // the stage shows YouTube's own frame and never carries a local source
+    const tile = await page.evaluate(() => {
+      const img = document.querySelector('.sw-stage img.on');
+      return { poster: img.currentSrc || img.src, hasVideo: !!document.querySelector('.sw-stage video') };
     });
     expect(tile.poster).toMatch(/i\.ytimg\.com/);
-    expect(tile.lazy).toBe('lazy');
-    expect(tile.hasVideo, 'embedded cards must not ship a local video element').toBe(false);
+    expect(tile.hasVideo, 'the stage must not ship a local video element').toBe(false);
+    // only the first frame is eager; the rest wait until they are needed
+    expect(await page.evaluate(() =>
+      [...document.querySelectorAll('.sw-stage img')].slice(1).every(i => i.loading === 'lazy'))).toBe(true);
 
-    await bring(page, '.reel[data-drive], .reel[data-youtube]');
-    await card.locator('.reel-open').click({ force: true });
+    await bring(page, '.selwork');
+    await page.evaluate(() => document.getElementById('swOpen').click());
 
     // the viewer swaps in Drive's player for each Drive-backed entry, and the
     // one actually on screen is the one that loads
@@ -243,10 +261,10 @@ test('work page plays embedded projects inline', async ({ page }) => {
   for (const p of ['/work.html','/ar/work.html']) {
     await page.goto(p);
     await page.waitForTimeout(1200);
-    const frames = page.locator('.reel .reel-frame');
-    expect(await frames.count(), `${p} embedded frames`).toBe(await page.locator('.reel').count());
+    const frames = page.locator('#panelVideo .reel .reel-frame');
+    expect(await frames.count(), `${p} embedded frames`).toBe(await page.locator('#panelVideo .reel').count());
     // each frame must point at Drive's player and sit inside its card
-    const ok = await page.evaluate(() => [...document.querySelectorAll('.reel .reel-frame')].every(f => {
+    const ok = await page.evaluate(() => [...document.querySelectorAll('#panelVideo .reel .reel-frame')].every(f => {
       const card = f.closest('.reel').getBoundingClientRect();
       const r = f.getBoundingClientRect();
       return /drive\.google\.com\/file\/d\/.+\/preview|youtube-nocookie\.com\/embed\//.test(f.getAttribute('src') || '')
@@ -254,17 +272,31 @@ test('work page plays embedded projects inline', async ({ page }) => {
     }));
     expect(ok).toBe(true);
     // every project title stays unique
-    const titles = await page.locator('.reel h3').allTextContents();
+    const titles = await page.locator('#panelVideo .reel h3').allTextContents();
     expect(new Set(titles).size).toBe(titles.length);
   }
 });
 
 test('thumbnail srcsets never advertise a missing size', async ({ page, request }) => {
-  await page.goto('/index.html');
-  await page.waitForTimeout(1200);
-  const urls = await page.evaluate(() => {
+  const urls = new Set();
+  for (const p of ['/index.html','/work.html']) {
+    await page.goto(p);
+    await page.waitForTimeout(1200);
+    (await collectSrcset(page)).forEach(u => urls.add(u));
+  }
+  expect(urls.size).toBeGreaterThan(4);
+  const bad = [];
+  for (const u of urls) {
+    const r = await request.get(u);
+    if (r.status() !== 200) bad.push(`${r.status()} ${u}`);
+  }
+  expect(bad, 'srcset offers a thumbnail YouTube does not have').toEqual([]);
+});
+
+function collectSrcset(page) {
+  return page.evaluate(() => {
     const out = new Set();
-    document.querySelectorAll('.reel-thumb').forEach(img => {
+    document.querySelectorAll('.reel-thumb, .sw-stage img').forEach(img => {
       (img.getAttribute('srcset') || '').split(',').forEach(part => {
         const u = part.trim().split(/\s+/)[0];
         if (u) out.add(u);
@@ -273,11 +305,4 @@ test('thumbnail srcsets never advertise a missing size', async ({ page, request 
     });
     return [...out];
   });
-  expect(urls.length).toBeGreaterThan(20);
-  const bad = [];
-  for (const u of urls) {
-    const r = await request.get(u);
-    if (r.status() !== 200) bad.push(`${r.status()} ${u}`);
-  }
-  expect(bad, 'srcset offers a thumbnail YouTube does not have').toEqual([]);
-});
+}

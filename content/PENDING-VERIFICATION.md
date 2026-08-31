@@ -43,11 +43,29 @@ appear on the public website. Nothing in this file is published. Items marked
 - Government / institutional showreel (60–90 s): current showreel.mp4 is an 8-second
   placeholder loop. The "Play government & institutional reel — 01:30" control text
   from the plan is NOT used until a real reel exists.
+- Site structure (2026-08-31): the homepage no longer carries the whole gallery.
+  It now shows a SELECTED WORK block — a portrait stage plus a numbered
+  switcher of five featured films — and an "All projects" link. The full set
+  moved to the projects page (`work.html` / `ar/work.html`), which opens on a
+  VIDEOGRAPHY / PHOTOGRAPHY tab switch. The tab choice is reflected in the URL
+  (`?view=photography`) and restored from it.
+  The five featured films are chosen by hand in the gallery generator
+  (`FEATURED`); changing the shortlist means regenerating both homepages.
+  The stage is deliberately portrait: every film SMV has supplied is shot
+  vertically, so a 16:9 stage would have shown YouTube's blurred filler either
+  side of the real frame rather than the work itself. If landscape films are
+  added later, the stage aspect needs revisiting.
+- PHOTOGRAPHY PANEL — BLOCKER: no photography has been supplied, so the panel
+  publishes an honest empty state ("The stills archive is being prepared") and a
+  route to request the archive. No stock images, no placeholder tiles and no
+  square-bracket text are used. Supply approved stills — with the same client
+  approvals and individual consents the films need — before anything ships here.
 - Portfolio media: the gallery is 23 cards, ALL real SMV work, embedded from
   YouTube in privacy-enhanced mode (youtube-nocookie.com). No placeholder stock
   footage and no Google Drive embeds remain anywhere on the site.
   Category filters were removed at the client's request — the gallery is now a
-  single numbered set, and card captions no longer show a category.
+  single numbered set, and card captions no longer show a category. The films
+  live under the projects page's Videography tab.
   The "representative footage shown" disclaimer was removed at the client's
   request. It was correct while the grid held stock placeholders; now that every
   card is real SMV work it no longer applies. Note this also removed the only
@@ -83,6 +101,8 @@ appear on the public website. Nothing in this file is published. Items marked
 
 ## Arabic localisation (complete route parity — /ar/)
 
+- The Arabic homepage was missing the chapter rail that the English one shows;
+  it has been restored, and the runtime no longer breaks when it is absent.
 - Full Arabic route parity now exists under `/ar/`: index, work, government-production,
   capabilities, approach, about, contact (Arabic brief form) and privacy. `ar.html`
   remains as a compatibility redirect to `/ar/`.
@@ -92,6 +112,10 @@ appear on the public website. Nothing in this file is published. Items marked
   rely on it. The plan's approved Arabic hero copy (§15) is used verbatim.
 - Language switch preserves the route in both directions; reciprocal hreflang plus
   x-default are published on every page.
+- TODO: CLIENT VERIFICATION — the Arabic wording of the new projects tabs
+  ("التصوير الفوتوغرافي" / "أفلام"), the panel headings and the photography
+  empty state were written by the engineer and need the same editorial review
+  as the rest of the Arabic copy.
 
 ## Captions and transcripts (blocker)
 

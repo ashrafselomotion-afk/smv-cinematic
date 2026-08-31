@@ -75,12 +75,12 @@ test.describe('showreel dialog', () => {
 test.describe('selected-work viewer', () => {
   test('opens on the chosen card and lists the whole gallery', async ({ page }) => {
     await page.goto('/index.html');
-    await bring(page, '.reel');
-    const total = await page.locator('.reel').count();
+    await bring(page, '.selwork');
+    const total = await page.locator('#swList .sw-item').count();
 
-    // activate the card directly: this asserts the viewer's behaviour, not
+    // activate the stage directly: this asserts the viewer's behaviour, not
     // pixel hit-testing (covered separately), and cannot race the smooth scroll
-    await page.evaluate(() => document.querySelector('.reel .reel-open').click());
+    await page.evaluate(() => document.getElementById('swOpen').click());
     const feed = page.locator('#feed');
     await expect(feed).toHaveClass(/open/);
     await expect(page.locator('#feedCol .feed-item')).toHaveCount(total);
@@ -110,5 +110,46 @@ test.describe('mobile menu', () => {
     await page.keyboard.press('Escape');
     expect(await page.evaluate(() => document.documentElement.classList.contains('menu-open'))).toBe(false);
     await expect(btn).toBeFocused();
+  });
+});
+
+test.describe('selected-work viewer', () => {
+  const activeFrame = page => () => page.evaluate(() => {
+    const col = document.getElementById('feedCol'), cr = col.getBoundingClientRect();
+    const active = [...document.querySelectorAll('.feed-item')].find(it => {
+      const r = it.getBoundingClientRect();
+      return r.top >= cr.top - 40 && r.top < cr.top + cr.height * 0.6;
+    });
+    const fr = active && active.querySelector('.feed-frame');
+    return fr ? (fr.getAttribute('src') || '') : 'no-frame';
+  });
+
+  test('opens on whichever entry is current', async ({ page }) => {
+    await page.route('https://www.youtube-nocookie.com/**', r =>
+      r.fulfill({ status: 200, contentType: 'text/html', body: '<h1>stub player</h1>' }));
+    await page.goto('/index.html');
+    await bring(page, '.selwork');
+
+    // path 1 — activating an entry opens that entry
+    const third = page.locator('#swList .sw-item').nth(2);
+    const thirdId = await third.evaluate(el => el.dataset.youtube);
+    // activate directly: hit-testing through the smooth-scroll wrapper is covered elsewhere
+    await third.evaluate(el => el.click());
+    await expect(page.locator('#feed')).toHaveClass(/open/);
+    await expect(page.locator('#feedCount')).toHaveText(/^03/);
+    await expect.poll(activeFrame(page), { timeout: 15000 }).toContain(thirdId);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#feed')).not.toHaveClass(/open/);
+
+    // path 2 — highlighting an entry, then pressing play on the stage, opens the same film
+    const fourth = page.locator('#swList .sw-item').nth(3);
+    const fourthId = await fourth.evaluate(el => el.dataset.youtube);
+    await fourth.evaluate(el => el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: false })));
+    await expect(fourth).toHaveAttribute('aria-current', 'true');
+    await page.evaluate(() => document.getElementById('swOpen').click());
+    await expect(page.locator('#feedCount')).toHaveText(/^04/);
+    await expect.poll(activeFrame(page), { timeout: 15000 }).toContain(fourthId);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#feed')).not.toHaveClass(/open/);
   });
 });
