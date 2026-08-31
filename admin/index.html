@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<!-- This page talks to GitHub directly from the browser; nothing else is allowed out. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://i.ytimg.com; media-src 'self' blob:; font-src 'self'; connect-src 'self' https://api.github.com; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'">
+<title>SMV — media admin</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="mark">SMV<i>.</i> <span>media admin</span></div>
+  <div class="bar-right">
+    <span id="dirty" class="pill" hidden>Unsaved changes</span>
+    <button type="button" id="publish" class="btn hot" disabled>Publish changes</button>
+    <button type="button" id="signout" class="btn ghost" hidden>Sign out</button>
+  </div>
+</header>
+
+<!-- ============================ CONNECT ============================ -->
+<main id="connect" class="wrap">
+  <h1>Connect to the site</h1>
+  <p class="lede">This page edits the film and photography list, then commits it to the
+    website repository. It runs entirely in your browser — your token is never sent
+    anywhere except GitHub.</p>
+
+  <ol class="steps">
+    <li>Open <b>github.com → Settings → Developer settings → Personal access tokens →
+        Fine-grained tokens → Generate new token</b>.</li>
+    <li>Under <b>Repository access</b> choose <b>Only select repositories</b> and pick
+        <b>smv-cinematic</b>.</li>
+    <li>Under <b>Permissions → Repository permissions</b> set <b>Contents</b> to
+        <b>Read and write</b>. Nothing else is needed.</li>
+    <li>Give it an expiry date, generate it, and paste it below.</li>
+  </ol>
+
+  <form id="connectForm" autocomplete="off">
+    <label class="field">
+      <span>Repository</span>
+      <input id="repo" type="text" value="ashrafselomotion-afk/smv-cinematic" spellcheck="false" required>
+    </label>
+    <label class="field">
+      <span>Access token</span>
+      <input id="token" type="password" placeholder="github_pat_…" spellcheck="false"
+             autocomplete="off" required>
+    </label>
+    <label class="check">
+      <input type="checkbox" id="remember" checked>
+      <span>Keep me signed in on this computer</span>
+    </label>
+    <button type="submit" class="btn hot">Connect</button>
+    <p id="connectMsg" class="msg" role="status" aria-live="polite"></p>
+  </form>
+
+  <p class="note"><b>Treat the token like a password.</b> It can change anything in that
+    repository. Set an expiry date, and if you use a shared computer leave
+    “Keep me signed in” unticked. You can revoke it at any time from the same GitHub
+    settings page.</p>
+</main>
+
+<!-- ============================ EDITOR ============================ -->
+<main id="editor" class="wrap" hidden>
+
+  <div class="tabs" role="tablist" aria-label="Media type">
+    <button type="button" role="tab" id="tFilms"  aria-selected="true"  aria-controls="pFilms">Films</button>
+    <button type="button" role="tab" id="tPhotos" aria-selected="false" aria-controls="pPhotos" tabindex="-1">Photography</button>
+  </div>
+
+  <!-- ---------------- FILMS ---------------- -->
+  <section id="pFilms" role="tabpanel" aria-labelledby="tFilms" tabindex="0">
+    <div class="panel-head">
+      <div>
+        <h2>Films</h2>
+        <p class="lede" id="filmCount"></p>
+      </div>
+      <button type="button" class="btn ghost" id="addFilm">Add a film</button>
+    </div>
+
+    <div class="callout">
+      <b>Featured films</b> appear on the homepage, in the numbered list. Tick up to five.
+      A film with a <b>preview loop</b> plays by itself in the grid instead of showing a
+      still — upload a short, silent clip and it takes over automatically.
+    </div>
+
+    <div id="films" class="list"></div>
+  </section>
+
+  <!-- ---------------- PHOTOS ---------------- -->
+  <section id="pPhotos" role="tabpanel" aria-labelledby="tPhotos" tabindex="0" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>Photography</h2>
+        <p class="lede" id="photoCount"></p>
+      </div>
+      <label class="btn ghost file">
+        Add photos<input type="file" id="addPhotos" accept="image/*" multiple hidden>
+      </label>
+    </div>
+
+    <div class="callout">
+      Photos are resized to 1600px and re-encoded before upload, so a 12MB camera file
+      lands as a few hundred kilobytes. <b>Description is required</b> — it is what a
+      screen reader announces, and the site is built to stay accessible.
+      <br><br>
+      <b>Before you publish anyone recognisable:</b> confirm you hold consent, and that
+      the client has approved the set. Nothing here checks that for you.
+    </div>
+
+    <div id="photos" class="list"></div>
+    <p id="photoEmpty" class="empty">No photography yet. The website shows an honest
+      “archive is being prepared” message until you add some.</p>
+  </section>
+</main>
+
+<!-- ============================ PUBLISH ============================ -->
+<div id="sheet" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-in">
+    <h2 id="sheetTitle">Publishing</h2>
+    <ul id="log" class="log"></ul>
+    <div class="sheet-foot">
+      <a id="viewSite" class="btn ghost" href="../index.html" target="_blank" rel="noopener" hidden>Open the site</a>
+      <button type="button" class="btn hot" id="sheetClose" hidden>Done</button>
+    </div>
+  </div>
+</div>
+
+<template id="filmTpl">
+  <article class="card film">
+    <div class="card-head">
+      <img class="thumb" alt="" loading="lazy" decoding="async">
+      <div class="card-title">
+        <b class="name">Untitled</b>
+        <span class="sub"></span>
+      </div>
+      <div class="card-tools">
+        <button type="button" class="icon up"   title="Move up"   aria-label="Move up">↑</button>
+        <button type="button" class="icon down" title="Move down" aria-label="Move down">↓</button>
+        <button type="button" class="icon del"  title="Remove"    aria-label="Remove">✕</button>
+      </div>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Title (English)</span><input data-k="titleEn" type="text" required></label>
+      <label class="field rtl"><span>Title (Arabic)</span><input data-k="titleAr" type="text" dir="rtl" required></label>
+      <label class="field"><span>Type (English)</span><input data-k="typeEn" type="text" required></label>
+      <label class="field rtl"><span>Type (Arabic)</span><input data-k="typeAr" type="text" dir="rtl" required></label>
+      <label class="field"><span>Deliverables (English)</span><input data-k="deliverablesEn" type="text"></label>
+      <label class="field rtl"><span>Deliverables (Arabic)</span><input data-k="deliverablesAr" type="text" dir="rtl"></label>
+      <label class="field"><span>YouTube ID</span><input data-k="youtube" type="text" spellcheck="false" required></label>
+      <div class="field">
+        <span>Preview loop <em>(silent, a few seconds)</em></span>
+        <div class="filerow">
+          <span class="filename">No loop — the grid shows a still</span>
+          <label class="btn tiny file">Choose<input type="file" class="pickLoop" accept="video/mp4,video/webm" hidden></label>
+          <button type="button" class="btn tiny ghost clearLoop" hidden>Remove</button>
+        </div>
+      </div>
+    </div>
+    <label class="check feat"><input type="checkbox" class="featured"><span>Show on the homepage</span></label>
+  </article>
+</template>
+
+<template id="photoTpl">
+  <article class="card photo">
+    <div class="card-head">
+      <img class="thumb shot" alt="" loading="lazy" decoding="async">
+      <div class="card-title">
+        <b class="name"></b>
+        <span class="sub"></span>
+      </div>
+      <div class="card-tools">
+        <button type="button" class="icon up"   title="Move up"   aria-label="Move up">↑</button>
+        <button type="button" class="icon down" title="Move down" aria-label="Move down">↓</button>
+        <button type="button" class="icon del"  title="Remove"    aria-label="Remove">✕</button>
+      </div>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Description (English) — required</span><input data-k="altEn" type="text" required></label>
+      <label class="field rtl"><span>Description (Arabic) — required</span><input data-k="altAr" type="text" dir="rtl" required></label>
+      <label class="field"><span>Caption (English, optional)</span><input data-k="captionEn" type="text"></label>
+      <label class="field rtl"><span>Caption (Arabic, optional)</span><input data-k="captionAr" type="text" dir="rtl"></label>
+    </div>
+  </article>
+</template>
+
+<script src="admin.js"></script>
+</body>
+</html>

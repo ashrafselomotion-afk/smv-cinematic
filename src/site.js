@@ -24,17 +24,38 @@
   }));
   if (swItems.length) {
     const stage = document.querySelector('.sw-stage');
-    const shots = [...stage.querySelectorAll('img')];
+    const shots = [...stage.querySelectorAll('.sw-shot')];
     const title = document.getElementById('swTitle'), meta = document.getElementById('swMeta');
+    /* A layer is either a still (no loop supplied yet) or a silent loop. Loops
+       carry preload="none", so nothing is fetched until a layer is both on
+       screen and selected — switching entries never downloads five clips. */
+    const motionOK = !reduced && !saveData;
+    let onScreen = false;
+    const roll = v => {
+      if (v.tagName !== 'VIDEO' || !motionOK || !onScreen) return;
+      const p = v.play(); if (p && p.catch) p.catch(() => {});
+    };
+    const halt = v => { if (v.tagName === 'VIDEO') { try { v.pause(); } catch (e) {} } };
     let active = 0;
     const show = i => {
       if (i === active) return;
       active = i;
-      shots.forEach(s => s.classList.toggle('on', +s.dataset.i === i));
+      shots.forEach(s => {
+        const on = +s.dataset.i === i;
+        s.classList.toggle('on', on);
+        on ? roll(s) : halt(s);
+      });
       swItems.forEach((b, n) => b.setAttribute('aria-current', String(n === i)));
       title.textContent = swItems[i].dataset.title;
       meta.textContent = swItems[i].dataset.meta;
     };
+    /* off-screen loops stay paused: a hidden autoplaying video is pure battery drain */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(es => es.forEach(e => {
+        onScreen = e.isIntersecting;
+        onScreen ? roll(shots[active]) : shots.forEach(halt);
+      }), { rootMargin: '200px' }).observe(stage);
+    } else { onScreen = true; roll(shots[0]); }
     swItems.forEach((b, i) => {
       b.addEventListener('click', () => { show(i); openLB(i); });
       b.addEventListener('pointerenter', () => show(i));

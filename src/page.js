@@ -217,6 +217,54 @@
     if (want === 'photography') select(document.getElementById('tabPhoto'), false);
   }
 
+  /* ---------- SILENT PREVIEW LOOPS ----------
+     Cards backed by a self-hosted loop play by themselves, but only while they
+     are on screen: preload="none" means an off-screen card costs nothing, and
+     pausing on exit keeps a long grid from decoding twenty videos at once.
+     Anyone who asked for less motion, or is on a metered connection, keeps the
+     poster frame and the play control. */
+  const loops = [...document.querySelectorAll('.reel-prev')];
+  if (loops.length) {
+    const saveData = !!(navigator.connection && navigator.connection.saveData);
+    const motionOK = !reduced && !saveData;
+    const roll = v => { if (!motionOK) return; const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+    if (motionOK && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        if (e.isIntersecting) roll(e.target);
+        else { try { e.target.pause(); } catch (err) {} }
+      }), { rootMargin: '150px 0px', threshold: 0.15 });
+      loops.forEach(v => io.observe(v));
+    } else if (motionOK) {
+      loops.forEach(roll);
+    }
+    /* a loop is a taste of the film, not the film: opening one swaps the real
+       player into the same box, so playback never leaves the card */
+    document.querySelectorAll('.reel-preview .reel-open').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.reel');
+        const id = card && card.dataset.youtube;
+        if (!id || card.querySelector('.reel-frame')) return;
+        const title = (card.querySelector('h3') || {}).textContent || '';
+        const f = document.createElement('iframe');
+        f.className = 'reel-frame';
+        f.title = title;
+        f.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+        f.allowFullscreen = true;
+        f.referrerPolicy = 'strict-origin-when-cross-origin';
+        f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) +
+                '?rel=0&modestbranding=1&autoplay=1';
+        const v = card.querySelector('.reel-prev');
+        if (v) { try { v.pause(); } catch (e) {} v.remove(); }
+        btn.remove();
+        const badge = card.querySelector('.play');
+        if (badge) badge.remove();
+        card.classList.remove('reel-preview');
+        card.insertBefore(f, card.firstChild);
+        f.focus({ preventScroll: true });
+      });
+    });
+  }
+
   /* ---------- 26-30 · brief form: validation, submit state, success ---------- */
   const form = document.getElementById('brief');
   if (form) {

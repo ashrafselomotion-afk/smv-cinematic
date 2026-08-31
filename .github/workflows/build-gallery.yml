@@ -1,0 +1,50 @@
+name: Render gallery
+
+# The admin page commits content/media.json and nothing else. This turns that
+# manifest back into the four gallery pages, so a content edit never requires
+# anyone to run a script locally.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/media.json'
+      - 'scripts/build-gallery.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: render-gallery
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Render media.json into the pages
+        run: python3 scripts/build-gallery.py
+
+      - name: Commit the rendered pages
+        run: |
+          if [ -z "$(git status --porcelain -- '*.html')" ]; then
+            echo "Pages already match the manifest — nothing to commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html'
+          git commit -m "Render gallery from content/media.json"
+          git push
+
+      # A push made with GITHUB_TOKEN does not always wake the Pages builder,
+      # so ask for the rebuild explicitly. Harmless if one is already queued.
+      - name: Ask Pages to rebuild
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${{ github.repository }}/pages/builds"

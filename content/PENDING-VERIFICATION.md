@@ -55,11 +55,36 @@ appear on the public website. Nothing in this file is published. Items marked
   vertically, so a 16:9 stage would have shown YouTube's blurred filler either
   side of the real frame rather than the work itself. If landscape films are
   added later, the stage aspect needs revisiting.
+- Content pipeline (2026-08-31): the gallery is no longer written by hand. Every
+  film and photograph lives in `content/media.json`; `scripts/build-gallery.py`
+  renders it into the four gallery pages between `<!-- BUILD:… -->` markers, and
+  a GitHub Action runs that render whenever the manifest changes. The admin page
+  at `/admin/` edits the manifest and commits it. Do not hand-edit the gallery
+  HTML — a test fails when the pages and the manifest disagree.
+- Preview loops: a film with a `preview` file autoplays silently in the grid and
+  on the homepage stage instead of showing a YouTube still; clicking still opens
+  the full film. No loops have been supplied yet, so every card currently falls
+  back to the still. Loops must be short, silent and under ~1MB.
+  DECISION (2026-08-31): loops are self-hosted in this repository and full films
+  stay on YouTube. Self-hosting the loops is what removes Google from the page
+  load entirely — until a visitor opens a film, nothing is fetched from Google,
+  which strengthens the privacy position for procurement. If full films are ever
+  self-hosted too, the privacy notice, the CSP `media-src` and the `frame-src`
+  YouTube entry all need revisiting.
+- ADMIN ACCESS — the page at `/admin/` is publicly reachable (it is a static
+  file on GitHub Pages) but does nothing without a GitHub token. It carries
+  `noindex` and is absent from the sitemap. Its CSP restricts outbound calls to
+  api.github.com, so the token cannot be exfiltrated to another host by injected
+  script. Anyone holding the token can change the repository: keep it
+  short-lived, scoped to this one repository, and revoke it if exposed.
 - PHOTOGRAPHY PANEL — BLOCKER: no photography has been supplied, so the panel
   publishes an honest empty state ("The stills archive is being prepared") and a
   route to request the archive. No stock images, no placeholder tiles and no
   square-bracket text are used. Supply approved stills — with the same client
   approvals and individual consents the films need — before anything ships here.
+  Photography is now addable through `/admin/`, which requires a description in
+  both languages before it will publish. It does NOT check consent or client
+  approval — that judgement stays with SMV.
 - Portfolio media: the gallery is 23 cards, ALL real SMV work, embedded from
   YouTube in privacy-enhanced mode (youtube-nocookie.com). No placeholder stock
   footage and no Google Drive embeds remain anywhere on the site.
