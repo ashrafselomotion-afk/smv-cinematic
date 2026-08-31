@@ -246,3 +246,12 @@ appear on the public website. Nothing in this file is published. Items marked
   FIXED: publishing used to rebuild media.json from a hardcoded key list, which
   would have silently deleted the entire client strip the first time anyone
   pressed Publish. A test now fails if any manifest section is lost on publish.
+- The FAQ ("Questions, answered") is no longer its own numbered section — it now
+  sits inside the contact section, under its own sub-heading, after the call to
+  action. The homepage runs 01–06 and the chapter rail lost its FAQ stop. The
+  FAQPage JSON-LD in the head is unaffected.
+- Two CSS defects fixed in passing, both pre-dating this work and both silently
+  dropping rules from the minified stylesheet: `.hero-copy .eyebrow` had lost its
+  selector, so the hero eyebrow shipped unstyled (body font instead of the mono
+  treatment), and a stray closing brace was swallowing the section-heading rule
+  that followed it. The stylesheet now minifies with zero warnings.

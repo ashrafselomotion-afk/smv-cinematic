@@ -62,23 +62,22 @@ test('mobile interactive targets are at least 44x44', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   for (const p of ['/index.html','/ar/index.html','/contact.html','/work.html','/ar/work.html']) {
     await page.goto(p);
-    // The 44px rules ride on a media query and on fonts that change button
-    // heights as they swap in. Measuring once can catch the page mid-layout, so
-    // wait for fonts and then poll until the measurement stops changing.
+    // The 44px rules ride on a media query and on fonts that resize buttons as
+    // they swap in, so a single measurement can land mid-layout. Poll the real
+    // assertion — not a proxy for it — until the page settles.
     await page.evaluate(() => document.fonts && document.fonts.ready).catch(() => {});
-    await expect.poll(async () => page.evaluate(() => {
-      const b = document.getElementById('menuBtn');
-      return b ? Math.round(b.getBoundingClientRect().height) : 0;
-    }), { timeout: 10000 }).toBeGreaterThanOrEqual(44);
-    const small = await page.evaluate(() => {
+    const measure = () => page.evaluate(() => {
       const sel = '#menuBtn,#themeBtn,#nav .lang a,.filters button,#feedClose,#rpClose,#feedMute,'
                 + '.pv-switch [role=tab],.sw-item,.sw-all';
       return [...document.querySelectorAll(sel)].filter(el => {
         const r = el.getBoundingClientRect();
         return r.width > 0 && r.height > 0 && (r.width < 44 || r.height < 44);
-      }).map(el => (el.id || el.className) + ' ' + Math.round(el.getBoundingClientRect().width) + 'x' + Math.round(el.getBoundingClientRect().height));
+      }).map(el => (el.id || el.className) + ' ' +
+                   Math.round(el.getBoundingClientRect().width) + 'x' +
+                   Math.round(el.getBoundingClientRect().height));
     });
-    expect(small, `${p} has undersized targets`).toEqual([]);
+    await expect.poll(measure, { timeout: 15000, message: `${p} has undersized targets` })
+      .toEqual([]);
   }
 });
 

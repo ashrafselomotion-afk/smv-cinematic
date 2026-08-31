@@ -219,7 +219,6 @@ section,footer,.marquee{position:relative;z-index:1}
 @media (max-width:560px){#services .grid{grid-template-columns:1fr}#services .card{aspect-ratio:4/3}}
 
 /* ---------- WHY SMV (bento) ---------- */
-#faq h2{font-size:clamp(44px,7.5vw,110px);line-height:.95;margin:18px 0 0}
 .rule{display:flex;align-items:center;gap:0;margin:34px 0 0;max-width:180px}
 .rule::before{content:'';flex:1;height:1px;background:var(--ink);opacity:.7}
 .rule::after{content:'';width:7px;height:7px;border:1px solid var(--ink);margin-left:10px}
@@ -393,7 +392,6 @@ html.gl .wipe .line{overflow:hidden;display:block}
 .filters button.on{background:var(--hot-fill);border-color:var(--hot-fill);color:#111418}
 .reel.is-hidden{display:none}
 /* faq */
-#faq .wipe{margin-bottom:44px}
 .faq{border-top:1px solid var(--line);max-width:860px}
 .faq details{border-bottom:1px solid var(--line)}
 .faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px 4px;font-family:var(--display);font-size:clamp(17px,1.7vw,24px);text-transform:uppercase;letter-spacing:.02em;transition:color .3s}
@@ -466,8 +464,8 @@ html.gl .wipe .line{overflow:hidden;display:block}
 #reels::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
   background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;
   -webkit-mask-image:radial-gradient(60% 55% at 50% 40%,#000 30%,transparent 100%);mask-image:radial-gradient(60% 55% at 50% 40%,#000 30%,transparent 100%);opacity:.5}
-#faq,#stats{position:relative}
-#faq::before,#stats::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(var(--dim) 1px,transparent 1.2px);background-size:22px 22px;opacity:.18;
+#stats{position:relative}
+#stats::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(var(--dim) 1px,transparent 1.2px);background-size:22px 22px;opacity:.18;
   -webkit-mask-image:radial-gradient(55% 60% at 50% 50%,#000 20%,transparent 100%);mask-image:radial-gradient(55% 60% at 50% 50%,#000 20%,transparent 100%)}
 /* Aceternity · Focus Cards (reels) */
 @media (hover:hover) and (pointer:fine){
@@ -505,7 +503,7 @@ html.nav-hide #nav{transform:translate(-50%,-150%);opacity:0}
 /* ---------- editorial hero ---------- */
 #hero{align-items:flex-end;justify-content:flex-start}
 .hero-copy{position:relative;z-index:2;width:100%;padding:0 max(5vw,calc((100% - 1040px)/2)) 9vh;text-align:left}
-display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:rgba(255,255,255,.8);margin-bottom:26px}
+.hero-copy .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:rgba(255,255,255,.8);margin-bottom:26px}
 .hero-copy .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--hot-fill);box-shadow:0 0 12px rgba(224,101,47,.9)}
 #hero h1{font-size:clamp(44px,6.4vw,104px);line-height:.96;letter-spacing:.01em;color:#fff}
 #hero h1 .l{display:block;overflow:hidden}
@@ -592,7 +590,6 @@ display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-siz
 
 
 /* ---------- 05 · CONFIDENCE — service journey (winding drawn line) ---------- */
-}
 
 /* ---------- BIG SECTION HEADINGS for approach / confidence / credentials ---------- */
 #process h2,#confidence h2,#credentials h2{font-size:clamp(40px,6vw,92px);line-height:.96;margin:18px 0 30px}
@@ -671,7 +668,7 @@ html[lang="ar"] *{letter-spacing:0!important}
 html[lang="ar"] body,html[lang="ar"] h1,html[lang="ar"] h2,html[lang="ar"] h3,html[lang="ar"] p,html[lang="ar"] a,html[lang="ar"] button,html[lang="ar"] span,html[lang="ar"] div,html[lang="ar"] summary,html[lang="ar"] li,html[lang="ar"] figcaption{font-family:'Almarai','Space Grotesk',system-ui,sans-serif}
 html[lang="ar"] h1,html[lang="ar"] h2,html[lang="ar"] h3,html[lang="ar"] .ncell .v,html[lang="ar"] .wordmark{font-weight:800}
 html[lang="ar"] #hero h1{font-size:clamp(30px,4.8vw,76px);line-height:1.22}
-html[lang="ar"] h2.wipe,html[lang="ar"] #reels h2,html[lang="ar"] #services h2,html[lang="ar"] #faq h2,html[lang="ar"] #contact h2,html[lang="ar"] #process h2,html[lang="ar"] #confidence h2,html[lang="ar"] #credentials h2{font-size:clamp(28px,4.6vw,68px);line-height:1.2;text-transform:none}
+html[lang="ar"] h2.wipe,html[lang="ar"] #reels h2,html[lang="ar"] #services h2,html[lang="ar"] #contact h2,html[lang="ar"] #process h2,html[lang="ar"] #confidence h2,html[lang="ar"] #credentials h2{font-size:clamp(28px,4.6vw,68px);line-height:1.2;text-transform:none}
 html[lang="ar"] .hero-copy{text-align:right}
 html[lang="ar"] .fcard .node{left:auto;right:18px}
 html[lang="ar"] .fcard .mini b{left:auto;right:14px}
@@ -1085,3 +1082,14 @@ html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
   .client-logo{flex-basis:114px;min-height:54px}
   .textmark{font-size:13.5px}
 }
+
+
+/* ============ FAQ, now living inside the contact section ============
+   #contact is centred; the accordion is not, so it is centred as a block and
+   its own text put back to the reading direction. */
+.faq-head{margin:110px auto 26px;max-width:860px;text-align:start;
+  font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(26px,3.4vw,46px);line-height:1;letter-spacing:.01em;color:var(--ink)}
+#contact .faq{margin-inline:auto;text-align:start}
+#contact .faq summary{text-align:start}
+@media (max-width:900px){.faq-head{margin-top:80px}}
