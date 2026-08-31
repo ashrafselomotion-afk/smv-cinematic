@@ -100,8 +100,8 @@ appear on the public website. Nothing in this file is published. Items marked
   back to the still. Loops must be short, silent and under ~1MB.
   DECISION (2026-08-31): loops are self-hosted in this repository and full films
   stay on YouTube. The client's separate hosting is NOT used for site media.
-  It is AEserver "Advanced Hosting" — cPanel shared hosting, 50GB disk (not the
-  2TB first assumed), traffic advertised as unlimited but subject to the usual
+  It is AEserver "Advanced Hosting" — cPanel shared hosting, purchased and live,
+  50GB disk (the 2TB figure the client was originally given was wrong), traffic advertised as unlimited but subject to the usual
   shared-hosting fair-use clause, which typically forbids using the account
   primarily to store or stream video. GitHub Pages is the better home for the
   loops regardless: they total ~12MB, it is already wired into the admin page,
@@ -198,8 +198,9 @@ appear on the public website. Nothing in this file is published. Items marked
 - OPTION (not taken): the client's cPanel hosting runs PHP, so the contact form
   could POST to a self-hosted handler instead of the FormSubmit.co relay. That
   would remove the last third party the site hands visitor data to — the same
-  argument that made self-hosted preview loops worth it. Not built; it needs the
-  hosting to actually be purchased and a decision on where enquiries land.
+  argument that made self-hosted preview loops worth it. The hosting is bought
+  and live (confirmed 2026-08-31), so the only thing still missing is a decision
+  on which mailbox enquiries should land in. Not built.
 - privacy.html is a factual description of what the site actually does (FormSubmit
   relay, local theme preference, no analytics). Have it reviewed by counsel before
   relying on it for procurement.
