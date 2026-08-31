@@ -220,3 +220,58 @@ test.describe('selected-productions strip', () => {
     }
   });
 });
+
+test.describe('admin publish', () => {
+  test('preserves manifest sections it does not itself edit', async ({ page }) => {
+    // The admin once rebuilt media.json from a hardcoded key list, which meant
+    // the client strip was silently deleted the first time anyone published.
+    const src = fs.readFileSync(path.join(ROOT, 'content/media.json'), 'utf8');
+    const before = JSON.parse(src);
+    let committed = null;
+
+    await page.route('https://api.github.com/**', route => {
+      const req = route.request();
+      if (req.method() === 'GET') {
+        return route.fulfill({ status: 200, contentType: 'application/json',
+          body: JSON.stringify({ sha: 'sha0',
+            content: Buffer.from(src, 'utf8').toString('base64') }) });
+      }
+      const body = JSON.parse(req.postData());
+      if (req.url().includes('media.json')) {
+        committed = Buffer.from(body.content, 'base64').toString('utf8');
+      }
+      return route.fulfill({ status: 200, contentType: 'application/json',
+        body: JSON.stringify({ content: { sha: 'sha1' } }) });
+    });
+    await page.route('https://i.ytimg.com/**', route => route.fulfill({ status: 200,
+      contentType: 'image/gif',
+      body: Buffer.from('R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==', 'base64') }));
+
+    await page.goto('/admin/index.html');
+    await page.fill('#token', 'test-token');
+    await page.click('#connectForm button[type=submit]');
+    await page.waitForSelector('#editor:not([hidden])');
+    await page.click('#films .card:first-child .card-head');
+    await page.fill('#films .card:first-child input[data-k=titleEn]', 'Renamed For Test');
+    await page.click('#publish');
+    await page.waitForSelector('#sheetClose:not([hidden])', { timeout: 20000 });
+
+    expect(committed, 'nothing was committed').toBeTruthy();
+    const after = JSON.parse(committed);
+    expect(Object.keys(after).sort(), 'a manifest section was dropped on publish')
+      .toEqual(Object.keys(before).sort());
+    expect(after.clients.length).toBe(before.clients.length);
+    expect(after.videos.length).toBe(before.videos.length);
+    expect(after.videos[0].titleEn).toBe('Renamed For Test');
+    // browser-only bookkeeping must never reach the repository
+    expect(committed).not.toMatch(/"_(?:new|url)"/);
+  });
+
+  test('every organisation in the strip is editable from the admin', async ({ page }) => {
+    await page.goto('/admin/index.html');
+    // the tab exists and is wired to a panel, signed out or not
+    await expect(page.locator('#tClients')).toHaveAttribute('aria-controls', 'pClients');
+    await expect(page.locator('#pClients')).toHaveCount(1);
+    await expect(page.locator('#clientTpl')).toHaveCount(1);
+  });
+});

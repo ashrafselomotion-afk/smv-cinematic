@@ -117,8 +117,6 @@ test.describe('contact form', () => {
 
 test.describe('arabic parity and routing', () => {
   const PAIRS = [['/index.html','/ar/index.html'],['/work.html','/ar/work.html'],
-    ['/government-production.html','/ar/government-production.html'],
-    ['/capabilities.html','/ar/capabilities.html'],['/approach.html','/ar/approach.html'],
     ['/about.html','/ar/about.html'],['/contact.html','/ar/contact.html'],['/privacy.html','/ar/privacy.html']];
 
   for (const [en, ar] of PAIRS) {
@@ -157,11 +155,11 @@ test.describe('arabic parity and routing', () => {
   });
 
   test('reciprocal hreflang plus x-default', async ({ page }) => {
-    await page.goto('/capabilities.html');
-    await expect(page.locator('link[hreflang="ar"]')).toHaveAttribute('href', /ar\/capabilities\.html/);
+    await page.goto('/about.html');
+    await expect(page.locator('link[hreflang="ar"]')).toHaveAttribute('href', /ar\/about\.html/);
     await expect(page.locator('link[hreflang="x-default"]')).toHaveCount(1);
-    await page.goto('/ar/capabilities.html');
-    await expect(page.locator('link[hreflang="en"]')).toHaveAttribute('href', /\/capabilities\.html/);
+    await page.goto('/ar/about.html');
+    await expect(page.locator('link[hreflang="en"]')).toHaveAttribute('href', /\/about\.html/);
   });
 
   test('arabic social metadata is present', async ({ page }) => {
@@ -175,7 +173,7 @@ test.describe('arabic parity and routing', () => {
 });
 
 test('no horizontal overflow anywhere', async ({ page }) => {
-  const PAGES = ['/index.html','/work.html','/contact.html','/capabilities.html','/ar/index.html','/ar/work.html','/ar/contact.html'];
+  const PAGES = ['/index.html','/work.html','/contact.html','/about.html','/ar/index.html','/ar/work.html','/ar/contact.html'];
   for (const p of PAGES) {
     await page.goto(p);
     await page.waitForTimeout(400);

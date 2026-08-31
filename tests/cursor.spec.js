@@ -1,10 +1,8 @@
 const { bring } = require('./helpers');
 const { test, expect } = require('@playwright/test');
 
-const INNER = ['/work.html','/contact.html','/capabilities.html','/approach.html','/about.html',
-  '/government-production.html','/privacy.html','/404.html',
-  '/ar/work.html','/ar/contact.html','/ar/capabilities.html','/ar/approach.html',
-  '/ar/about.html','/ar/government-production.html','/ar/privacy.html'];
+const INNER = ['/work.html','/contact.html','/about.html','/privacy.html','/404.html',
+  '/ar/work.html','/ar/contact.html','/ar/about.html','/ar/privacy.html'];
 
 test.describe('mouse pointer is never hidden without a replacement', () => {
   for (const p of INNER) {

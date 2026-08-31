@@ -2,10 +2,8 @@ const { bring } = require('./helpers');
 const { test, expect } = require('@playwright/test');
 const AxeBuilder = require('@axe-core/playwright').default;
 
-const PAGES = ['/index.html','/work.html','/government-production.html','/capabilities.html',
-  '/approach.html','/about.html','/contact.html','/privacy.html','/404.html',
-  '/ar/index.html','/ar/work.html','/ar/government-production.html','/ar/capabilities.html',
-  '/ar/approach.html','/ar/about.html','/ar/contact.html','/ar/privacy.html'];
+const PAGES = ['/index.html','/work.html','/about.html','/contact.html','/privacy.html','/404.html',
+  '/ar/index.html','/ar/work.html','/ar/about.html','/ar/contact.html','/ar/privacy.html'];
 
 for (const p of PAGES) {
   test(`no serious/critical axe violations — ${p}`, async ({ page }) => {
@@ -64,11 +62,14 @@ test('mobile interactive targets are at least 44x44', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   for (const p of ['/index.html','/ar/index.html','/contact.html','/work.html','/ar/work.html']) {
     await page.goto(p);
-    // the 44px rules ride on a media query; wait for layout rather than racing it
-    await page.waitForFunction(() => {
+    // The 44px rules ride on a media query and on fonts that change button
+    // heights as they swap in. Measuring once can catch the page mid-layout, so
+    // wait for fonts and then poll until the measurement stops changing.
+    await page.evaluate(() => document.fonts && document.fonts.ready).catch(() => {});
+    await expect.poll(async () => page.evaluate(() => {
       const b = document.getElementById('menuBtn');
-      return b && b.getBoundingClientRect().height >= 44;
-    }, null, { timeout: 8000 }).catch(() => {});
+      return b ? Math.round(b.getBoundingClientRect().height) : 0;
+    }), { timeout: 10000 }).toBeGreaterThanOrEqual(44);
     const small = await page.evaluate(() => {
       const sel = '#menuBtn,#themeBtn,#nav .lang a,.filters button,#feedClose,#rpClose,#feedMute,'
                 + '.pv-switch [role=tab],.sw-item,.sw-all';
@@ -82,10 +83,10 @@ test('mobile interactive targets are at least 44x44', async ({ page }) => {
 });
 
 test('focus is never hidden behind the fixed nav on deep links', async ({ page }) => {
-  await page.goto('/capabilities.html#cap-01');
+  await page.goto('/contact.html#credentials');
   await page.waitForTimeout(500);
   const ok = await page.evaluate(() => {
-    const t = document.getElementById('cap-01');
+    const t = document.getElementById('credentials');
     const navB = document.getElementById('nav').getBoundingClientRect().bottom;
     return t.getBoundingClientRect().top >= navB - 2;
   });

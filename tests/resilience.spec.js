@@ -64,10 +64,9 @@ test.describe('content visibility without JS / motion', () => {
 });
 
 test('all internal assets return 200', async ({ page, request }) => {
-  const PAGES = ['/index.html','/work.html','/government-production.html','/capabilities.html',
-    '/approach.html','/about.html','/contact.html','/privacy.html','/404.html','/ar.html',
-    '/ar/index.html','/ar/work.html','/ar/government-production.html','/ar/capabilities.html',
-    '/ar/approach.html','/ar/about.html','/ar/contact.html','/ar/privacy.html',
+  const PAGES = ['/index.html','/work.html','/about.html','/contact.html','/privacy.html',
+    '/404.html','/ar.html',
+    '/ar/index.html','/ar/work.html','/ar/about.html','/ar/contact.html','/ar/privacy.html',
     '/site.webmanifest','/og.jpg','/favicon.ico','/robots.txt','/sitemap.xml'];
   for (const p of PAGES) {
     const r = await request.get(p);
@@ -98,7 +97,7 @@ test('all internal assets return 200', async ({ page, request }) => {
 });
 
 test('deep links land below the fixed navigation', async ({ page }) => {
-  for (const [url, id] of [['/capabilities.html#cap-01','cap-01'], ['/contact.html#credentials','credentials']]) {
+  for (const [url, id] of [['/contact.html#credentials','credentials'], ['/contact.html#brief-sec','brief-sec']]) {
     await page.goto(url);
     await page.waitForTimeout(400);
     const ok = await page.evaluate(id => {
@@ -108,4 +107,27 @@ test('deep links land below the fixed navigation', async ({ page }) => {
     }, id);
     expect(ok, `${url} hidden behind nav`).toBe(true);
   }
+});
+
+test('no page links to something that is not there', async ({ page, request }) => {
+  // Removing a page is easy; removing every link into it is what gets missed.
+  const PAGES = ['/index.html','/work.html','/about.html','/contact.html','/privacy.html',
+    '/404.html','/ar/index.html','/ar/work.html','/ar/about.html','/ar/contact.html',
+    '/ar/privacy.html'];
+  const checked = new Map();
+  const broken = [];
+  for (const p of PAGES) {
+    await page.goto(p);
+    const links = await page.evaluate(() =>
+      [...document.querySelectorAll('a[href]')]
+        .map(a => a.getAttribute('href'))
+        .filter(h => h && !/^(#|mailto:|tel:|https?:)/.test(h))
+        .map(h => new URL(h, location.href).pathname));
+    for (const href of new Set(links)) {
+      if (!checked.has(href)) checked.set(href, (await request.get(href)).status());
+      if (checked.get(href) !== 200) broken.push(`${p} -> ${href} (${checked.get(href)})`);
+    }
+  }
+  expect(checked.size, 'no internal links were found at all').toBeGreaterThan(5);
+  expect(broken, 'dead internal links').toEqual([]);
 });

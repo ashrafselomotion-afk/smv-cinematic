@@ -205,3 +205,32 @@ appear on the public website. Nothing in this file is published. Items marked
   relay, local theme preference, no analytics). Have it reviewed by counsel before
   relying on it for procurement.
 - Terms page: not created (nothing to state yet without legal input).
+
+## Site structure (2026-08-31)
+
+- REMOVED at the client's instruction: the Government Production, Capabilities
+  and Approach pages (English and Arabic — six files), their nav and mobile-menu
+  links, their footer links and their sitemap entries. The site is now Work,
+  About, Contact, Privacy. Everything is recoverable from git history if the
+  decision is reversed.
+- The homepage KEPT its Capabilities (02) and Approach (03) sections, per the
+  client's choice. The eight capability cards on the English homepage used to
+  link into capabilities.html; they are now plain articles with the "→" affordance
+  removed, so the content stays and nothing dangles.
+- NOTE — Arabic parity gap, pre-existing and now visible: the Arabic homepage's
+  Capabilities section never carried the eight cards the English one has. Its
+  only substance was a button into capabilities.html, which is gone with that
+  page. The Arabic section is now a heading and an intro paragraph. Either give
+  it the eight cards or cut the section; leaving it thin weakens the Arabic route.
+- A test now crawls every internal link on every page and fails on any that does
+  not return 200, so a future removal cannot leave dead links behind.
+- The navigation bar is now glass — translucent, blurred and saturated over
+  whatever sits behind it. It falls back to the previous solid bar where
+  backdrop-filter is unsupported and under prefers-reduced-transparency, and the
+  link colour was lifted off --dim because a glass bar over moving video cannot
+  rely on a dim grey staying legible.
+- The admin page gained a Clients tab, so the selected-productions strip is
+  editable rather than being the one part of the manifest with no interface.
+  FIXED: publishing used to rebuild media.json from a hardcoded key list, which
+  would have silently deleted the entire client strip the first time anyone
+  pressed Publish. A test now fails if any manifest section is lost on publish.

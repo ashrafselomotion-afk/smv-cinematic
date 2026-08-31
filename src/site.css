@@ -10,6 +10,9 @@
   --hot-fill:#E0652F;
   --line:rgba(244,242,238,.12);
   --nav-bg:rgba(17,20,24,.9);
+  --nav-glass:rgba(26,30,36,.58);--nav-edge:rgba(244,242,238,.16);
+  --nav-sheen:rgba(255,255,255,.10);--nav-cast:rgba(0,0,0,.34);
+  --nav-ink:rgba(244,242,238,.82);
   --logo:rgba(244,242,238,.42);
   --tile:rgba(255,255,255,.035);
   --strip:rgba(5,6,8,.5);
@@ -27,6 +30,12 @@
     --dim:#4E525B;
     --line:rgba(18,20,24,.18);
     --nav-bg:rgba(221,224,228,.94);
+  --nav-glass:rgba(255,255,255,.58);--nav-edge:rgba(18,20,24,.14);
+  --nav-sheen:rgba(255,255,255,.7);--nav-cast:rgba(18,20,24,.16);
+  --nav-ink:rgba(18,20,24,.78);
+    --nav-glass:rgba(255,255,255,.58);--nav-edge:rgba(18,20,24,.14);
+    --nav-sheen:rgba(255,255,255,.7);--nav-cast:rgba(18,20,24,.16);
+    --nav-ink:rgba(18,20,24,.78);
     --logo:rgba(18,20,24,.42);
     --tile:rgba(18,20,24,.05);
     --strip:rgba(255,255,255,.28);
@@ -123,12 +132,23 @@ html.menu-open #mmenu a.big:nth-child(5){transition-delay:.24s}
 #nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:800;
   display:flex;align-items:center;gap:38px;
   padding:12px 14px 12px 26px;border-radius:999px;
-  background:var(--nav-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border:1px solid var(--line);white-space:nowrap}
+  background:var(--nav-glass);
+  backdrop-filter:blur(26px) saturate(1.7);-webkit-backdrop-filter:blur(26px) saturate(1.7);
+  border:1px solid var(--nav-edge);white-space:nowrap;
+  /* the inset line is the lit top edge that makes glass read as glass */
+  box-shadow:0 10px 34px var(--nav-cast),inset 0 1px 0 var(--nav-sheen)}
+/* Glass is a decoration, never the thing holding the text up: anywhere the blur
+   cannot run, or transparency is turned down, fall back to the solid bar. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  #nav{background:var(--nav-bg);box-shadow:0 10px 34px var(--nav-cast)}
+}
+@media (prefers-reduced-transparency: reduce){
+  #nav{background:var(--nav-bg);backdrop-filter:none;-webkit-backdrop-filter:none}
+}
 #nav .wordmark{font-family:var(--display);font-size:19px;letter-spacing:.05em}
 #nav .wordmark i{font-style:normal;color:var(--hot)}
 #nav .links{display:flex;gap:22px;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;white-space:nowrap}
-#nav .links a{position:relative;padding:6px 0;color:var(--dim);transition:color .3s}
+#nav .links a{position:relative;padding:6px 0;color:var(--nav-ink);transition:color .3s}
 #nav .links a:hover{color:var(--ink)}
 #nav .cta{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:#111418;font-weight:500;
   background:var(--hot-fill);padding:12px 22px;border-radius:999px;transition:transform .3s,background .3s}
@@ -638,7 +658,7 @@ display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-siz
 
 /* ---------- LANGUAGE TOGGLE ---------- */
 #nav .lang{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em}
-#nav .lang a{color:var(--dim);transition:color .3s;padding:4px 2px}
+#nav .lang a{color:var(--nav-ink);transition:color .3s;padding:4px 2px}
 #nav .lang a:hover{color:var(--ink)}
 #nav .lang a.on{color:var(--hot)}
 #nav .lang i{font-style:normal;color:var(--line)}

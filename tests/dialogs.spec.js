@@ -98,7 +98,7 @@ test.describe('selected-work viewer', () => {
 test.describe('mobile menu', () => {
   test('traps focus, Escape closes, focus restored, background inert', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto('/capabilities.html');
+    await page.goto('/about.html');
     // the shared runtime attaches the menu handler on load; don't race it
     await page.waitForFunction(() => typeof window.__smvSetMenu === 'function', null, { timeout: 10000 });
     const btn = page.locator('#menuBtn');

@@ -67,6 +67,7 @@
   <div class="tabs" role="tablist" aria-label="Media type">
     <button type="button" role="tab" id="tFilms"  aria-selected="true"  aria-controls="pFilms">Films</button>
     <button type="button" role="tab" id="tPhotos" aria-selected="false" aria-controls="pPhotos" tabindex="-1">Photography</button>
+    <button type="button" role="tab" id="tClients" aria-selected="false" aria-controls="pClients" tabindex="-1">Clients</button>
   </div>
 
   <!-- ---------------- FILMS ---------------- -->
@@ -112,6 +113,32 @@
     <div id="photos" class="list"></div>
     <p id="photoEmpty" class="empty">No photography yet. The website shows an honest
       “archive is being prepared” message until you add some.</p>
+  </section>
+
+  <!-- ---------------- CLIENTS ---------------- -->
+  <section id="pClients" role="tabpanel" aria-labelledby="tClients" tabindex="0" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>Clients</h2>
+        <p class="lede" id="clientCount"></p>
+      </div>
+      <button type="button" class="btn ghost" id="addClient">Add an organisation</button>
+    </div>
+
+    <div class="callout">
+      This is the moving strip under the homepage hero. Each organisation shows as a
+      typeset name unless you supply a real logo file — we never draw an approximation
+      of somebody else’s trademark.
+      <br><br>
+      <b>Before you add a name:</b> be sure it is genuinely a credit of yours, and that
+      the organisation permits being listed. Showing their <b>logo</b> is a separate
+      permission again — UAE government entities in particular tend to restrict who may
+      reproduce their mark.
+    </div>
+
+    <div id="clients" class="list"></div>
+    <p id="clientEmpty" class="empty">No organisations listed. The strip disappears
+      from the homepage entirely if you empty this.</p>
   </section>
 </main>
 
@@ -181,6 +208,35 @@
       <label class="field rtl"><span>Description (Arabic) — required</span><input data-k="altAr" type="text" dir="rtl" required></label>
       <label class="field"><span>Caption (English, optional)</span><input data-k="captionEn" type="text"></label>
       <label class="field rtl"><span>Caption (Arabic, optional)</span><input data-k="captionAr" type="text" dir="rtl"></label>
+    </div>
+  </article>
+</template>
+
+<template id="clientTpl">
+  <article class="card client">
+    <div class="card-head">
+      <div class="card-title">
+        <b class="name"></b>
+        <span class="sub"></span>
+      </div>
+      <div class="card-tools">
+        <button type="button" class="icon up"   title="Move up"   aria-label="Move up">↑</button>
+        <button type="button" class="icon down" title="Move down" aria-label="Move down">↓</button>
+        <button type="button" class="icon del"  title="Remove"    aria-label="Remove">✕</button>
+      </div>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Name, as it should appear</span><input data-k="name" type="text" required></label>
+      <div class="field">
+        <span>Logo <em>(SVG or PNG, transparent)</em></span>
+        <div class="filerow">
+          <span class="filename">No logo — the name is typeset</span>
+          <label class="btn tiny file">Choose<input type="file" class="pickLogo" accept=".svg,.png,.webp,image/svg+xml,image/png,image/webp" hidden></label>
+          <button type="button" class="btn tiny ghost clearLogo" hidden>Remove</button>
+        </div>
+      </div>
+      <label class="field"><span>Descriptor (English) — required</span><input data-k="subEn" type="text" required></label>
+      <label class="field rtl"><span>Descriptor (Arabic) — required</span><input data-k="subAr" type="text" dir="rtl" required></label>
     </div>
   </article>
 </template>

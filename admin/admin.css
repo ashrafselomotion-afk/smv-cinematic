@@ -84,6 +84,7 @@ a{color:var(--hot)}
 .card-head:hover{background:var(--tile)}
 .thumb{width:44px;height:62px;object-fit:cover;border-radius:7px;background:var(--tile);flex:none}
 .card.photo .thumb{height:44px;width:60px}
+.card.client .card-head{padding-left:18px}
 .card-title{flex:1;min-width:0}
 .card-title .name{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-title .sub{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;

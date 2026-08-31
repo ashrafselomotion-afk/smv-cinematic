@@ -15,13 +15,15 @@
   var MANIFEST = 'content/media.json';
   var LOOP_DIR = 'media/previews/';
   var PHOTO_DIR = 'media/photos/';
+  var LOGO_DIR = 'media/logos/';
+  var LOGO_MAX = 512 * 1024;            // a mark this big is a photo, not a logo
   var LOOP_WARN = 2 * 1024 * 1024;      // a loop this big is a sign it is too long
   var LOOP_MAX = 8 * 1024 * 1024;       // above this the repo starts to suffer
   var PHOTO_EDGE = 1600;                // longest side after resizing
   var MAX_FEATURED = 5;
 
   var token = '', repo = '', sha = '';
-  var doc = { videos: [], photos: [] };
+  var doc = { videos: [], photos: [], clients: [] };
   var pending = [];                     // files to upload alongside the manifest
   var dirty = false;
 
@@ -125,6 +127,7 @@
       doc = JSON.parse(unb64text(file.content));
       doc.videos = doc.videos || [];
       doc.photos = doc.photos || [];
+      doc.clients = doc.clients || [];
       if (remember) {
         try { localStorage.setItem(STORE, JSON.stringify({ repo: repo, token: token })); } catch (e) {}
       }
@@ -134,6 +137,7 @@
       $('signout').hidden = false;
       renderFilms();
       renderPhotos();
+      renderClients();
       markClean();
     }).catch(function (err) { say(err.message, 'bad'); throw err; });
   }
@@ -151,8 +155,8 @@
 
   /* ------------------------------------------------------------------ tabs */
 
-  var tabs = [$('tFilms'), $('tPhotos')];
-  var panels = [$('pFilms'), $('pPhotos')];
+  var tabs = [$('tFilms'), $('tPhotos'), $('tClients')];
+  var panels = [$('pFilms'), $('pPhotos'), $('pClients')];
   function selectTab(i, focus) {
     tabs.forEach(function (t, n) {
       t.setAttribute('aria-selected', String(n === i));
@@ -432,6 +436,98 @@
     });
   }
 
+  /* ------------------------------------------------------------------ clients */
+
+  function renderClients() {
+    var host = $('clients');
+    host.textContent = '';
+    doc.clients.forEach(function (c, i) { host.appendChild(clientCard(c, i)); });
+    $('clientEmpty').hidden = doc.clients.length > 0;
+    $('clientCount').textContent = doc.clients.length
+      ? doc.clients.length + ' organisation' + (doc.clients.length === 1 ? '' : 's') + ' · ' +
+        doc.clients.filter(function (c) { return c.logo; }).length + ' with a supplied logo'
+      : 'Nothing listed yet';
+  }
+
+  function clientCard(c, i) {
+    var node = $('clientTpl').content.firstElementChild.cloneNode(true);
+    var fname = node.querySelector('.filename');
+    var clear = node.querySelector('.clearLogo');
+
+    function refresh() {
+      node.querySelector('.name').textContent = c.name || 'Unnamed';
+      node.querySelector('.sub').textContent =
+        (c.subEn || '') + (c.logo ? ' · LOGO' : ' · TYPESET');
+      fname.textContent = c.logo ? c.logo.split('/').pop() : 'No logo — the name is typeset';
+      fname.classList.toggle('has', !!c.logo);
+      clear.hidden = !c.logo;
+    }
+    refresh();
+
+    node.querySelector('.card-head').addEventListener('click', function (e) {
+      if (e.target.closest('.card-tools')) return;
+      node.classList.toggle('open');
+    });
+    node.querySelectorAll('[data-k]').forEach(function (input) {
+      input.value = c[input.dataset.k] || '';
+      input.addEventListener('input', function () {
+        c[input.dataset.k] = input.value.trim();
+        refresh(); markDirty();
+      });
+    });
+
+    /* Logos are uploaded untouched: re-encoding a mark to JPEG destroys its
+       transparency, and these are usually PNG or SVG with a clear background. */
+    node.querySelector('.pickLogo').addEventListener('change', function (e) {
+      var f = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!f) return;
+      if (!/\.(svg|png|webp)$/i.test(f.name)) {
+        alert('Use an SVG, PNG or WebP with a transparent background. A JPEG will show a white box.');
+        return;
+      }
+      if (f.size > LOGO_MAX) {
+        alert('That file is ' + mb(f.size) + '. Logos should be well under ' + mb(LOGO_MAX) + '.');
+        return;
+      }
+      var ext = f.name.match(/\.[^.]+$/)[0].toLowerCase();
+      var name = slug(c.name || 'client-' + i) + ext;
+      queue(LOGO_DIR + name, f);
+      c.logo = LOGO_DIR + name;
+      refresh(); markDirty();
+    });
+    clear.addEventListener('click', function () {
+      unqueue(c.logo); c.logo = null; refresh(); markDirty();
+    });
+
+    var up = node.querySelector('.up'), down = node.querySelector('.down');
+    up.disabled = i === 0;
+    down.disabled = i === doc.clients.length - 1;
+    up.addEventListener('click', function () { move(doc.clients, i, -1); renderClients(); markDirty(); });
+    down.addEventListener('click', function () { move(doc.clients, i, 1); renderClients(); markDirty(); });
+    node.querySelector('.del').addEventListener('click', function () {
+      if (!confirm('Remove ' + (c.name || 'this organisation') + ' from the strip?')) return;
+      unqueue(c.logo);
+      doc.clients.splice(i, 1);
+      renderClients(); markDirty();
+    });
+    return node;
+  }
+
+  $('addClient').addEventListener('click', function () {
+    var name = (prompt('Organisation name, as it should appear:') || '').trim();
+    if (!name) return;
+    if (doc.clients.some(function (c) { return c.name.toLowerCase() === name.toLowerCase(); })) {
+      alert('That organisation is already listed.'); return;
+    }
+    doc.clients.push({ name: name, subEn: '', subAr: '', logo: null });
+    renderClients(); markDirty();
+    var last = $('clients').lastElementChild;
+    last.classList.add('open');
+    last.scrollIntoView({ block: 'center' });
+    last.querySelector('input').focus();
+  });
+
   /* ------------------------------------------------------------------ helpers */
 
   function move(arr, i, d) {
@@ -479,6 +575,12 @@
     doc.photos.forEach(function (p, i) {
       if (!p.altEn || !p.altAr) bad.push('Photo ' + (i + 1) + ' needs a description in both languages');
     });
+    doc.clients.forEach(function (c, i) {
+      if (!c.name) bad.push('Organisation ' + (i + 1) + ' has no name');
+      if (!c.subEn || !c.subAr) {
+        bad.push((c.name || 'Organisation ' + (i + 1)) + ' needs a descriptor in both languages');
+      }
+    });
     if (!featuredCount()) bad.push('At least one film must be shown on the homepage');
     return bad;
   }
@@ -515,16 +617,17 @@
     step = step.then(function () {
       var li = logLine('Saving the media list…');
       /* strip the browser-only bookkeeping before it reaches the repository */
-      var clean = {
-        _readme: doc._readme,
-        updated: new Date().toISOString().slice(0, 10),
-        videos: doc.videos,
-        photos: doc.photos.map(function (p) {
-          var c = {};
-          Object.keys(p).forEach(function (k) { if (k[0] !== '_') c[k] = p[k]; });
-          return c;
-        })
-      };
+      /* Start from what was loaded and change only what this page owns. Listing
+         the keys by hand meant a manifest section the admin did not know about
+         — the client strip, or anything added later — was silently deleted on
+         the first publish. */
+      var clean = JSON.parse(JSON.stringify(doc));
+      clean.updated = new Date().toISOString().slice(0, 10);
+      clean.photos = (clean.photos || []).map(function (p) {
+        var c = {};
+        Object.keys(p).forEach(function (k) { if (k[0] !== '_') c[k] = p[k]; });
+        return c;
+      });
       var body = JSON.stringify(clean, null, 2) + '\n';
       return putFile(MANIFEST, b64text(body), 'Update media list from the admin page', sha)
         .then(function (res) {
@@ -540,7 +643,7 @@
       logLine('GitHub is rebuilding the pages — allow about a minute.', 'ok');
       $('viewSite').hidden = false;
       $('sheetClose').hidden = false;
-      renderFilms(); renderPhotos();
+      renderFilms(); renderPhotos(); renderClients();
     }).catch(function (err) {
       logLine(err.message, 'err');
       logLine('Nothing further was published. Fix the problem and try again.', 'err');
