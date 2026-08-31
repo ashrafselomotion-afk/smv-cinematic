@@ -217,11 +217,23 @@ appear on the public website. Nothing in this file is published. Items marked
   client's choice. The eight capability cards on the English homepage used to
   link into capabilities.html; they are now plain articles with the "→" affordance
   removed, so the content stays and nothing dangles.
-- NOTE — Arabic parity gap, pre-existing and now visible: the Arabic homepage's
-  Capabilities section never carried the eight cards the English one has. Its
-  only substance was a button into capabilities.html, which is gone with that
-  page. The Arabic section is now a heading and an intro paragraph. Either give
-  it the eight cards or cut the section; leaving it thin weakens the Arabic route.
+- Arabic parity gap CLOSED: the Arabic homepage's Capabilities section never
+  carried the eight cards the English one has — its only substance was a button
+  into capabilities.html, which went with that page. Removing the intro
+  paragraph would have left a bare heading, so the eight cards were mirrored
+  across. The card titles are the approved Arabic capability names recovered
+  from the deleted ar/capabilities.html, in the English order; only the image
+  alt text is newly written and needs the usual Arabic review.
+- Section 02's heading is now "OUR SERVICES" / "خدماتنا" and its introductory
+  paragraph is gone, at the client's request. NOTE: the section label and the
+  chapter rail still read CAPABILITIES / قدراتنا, so the label and the heading
+  now disagree. Change both if that matters.
+- STILL UNVERIFIED, unchanged by the above: two of the eight cards claim LIVE
+  BROADCAST & STREAMING and AERIAL & SPECIALISED CAPTURE. This register lists
+  both as removed from the rest of the site pending confirmation, yet they have
+  been published on the English homepage throughout, and are now published in
+  Arabic too as a consequence of closing the parity gap. Confirm the licence and
+  clean-feed positions or cut those two cards from both locales.
 - A test now crawls every internal link on every page and fails on any that does
   not return 200, so a future removal cannot leave dead links behind.
 - The navigation bar is now glass — translucent, blurred and saturated over
