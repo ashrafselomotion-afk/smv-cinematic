@@ -99,7 +99,14 @@ appear on the public website. Nothing in this file is published. Items marked
   the full film. No loops have been supplied yet, so every card currently falls
   back to the still. Loops must be short, silent and under ~1MB.
   DECISION (2026-08-31): loops are self-hosted in this repository and full films
-  stay on YouTube. Self-hosting the loops is what removes Google from the page
+  stay on YouTube. The client's separate hosting is NOT used for site media.
+  It is AEserver "Advanced Hosting" — cPanel shared hosting, 50GB disk (not the
+  2TB first assumed), traffic advertised as unlimited but subject to the usual
+  shared-hosting fair-use clause, which typically forbids using the account
+  primarily to store or stream video. GitHub Pages is the better home for the
+  loops regardless: they total ~12MB, it is already wired into the admin page,
+  and it serves from a global CDN rather than a single box. Revisit only if the
+  full films move off YouTube. Self-hosting the loops is what removes Google from the page
   load entirely — until a visitor opens a film, nothing is fetched from Google,
   which strengthens the privacy position for procurement. If full films are ever
   self-hosted too, the privacy notice, the CSP `media-src` and the `frame-src`
@@ -188,6 +195,11 @@ appear on the public website. Nothing in this file is published. Items marked
 
 ## Legal
 
+- OPTION (not taken): the client's cPanel hosting runs PHP, so the contact form
+  could POST to a self-hosted handler instead of the FormSubmit.co relay. That
+  would remove the last third party the site hands visitor data to — the same
+  argument that made self-hosted preview loops worth it. Not built; it needs the
+  hosting to actually be purchased and a decision on where enquiries land.
 - privacy.html is a factual description of what the site actually does (FormSubmit
   relay, local theme preference, no analytics). Have it reviewed by counsel before
   relying on it for procurement.
