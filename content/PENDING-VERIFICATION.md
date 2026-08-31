@@ -29,9 +29,42 @@ appear on the public website. Nothing in this file is published. Items marked
 
 ## Content awaiting approved assets (hidden until supplied)
 
-- Client proof strip ("Selected organisations and destinations we have supported"):
-  HIDDEN — previous SVG logo lockups (ADNEC, Shurooq, Dubai Design Week, Khorfakkan,
-  WIC, SIF) were unapproved implied relationships and have been deleted.
+- Client proof strip: RESTORED 2026-08-31 at the client's explicit instruction,
+  reversing the earlier deletion. It now sits on both homepages as "Selected
+  productions / UAE + Global / Institutions + Events" and names twenty
+  organisations, taken from the client's own reference site
+  (heartfelt-brioche-b9f5b3.netlify.app) at their direction.
+  SMV asserts these relationships; the engineer has verified none of them.
+  TODO: CLIENT VERIFICATION — three separate things are still outstanding:
+    1. That each of the twenty is genuinely a client or production credit.
+    2. Permission to display each organisation's NAME in a client strip.
+    3. Permission to display each organisation's LOGO, if logos are ever added.
+       UAE government entities in particular (Invest in Sharjah, ADNEC,
+       Government of Dubai, Abu Dhabi Media Office, Shams) commonly restrict
+       who may reproduce their mark and how.
+  NO LOGO FILES ARE USED, deliberately. The reference site's "logos" are not the
+  real marks: nine are hand-drawn SVG approximations (a circle and Arial Black
+  text standing in for ITB Berlin, a triangle for ADNEC, and so on) and two are
+  hotlinked <img> tags pointing at cntravellerme.com and innovationbox.ae —
+  third-party servers that will break and that we should not be leeching. A
+  fabricated trademark is worse than none: it misrepresents the brand and is
+  obvious to anyone who knows it. Every mark is therefore typeset in the site's
+  own display face, which is also what the reference itself does for half its
+  entries. `content/media.json` carries a `logo` field per client: drop a real,
+  supplied file in and that entry renders as an image instead, with no other
+  change. A test fails if an image ever appears without a manifest entry.
+- The kinetic word band this strip replaced ("GOVERNMENT FILMS ✦ OFFICIAL EVENTS
+  ✦ NATIONAL OCCASIONS ✦ LIVE BROADCAST ✦ AERIAL ✦ PHOTOGRAPHY ✦ POST &
+  LOCALISATION") is gone, along with its now-dead CSS and GSAP code. Note this
+  removed two capability claims — LIVE BROADCAST and AERIAL — that this register
+  already lists as unverified and removed from the rest of the site. They should
+  not return without the confirmations recorded above.
+- Arabic strip: the twenty names stay in Latin script, as brand names normally
+  do; only the small descriptor under each is localised. Those descriptors were
+  written by the engineer and need the same Arabic editorial review as the rest.
+  The marquee is laid out left-to-right in both locales (a max-content rail
+  inside an RTL block overflows off screen) but travels rightward in Arabic so
+  it moves with the reading direction.
 - Testimonials section: HIDDEN — no approved testimonials exist. Never invent one.
 - Credentials counters ("70+ productions", "since 2016", "24H average", "40+ clients"):
   DELETED — unverified. Replace only with verified statements.

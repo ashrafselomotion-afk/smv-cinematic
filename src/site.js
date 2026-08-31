@@ -385,17 +385,6 @@
       onLeaveBack(){ if (i === 0) document.documentElement.classList.remove('chapters'); } });
   });
 
-  /* ---------- KINETIC BAND (speed + skew follow scroll velocity) ---------- */
-  const bandTrack = document.getElementById('bandTrack');
-  if (bandTrack) {
-    const loop = gsap.to(bandTrack, { xPercent:-50, duration:26, ease:'none', repeat:-1 });
-    const skew = gsap.quickTo(bandTrack, 'skewX', { duration:.5, ease:'power2.out' });
-    ScrollTrigger.create({ trigger:'.band', start:'top bottom', end:'bottom top',
-      onUpdate(self){ const v = self.getVelocity(); loop.timeScale(gsap.utils.clamp(-4, 4, 1 + v / 600)); skew(gsap.utils.clamp(-12, 12, -v / 180)); },
-      onLeave(){ loop.timeScale(1); skew(0); }, onLeaveBack(){ loop.timeScale(1); skew(0); } });
-    ScrollTrigger.addEventListener('scrollEnd', () => { gsap.to(loop, { timeScale:1, duration:.8 }); skew(0); });
-  }
-
   /* ---------- one-shot reveal helper: fires on enter, jump-past, or load-already-past ---------- */
   const enterOnce = (trigger, start, fn) => {
     let fired = false;

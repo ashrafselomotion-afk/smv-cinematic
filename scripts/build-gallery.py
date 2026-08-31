@@ -2,6 +2,7 @@
 """Render content/media.json into the marked regions of the four gallery pages.
 
   index.html / ar/index.html   BUILD:SELWORK    the homepage shortlist (stage + switcher)
+                               BUILD:CLIENTS    the selected-productions strip
   work.html  / ar/work.html    BUILD:PROJECTS   every film, in the Videography panel
                                BUILD:PHOTOS     the Photography panel
 
@@ -28,6 +29,9 @@ T = {
     'view':      ('View project %s: %s — %s', 'عرض العمل %s: %s — %s'),
     'silent':    ('Silent preview', 'معاينة صامتة'),
     'photo_of':  ('Photograph %s', 'صورة %s'),
+    'cred':      ('Selected productions', 'إنتاجات مختارة'),
+    'cred_note': ('UAE + Global / Institutions + Events', 'الإمارات والعالم / مؤسسات وفعاليات'),
+    'cred_aria': ('Selected productions', 'إنتاجات مختارة'),
 }
 
 
@@ -140,6 +144,48 @@ def selwork(videos, ar):
     ])
 
 
+def clients(items, ar):
+    """The marquee of organisations SMV has produced for.
+
+    A mark is only ever an image when a real, supplied logo file exists. We do
+    not draw approximations of other people's trademarks: a hand-made ADNEC
+    lockup is more damaging than no lockup at all. Until a file arrives the
+    name is typeset in the site's own display face, which is honest and is what
+    the reference design does for half its entries anyway."""
+    if not items:
+        return '<!-- no clients listed -->'
+    marks = []
+    for c in items:
+        sub = c.get('subAr' if ar else 'subEn') or ''
+        if c.get('logo'):
+            inner = ('<img src="%s" alt="%s" loading="lazy" decoding="async">'
+                     % (esc(local(c['logo'], ar)), esc(c['name'])))
+        else:
+            inner = ('<span class="textmark">%s%s</span>'
+                     % (esc(c['name']),
+                        ('<small>%s</small>' % esc(sub)) if sub else ''))
+        marks.append('        <li class="client-logo">%s</li>' % inner)
+    group = '\n'.join(marks)
+    # the run is duplicated so translateX(-50%) meets itself seamlessly; the
+    # copy is hidden from assistive tech so names are not announced twice
+    return '\n'.join([
+        '<section class="cred-strip" aria-label="%s">' % esc(t('cred_aria', ar)),
+        '  <div class="cred-heading">',
+        '    <span class="label">%s</span>' % esc(t('cred', ar)),
+        '    <span class="note">%s</span>' % esc(t('cred_note', ar)),
+        '  </div>',
+        '  <div class="logo-rail">',
+        '    <ul class="logo-group">',
+        group,
+        '    </ul>',
+        '    <ul class="logo-group" aria-hidden="true">',
+        group,
+        '    </ul>',
+        '  </div>',
+        '</section>',
+    ])
+
+
 def projects(videos, ar):
     out = []
     for i, v in enumerate(videos, start=1):
@@ -231,6 +277,7 @@ def main():
     doc = json.load(open(MANIFEST, encoding='utf-8'))
     videos = doc.get('videos') or []
     pics = doc.get('photos') or []
+    crew = doc.get('clients') or []
     if not videos:
         raise SystemExit('media.json lists no videos')
 
@@ -247,6 +294,8 @@ def main():
     for page, ar in (('index.html', False), ('ar/index.html', True)):
         if replace(page, 'SELWORK', selwork(videos, ar)):
             changed.append(page + ':SELWORK')
+        if replace(page, 'CLIENTS', clients(crew, ar)):
+            changed.append(page + ':CLIENTS')
     for page, ar in (('work.html', False), ('ar/work.html', True)):
         if replace(page, 'PROJECTS', projects(videos, ar)):
             changed.append(page + ':PROJECTS')
@@ -254,8 +303,10 @@ def main():
             changed.append(page + ':PHOTOS')
 
     loops = sum(1 for v in videos if v.get('preview'))
-    print('%d films (%d with a self-hosted loop, %d still on a YouTube still), %d photos'
-          % (len(videos), loops, len(videos) - loops, len(pics)))
+    named = sum(1 for c in crew if c.get('logo'))
+    print('%d films (%d with a self-hosted loop, %d still on a YouTube still), %d photos, '
+          '%d clients (%d with a supplied logo)'
+          % (len(videos), loops, len(videos) - loops, len(pics), len(crew), named))
     print('changed: %s' % (', '.join(changed) if changed else 'nothing'))
     return 0
 

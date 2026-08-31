@@ -12,6 +12,8 @@
   --nav-bg:rgba(17,20,24,.9);
   --logo:rgba(244,242,238,.42);
   --tile:rgba(255,255,255,.035);
+  --strip:rgba(5,6,8,.5);
+  --mark:#9AA0AA;
   --display:'Anton',sans-serif;
   --body:'Space Grotesk',sans-serif;
   --mono:'JetBrains Mono',monospace;
@@ -27,6 +29,8 @@
     --nav-bg:rgba(221,224,228,.94);
     --logo:rgba(18,20,24,.42);
     --tile:rgba(18,20,24,.05);
+    --strip:rgba(255,255,255,.28);
+    --mark:#4A4E57;
     color-scheme:light;
   }
 }
@@ -39,6 +43,8 @@
   --nav-bg:rgba(221,224,228,.94);
   --logo:rgba(18,20,24,.42);
   --tile:rgba(18,20,24,.05);
+  --strip:rgba(255,255,255,.28);
+  --mark:#4A4E57;
   color-scheme:light;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -339,18 +345,12 @@ html.leader #leader{display:flex}
 #chapter #chapterNum{color:var(--hot-fill)}
 html.chapters #chapter{opacity:1}
 @media (max-width:1100px){#chapter{display:none}}
-.band{position:relative;z-index:1;overflow:hidden;padding:38px 0 10px;border-bottom:1px solid var(--line);
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.band-track{display:inline-flex;white-space:nowrap;will-change:transform}
-.band-track span{font-family:var(--display);font-size:clamp(56px,9vw,140px);line-height:1;letter-spacing:.02em;color:transparent;-webkit-text-stroke:1px rgba(244,242,238,.55);padding-right:.4em}
-:root[data-theme="light"] .band-track span{-webkit-text-stroke:1px rgba(18,20,24,.5)}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .band-track span{-webkit-text-stroke:1px rgba(18,20,24,.5)}}
 .reel-grid{perspective:1200px}
 .reel-preview{transform-style:preserve-3d;will-change:transform}
 .reel-preview .glare{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;background:radial-gradient(240px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.22),transparent 60%);transition:opacity .35s}
 .reel-preview:hover .glare{opacity:1}
 #services .card img{will-change:transform}
-@media (prefers-reduced-motion:reduce){#leader,#cur,#progress,#chapter{display:none!important}.band-track{transform:none!important}}
+@media (prefers-reduced-motion:reduce){#leader,#cur,#progress,#chapter{display:none!important}}
 
 /* ====================== ADVANCED LAYER ====================== */
 #heroGL{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0;transition:opacity .8s;pointer-events:none}
@@ -679,7 +679,7 @@ html.show-all #hero h1 .l>span{transform:none!important}
 @media print{
   .reveal,.fcard,.ncell,.service-stop,h1,h2,h3,p,.intro,.label{opacity:1!important;transform:none!important;visibility:visible!important}
   #hero h1 .l>span{transform:none!important}
-  #nav,#mmenu,#space,#cur,#progress,#chapter,#leader,.band{display:none!important}
+  #nav,#mmenu,#space,#cur,#progress,#chapter,#leader,.cred-strip{display:none!important}
   .hero-copy .eyebrow,.hero-copy .sub,.hero-ctas,.hero-copy .trust{opacity:1!important}
 }
 
@@ -990,3 +990,78 @@ html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
   letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
 @media (max-width:640px){.photo-grid{columns:2 140px;column-gap:14px}
   .photo-grid .shot{margin-bottom:14px}}
+
+
+/* ================= SELECTED PRODUCTIONS STRIP =================
+   Replaces the old kinetic word band. A slow marquee of the organisations SMV
+   has produced for; the run is duplicated so translateX(-50%) meets itself. */
+.cred-strip{position:relative;z-index:3;padding:30px 0 34px;overflow:hidden;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--strip);
+  /* A max-content rail inside an RTL block overflows leftwards and lands off
+     screen. Lay the strip out LTR in both locales and give the heading — the
+     only real prose here — its direction back. */
+  direction:ltr}
+[dir="rtl"] .cred-heading{direction:rtl}
+.cred-heading{display:flex;align-items:center;justify-content:space-between;
+  gap:18px;margin:0 5vw 20px}
+.cred-heading .label,.cred-heading .note{font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.28em;text-transform:uppercase}
+.cred-heading .label{color:var(--hot)}
+.cred-heading .note{color:var(--dim)}
+
+.logo-rail{display:flex;width:max-content;animation:logoRail 46s linear infinite}
+/* let it travel with the reading direction rather than against it */
+[dir="rtl"] .logo-rail{animation-direction:reverse}
+.cred-strip:hover .logo-rail{animation-play-state:paused}
+@keyframes logoRail{to{transform:translateX(-50%)}}
+
+.logo-group{display:flex;align-items:center;list-style:none;margin:0;padding:0;
+  gap:clamp(44px,5.2vw,84px);padding-inline-end:clamp(44px,5.2vw,84px)}
+.client-logo{flex:0 0 clamp(142px,13vw,190px);min-height:72px;padding:8px;
+  display:grid;place-items:center}
+.client-logo img{display:block;max-width:150px;max-height:48px;width:auto;height:auto;
+  object-fit:contain;opacity:.6;filter:grayscale(1) contrast(1.6);
+  transition:opacity .35s ease,transform .4s cubic-bezier(.2,.8,.2,1)}
+.client-logo:hover img{opacity:.95;transform:scale(1.045)}
+/* Dark ground needs light marks, light ground needs dark ones — and "system"
+   sets no data-theme at all, so all three states are spelled out. */
+.client-logo img{filter:grayscale(1) contrast(1.8) brightness(1.15) invert(1);mix-blend-mode:screen}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]) .client-logo img{
+    filter:grayscale(1) contrast(1.6);mix-blend-mode:multiply}
+}
+:root[data-theme="light"] .client-logo img{
+  filter:grayscale(1) contrast(1.6);mix-blend-mode:multiply}
+
+/* Colour carries the "quiet" here, not opacity: a faded mark composites down
+   to roughly 3.6:1 against this strip, which is below AA. --mark is chosen to
+   stay subdued and still pass in both themes. */
+.textmark{font-family:var(--display);font-weight:400;font-size:17px;line-height:.94;
+  letter-spacing:.015em;text-align:center;text-transform:uppercase;color:var(--mark);
+  transition:color .35s ease}
+.textmark small{display:block;margin-top:7px;font-family:var(--mono);font-size:8px;
+  line-height:1.3;letter-spacing:.16em;text-transform:uppercase}
+.client-logo:hover .textmark{color:var(--ink)}
+
+/* An endlessly moving strip is exactly what reduced-motion asks us to stop.
+   Park it and let the row be scrolled by hand instead. */
+@media (prefers-reduced-motion: reduce){
+  .logo-rail{animation:none}
+  .cred-strip .logo-rail{width:auto;overflow-x:auto;scrollbar-width:thin}
+  .logo-group[aria-hidden="true"]{display:none}
+}
+.lite .logo-rail{animation:none}
+.lite .cred-strip .logo-rail{width:auto;overflow-x:auto}
+.lite .logo-group[aria-hidden="true"]{display:none}
+
+@media (max-width:900px){
+  .cred-heading{flex-direction:column;align-items:flex-start;gap:6px}
+  .client-logo{flex-basis:132px;min-height:62px;padding:6px}
+  .textmark{font-size:15px}
+  .logo-rail{animation-duration:38s}
+}
+@media (max-width:560px){
+  .client-logo{flex-basis:114px;min-height:54px}
+  .textmark{font-size:13.5px}
+}

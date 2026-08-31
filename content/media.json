@@ -325,5 +325,127 @@
       "noMaxres": false
     }
   ],
-  "photos": []
+  "photos": [],
+  "clients": [
+    {
+      "name": "Shurooq",
+      "subEn": "Sharjah Investment & Development",
+      "subAr": "الشارقة للاستثمار والتطوير",
+      "logo": null
+    },
+    {
+      "name": "Invest in Sharjah",
+      "subEn": "Investment Promotion",
+      "subAr": "ترويج الاستثمار",
+      "logo": null
+    },
+    {
+      "name": "ITB Berlin",
+      "subEn": "The World of Travel",
+      "subAr": "عالم السفر",
+      "logo": null
+    },
+    {
+      "name": "WTM London",
+      "subEn": "World Travel Market",
+      "subAr": "سوق السفر العالمي",
+      "logo": null
+    },
+    {
+      "name": "ADNEC Group",
+      "subEn": "Exhibitions & Events",
+      "subAr": "المعارض والفعاليات",
+      "logo": null
+    },
+    {
+      "name": "Sharjah International Book Fair",
+      "subEn": "Sharjah Book Authority",
+      "subAr": "هيئة الشارقة للكتاب",
+      "logo": null
+    },
+    {
+      "name": "Government of Dubai",
+      "subEn": "حكومة دبي",
+      "subAr": "حكومة دبي",
+      "logo": null
+    },
+    {
+      "name": "Abu Dhabi Media Office",
+      "subEn": "مكتب أبوظبي الإعلامي",
+      "subAr": "مكتب أبوظبي الإعلامي",
+      "logo": null
+    },
+    {
+      "name": "Shams",
+      "subEn": "Sharjah Media City",
+      "subAr": "مدينة الشارقة للإعلام",
+      "logo": null
+    },
+    {
+      "name": "Emirates Airline Festival of Literature",
+      "subEn": "Dubai",
+      "subAr": "دبي",
+      "logo": null
+    },
+    {
+      "name": "Dubai Culture",
+      "subEn": "Culture & Arts Authority",
+      "subAr": "هيئة الثقافة والفنون",
+      "logo": null
+    },
+    {
+      "name": "DCT Abu Dhabi",
+      "subEn": "Culture + Tourism",
+      "subAr": "الثقافة والسياحة",
+      "logo": null
+    },
+    {
+      "name": "Expo City",
+      "subEn": "Dubai",
+      "subAr": "دبي",
+      "logo": null
+    },
+    {
+      "name": "Museum of the Future",
+      "subEn": "Dubai",
+      "subAr": "دبي",
+      "logo": null
+    },
+    {
+      "name": "GITEX Global",
+      "subEn": "The Largest Tech Event",
+      "subAr": "أكبر حدث تقني",
+      "logo": null
+    },
+    {
+      "name": "Dubai Airshow",
+      "subEn": "The Future of Aerospace",
+      "subAr": "مستقبل الطيران",
+      "logo": null
+    },
+    {
+      "name": "Abu Dhabi Art",
+      "subEn": "Modern + Contemporary",
+      "subAr": "الحديث والمعاصر",
+      "logo": null
+    },
+    {
+      "name": "Sharjah Biennial",
+      "subEn": "Art Foundation",
+      "subAr": "مؤسسة الشارقة للفنون",
+      "logo": null
+    },
+    {
+      "name": "Xposure",
+      "subEn": "Photography Festival",
+      "subAr": "مهرجان التصوير",
+      "logo": null
+    },
+    {
+      "name": "UAE Media Office",
+      "subEn": "Government Communication",
+      "subAr": "التواصل الحكومي",
+      "logo": null
+    }
+  ]
 }

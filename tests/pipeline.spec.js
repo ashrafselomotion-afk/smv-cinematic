@@ -140,3 +140,83 @@ test.describe('photography panel', () => {
     }
   });
 });
+
+test.describe('selected-productions strip', () => {
+  const HOMES = ['/index.html', '/ar/index.html'];
+
+  test('renders every client from the manifest, twice, with the copy hidden', async ({ page }) => {
+    const want = manifest().clients.length;
+    for (const p of HOMES) {
+      await page.goto(p);
+      await page.waitForTimeout(600);
+      const groups = page.locator('.cred-strip .logo-group');
+      await expect(groups).toHaveCount(2);
+      await expect(page.locator('.cred-strip .client-logo')).toHaveCount(want * 2);
+      // the seam copy must not make a screen reader announce every name twice
+      await expect(groups.nth(1)).toHaveAttribute('aria-hidden', 'true');
+      expect(await groups.nth(0).getAttribute('aria-hidden')).toBeNull();
+      await expect(page.locator('.cred-strip')).toHaveAttribute('aria-label', /.+/);
+    }
+  });
+
+  test('shows no logo image the manifest has not supplied', async ({ page }) => {
+    // We never draw approximations of other organisations' trademarks. A mark
+    // is an image only when a real file exists; otherwise it is typeset.
+    const supplied = manifest().clients.filter(c => c.logo).length;
+    for (const p of HOMES) {
+      await page.goto(p);
+      await expect(page.locator('.cred-strip img')).toHaveCount(supplied * 2);
+      const marks = await page.locator('.cred-strip .textmark').count();
+      expect(marks).toBe((manifest().clients.length - supplied) * 2);
+    }
+  });
+
+  test('replaced the kinetic band rather than sitting alongside it', async ({ page }) => {
+    for (const p of HOMES) {
+      await page.goto(p);
+      await expect(page.locator('.band, #bandTrack')).toHaveCount(0);
+      await expect(page.locator('.cred-strip')).toHaveCount(1);
+    }
+  });
+
+  test('the marquee parks itself when motion is not wanted', async ({ browser }) => {
+    const ctx = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await ctx.newPage();
+    await page.goto('/index.html');
+    await page.waitForTimeout(500);
+    const state = await page.evaluate(() => {
+      const rail = document.querySelector('.logo-rail');
+      const cs = getComputedStyle(rail);
+      const dup = document.querySelector('.logo-group[aria-hidden="true"]');
+      return { anim: cs.animationName, dupShown: getComputedStyle(dup).display !== 'none' };
+    });
+    expect(state.anim, 'the strip keeps scrolling under reduced motion').toBe('none');
+    expect(state.dupShown, 'the seam copy is pointless once the rail is parked').toBe(false);
+    await ctx.close();
+  });
+
+  test('does not push the page sideways in either locale', async ({ page }) => {
+    for (const p of HOMES) {
+      await page.goto(p);
+      await page.waitForTimeout(700);
+      const over = await page.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(over, `${p} overflows by ${over}px`).toBeLessThanOrEqual(1);
+      // and the rail must actually be on screen, not parked off to one side
+      const onScreen = await page.evaluate(() =>
+        [...document.querySelectorAll('.client-logo')].filter(el => {
+          const b = el.getBoundingClientRect();
+          return b.width > 0 && b.right > 0 && b.left < innerWidth;
+        }).length);
+      expect(onScreen, `${p} shows no client marks`).toBeGreaterThan(2);
+    }
+  });
+
+  test('every client in the manifest is named in both languages', () => {
+    for (const c of manifest().clients) {
+      expect(c.name, 'client without a name').toBeTruthy();
+      expect(c.subEn, `${c.name} has no English descriptor`).toBeTruthy();
+      expect(c.subAr, `${c.name} has no Arabic descriptor`).toBeTruthy();
+    }
+  });
+});
