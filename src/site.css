@@ -13,6 +13,9 @@
   --nav-glass:rgba(26,30,36,.58);--nav-edge:rgba(244,242,238,.16);
   --nav-sheen:rgba(255,255,255,.10);--nav-cast:rgba(0,0,0,.34);
   --nav-ink:rgba(244,242,238,.82);
+  --glass:rgba(26,30,36,.5);--glass-hi:rgba(40,46,54,.62);
+  --glass-edge:rgba(244,242,238,.14);--glass-sheen:rgba(255,255,255,.09);
+  --glass-cast:rgba(0,0,0,.3);--glass-blur:18px;
   --logo:rgba(244,242,238,.42);
   --tile:rgba(255,255,255,.035);
   --strip:rgba(5,6,8,.5);
@@ -33,9 +36,15 @@
   --nav-glass:rgba(255,255,255,.58);--nav-edge:rgba(18,20,24,.14);
   --nav-sheen:rgba(255,255,255,.7);--nav-cast:rgba(18,20,24,.16);
   --nav-ink:rgba(18,20,24,.78);
+  --glass:rgba(255,255,255,.5);--glass-hi:rgba(255,255,255,.68);
+  --glass-edge:rgba(18,20,24,.13);--glass-sheen:rgba(255,255,255,.68);
+  --glass-cast:rgba(18,20,24,.12);--glass-blur:18px;
     --nav-glass:rgba(255,255,255,.58);--nav-edge:rgba(18,20,24,.14);
     --nav-sheen:rgba(255,255,255,.7);--nav-cast:rgba(18,20,24,.16);
     --nav-ink:rgba(18,20,24,.78);
+    --glass:rgba(255,255,255,.5);--glass-hi:rgba(255,255,255,.68);
+    --glass-edge:rgba(18,20,24,.13);--glass-sheen:rgba(255,255,255,.68);
+    --glass-cast:rgba(18,20,24,.12);--glass-blur:18px;
     --logo:rgba(18,20,24,.42);
     --tile:rgba(18,20,24,.05);
     --strip:rgba(255,255,255,.28);
@@ -1168,3 +1177,55 @@ html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
   .pcat.on{border-color:var(--hot-fill)}
 }
 @media (max-width:520px){.album-grid{grid-template-columns:repeat(2,1fr);gap:14px}}
+
+
+/* ================= GLASS SYSTEM =================
+   One surface treatment shared by the navigation, the buttons and the cards:
+   a translucent fill, a lit top edge, a soft cast. The blur is the expensive
+   part, so it is spent where something sits behind the surface and skipped
+   where it would only cost — see the note above the card rules. */
+
+/* ---- buttons: few of them, and they sit over the hero and over images ---- */
+.btn.ghost,.reel-btn,.sw-all,.pv-switch,#themeBtn,#menuBtn,.pcat.is-pill,
+.service-chips span,.album-open{
+  background:var(--glass);border:1px solid var(--glass-edge);
+  backdrop-filter:blur(var(--glass-blur)) saturate(1.5);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.5);
+  box-shadow:0 6px 18px var(--glass-cast),inset 0 1px 0 var(--glass-sheen)}
+.btn.ghost:hover,.reel-btn:hover,.sw-all:hover,#themeBtn:hover,#menuBtn:hover{
+  background:var(--glass-hi);border-color:var(--hot-fill)}
+#contact .btn.ghost{background:var(--glass);border:1px solid var(--glass-edge)}
+/* the primary call to action stays opaque — translucency would cost it both
+   contrast and its place in the hierarchy. It takes the finish, not the fill. */
+.btn.hot,#nav .cta{border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 8px 22px rgba(224,101,47,.28),inset 0 1px 0 rgba(255,255,255,.34)}
+.pv-switch button[aria-selected="true"]{box-shadow:inset 0 1px 0 var(--glass-sheen)}
+
+/* ---- cards ---- */
+.tile,.fcard,.ncell,.reel,.album,.photo-empty,.sw-stage,.service-card{
+  background:var(--glass);border:1px solid var(--glass-edge);
+  box-shadow:0 14px 40px var(--glass-cast),inset 0 1px 0 var(--glass-sheen)}
+.photo-empty{border-style:dashed}
+.album.is-empty{background:
+  linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,0) 60%),var(--glass)}
+/* A card's backdrop is the starfield and the grid texture, so the blur is worth
+   having — but there are up to 37 cards on a page, and that many backdrop roots
+   is a scroll cost a phone should not pay. Desktop pointers only. */
+@media (min-width:900px) and (hover:hover) and (pointer:fine){
+  .tile,.fcard,.ncell,.album,.photo-empty,.service-card{
+    backdrop-filter:blur(var(--glass-blur)) saturate(1.4);
+    -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.4)}
+}
+.reel:hover,.album:hover{border-color:rgba(224,101,47,.55)}
+
+/* ---- the honest fallbacks ---- */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .btn.ghost,.reel-btn,.sw-all,.pv-switch,#themeBtn,#menuBtn,
+  .tile,.fcard,.ncell,.reel,.album,.photo-empty,.sw-stage,.service-card{
+    background:var(--panel)}
+}
+@media (prefers-reduced-transparency: reduce){
+  .btn.ghost,.reel-btn,.sw-all,.pv-switch,#themeBtn,#menuBtn,.service-chips span,
+  .tile,.fcard,.ncell,.reel,.album,.photo-empty,.sw-stage,.service-card{
+    background:var(--panel);backdrop-filter:none;-webkit-backdrop-filter:none}
+}

@@ -299,3 +299,18 @@ appear on the public website. Nothing in this file is published. Items marked
   are the engineer's, derived from approved English copy. Album titles are
   placeholders ("Album 01"); real ones will name events or clients, which needs
   the same written approval as everything else in this register.
+- Glass is now a system rather than a one-off on the navigation: four tokens
+  (fill, edge, sheen, cast) plus a blur radius, defined for dark, light and
+  system-default, applied to the nav, the buttons and the cards.
+- The blur is spent selectively, because backdrop-filter is the expensive part:
+  the nav and the buttons always have it; cards get it on desktop pointers only
+  (a page can hold 37 cards, and that many backdrop roots is a scroll cost a
+  phone should not pay); the 23 project cards never get it, since each holds a
+  YouTube iframe and there is nothing behind them worth blurring. Every one of
+  them still takes the glass look — translucent fill, lit edge, soft cast.
+- The primary call to action stays opaque orange. Making it translucent would
+  cost it both contrast and its position in the hierarchy; it takes the finish
+  (edge and sheen) but not the fill.
+- Fallbacks: where backdrop-filter is unsupported, and under
+  prefers-reduced-transparency, every glass surface falls back to the solid
+  panel colour. Axe found no contrast regression across 11 pages × 4 viewports.
