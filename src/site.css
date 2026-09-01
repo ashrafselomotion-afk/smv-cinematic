@@ -1084,12 +1084,5 @@ html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
 }
 
 
-/* ============ FAQ, now living inside the contact section ============
-   #contact is centred; the accordion is not, so it is centred as a block and
-   its own text put back to the reading direction. */
-.faq-head{margin:110px auto 26px;max-width:860px;text-align:start;
-  font-family:var(--display);font-weight:400;text-transform:uppercase;
-  font-size:clamp(26px,3.4vw,46px);line-height:1;letter-spacing:.01em;color:var(--ink)}
-#contact .faq{margin-inline:auto;text-align:start}
-#contact .faq summary{text-align:start}
-@media (max-width:900px){.faq-head{margin-top:80px}}
+/* ============ FAQ, on the contact page ============ */
+#faq.page-sec .faq{max-width:none;margin-top:26px}
