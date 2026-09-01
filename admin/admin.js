@@ -23,7 +23,7 @@
   var MAX_FEATURED = 5;
 
   var token = '', repo = '', sha = '';
-  var doc = { videos: [], photos: [], clients: [] };
+  var doc = { videos: [], photos: [], clients: [], photoCategories: [] };
   var pending = [];                     // files to upload alongside the manifest
   var dirty = false;
 
@@ -128,6 +128,7 @@
       doc.videos = doc.videos || [];
       doc.photos = doc.photos || [];
       doc.clients = doc.clients || [];
+      doc.photoCategories = doc.photoCategories || [];
       if (remember) {
         try { localStorage.setItem(STORE, JSON.stringify({ repo: repo, token: token })); } catch (e) {}
       }
@@ -342,14 +343,34 @@
     var img = node.querySelector('.thumb');
     img.src = p._url || ('../' + p.file);
     node.querySelector('.name').textContent = p.file.split('/').pop();
-    node.querySelector('.sub').textContent =
-      (p.width && p.height ? p.width + '×' + p.height : '') + (p._new ? ' · not yet uploaded' : '');
+    var sub = node.querySelector('.sub');
+    var catName = function () {
+      var c = doc.photoCategories.filter(function (x) { return x.key === p.category; })[0];
+      return c ? c.labelEn : 'NO CATEGORY';
+    };
+    var refreshSub = function () {
+      sub.textContent = catName() + ' · ' +
+        (p.width && p.height ? p.width + '×' + p.height : '') + (p._new ? ' · not yet uploaded' : '');
+    };
+    refreshSub();
+
+    /* the photography panel is grouped by category; an uncategorised photo
+       would be rendered nowhere at all */
+    var pick = node.querySelector('.catPick');
+    pick.appendChild(new Option('Choose a category…', ''));
+    doc.photoCategories.forEach(function (c) {
+      pick.appendChild(new Option(c.labelEn, c.key));
+    });
+    pick.value = p.category || '';
+    pick.addEventListener('change', function () {
+      p.category = pick.value; refreshSub(); markDirty();
+    });
 
     node.querySelector('.card-head').addEventListener('click', function (e) {
       if (e.target.closest('.card-tools')) return;
       node.classList.toggle('open');
     });
-    node.querySelectorAll('[data-k]').forEach(function (input) {
+    node.querySelectorAll('input[data-k]').forEach(function (input) {
       input.value = p[input.dataset.k] || '';
       input.addEventListener('input', function () {
         p[input.dataset.k] = input.value.trim();
@@ -574,6 +595,7 @@
     });
     doc.photos.forEach(function (p, i) {
       if (!p.altEn || !p.altAr) bad.push('Photo ' + (i + 1) + ' needs a description in both languages');
+      if (!p.category) bad.push('Photo ' + (i + 1) + ' has no category, so it would appear nowhere');
     });
     doc.clients.forEach(function (c, i) {
       if (!c.name) bad.push('Organisation ' + (i + 1) + ' has no name');

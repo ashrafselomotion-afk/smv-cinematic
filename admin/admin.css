@@ -59,8 +59,9 @@ a{color:var(--hot)}
 .field{display:block;margin-bottom:14px}
 .field>span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--dim);margin-bottom:6px}
-.field input{width:100%;padding:10px 13px;border-radius:9px;border:1px solid var(--line);
+.field input,.field select{width:100%;padding:10px 13px;border-radius:9px;border:1px solid var(--line);
   background:var(--tile);color:var(--ink);font:inherit;font-size:14px}
+.field select{cursor:pointer}
 .field input:invalid:not(:placeholder-shown){border-color:var(--bad)}
 .field.rtl input{text-align:right}
 .check{display:flex;align-items:center;gap:9px;color:var(--dim);font-size:13.5px;margin-bottom:16px;cursor:pointer}

@@ -999,14 +999,21 @@ html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
 
 /* ================= PHOTOGRAPHY GRID ================= */
 /* Masonry-ish: stills keep their own shape instead of being cropped square. */
-.photo-grid{columns:3 260px;column-gap:22px;margin-top:38px}
-.photo-grid .shot{break-inside:avoid;margin:0 0 22px;position:relative;
+.photo-note{margin-top:30px;font-family:var(--mono);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim)}
+.photo-cat-head{display:flex;align-items:baseline;gap:12px;margin:44px 0 0;
+  font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(16px,1.7vw,23px);letter-spacing:.01em;color:var(--ink);
+  padding-bottom:12px;border-bottom:1px solid var(--line)}
+.photo-cat-n{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--hot)}
+.photo-grid{columns:4 190px;column-gap:16px;margin-top:16px}
+.photo-grid .shot{break-inside:avoid;margin:0 0 16px;position:relative;
   border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
 .photo-grid .shot img{display:block;width:100%;height:auto}
 .photo-grid figcaption{padding:12px 14px 14px;font-family:var(--mono);font-size:9px;
   letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-@media (max-width:640px){.photo-grid{columns:2 140px;column-gap:14px}
-  .photo-grid .shot{margin-bottom:14px}}
+@media (max-width:640px){.photo-grid{columns:2 130px;column-gap:12px}
+  .photo-grid .shot{margin-bottom:12px}}
 
 
 /* ================= SELECTED PRODUCTIONS STRIP =================
@@ -1106,3 +1113,14 @@ html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
 .service-card i{position:absolute}
 .service-card{min-height:240px}
 @media (max-width:900px){.service-card{min-height:200px}}
+
+
+/* An empty slot is empty on purpose: the alternative is dressing the archive in
+   stock photography, which is exactly what this panel must not do. */
+.photo-grid .slot{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;border:1px dashed var(--line);background:var(--tile);text-align:center;padding:18px}
+.photo-grid .slot{max-height:340px}
+.photo-grid .slot .slot-n{font-family:var(--display);font-size:24px;line-height:1;
+  color:var(--ink);opacity:.16}
+.photo-grid .slot .slot-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);max-width:16ch;line-height:1.5}

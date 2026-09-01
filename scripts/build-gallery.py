@@ -32,6 +32,9 @@ T = {
     'cred':      ('Selected productions', 'إنتاجات مختارة'),
     'cred_note': ('UAE + Global / Institutions + Events', 'الإمارات والعالم / مؤسسات وفعاليات'),
     'cred_aria': ('Selected productions', 'إنتاجات مختارة'),
+    'slot':      ('Awaiting approved stills', 'بانتظار صور معتمدة'),
+    'photo_note':('Layout preview. Each slot fills as approved photography is released.',
+                  'معاينة للتصميم. يمتلئ كل موضع فور اعتماد الصور ونشرها.'),
 }
 
 
@@ -238,24 +241,51 @@ EMPTY_PHOTOS = {
 }
 
 
-def photos(items, ar):
-    """A grid once stills exist; until then the honest empty state."""
-    if not items:
+def photos(items, cats, ar):
+    """The photography panel, grouped by category.
+
+    A category shows its approved stills first, then labelled empty slots up to
+    its configured count. The slots are deliberately empty: filling them with
+    stock photographs would present generic imagery as SMV's archive, which is
+    the one thing this panel exists not to do."""
+    if not cats:
         return EMPTY_PHOTOS[bool(ar)]
-    cells = []
-    for i, p in enumerate(items, start=1):
-        alt = p.get('altAr' if ar else 'altEn') or (t('photo_of', ar) % i)
-        cap = p.get('captionAr' if ar else 'captionEn') or ''
-        cells.append(
-            '      <figure class="shot">\n'
-            '        <img src="%s" alt="%s" loading="lazy" decoding="async"%s%s>\n'
-            '%s'
-            '      </figure>'
-            % (esc(local(p['file'], ar)), esc(alt),
-               ' width="%d"' % p['width'] if p.get('width') else '',
-               ' height="%d"' % p['height'] if p.get('height') else '',
-               ('        <figcaption>%s</figcaption>\n' % esc(cap)) if cap else ''))
-    return '<div class="photo-grid">\n%s\n    </div>' % '\n'.join(cells)
+    blocks = []
+    for c in cats:
+        mine = [p for p in items if p.get('category') == c['key']]
+        label = c.get('labelAr' if ar else 'labelEn') or c['key']
+        cells = []
+        for i, p in enumerate(mine, start=1):
+            alt = p.get('altAr' if ar else 'altEn') or (t('photo_of', ar) % i)
+            cap = p.get('captionAr' if ar else 'captionEn') or ''
+            cells.append(
+                '        <figure class="shot">\n'
+                '          <img src="%s" alt="%s" loading="lazy" decoding="async"%s%s>\n'
+                '%s'
+                '        </figure>'
+                % (esc(local(p['file'], ar)), esc(alt),
+                   ' width="%d"' % p['width'] if p.get('width') else '',
+                   ' height="%d"' % p['height'] if p.get('height') else '',
+                   ('          <figcaption>%s</figcaption>\n' % esc(cap)) if cap else ''))
+        for n in range(len(mine) + 1, int(c.get('slots') or 0) + 1):
+            # aspect varies so the column layout reads like a real set, not a stack
+            shape = ('3 / 4', '4 / 3', '1 / 1', '4 / 5')[(n - 1) % 4]
+            cells.append(
+                '        <div class="shot slot" style="aspect-ratio:%s">\n'
+                '          <span class="slot-n">%02d</span>\n'
+                '          <span class="slot-label">%s</span>\n'
+                '        </div>' % (shape, n, esc(t('slot', ar))))
+        if not cells:
+            continue
+        # a count only says something once there is something to count
+        tally = ('<span class="photo-cat-n">%02d</span>' % len(mine)) if mine else ''
+        blocks.append(
+            '      <h3 class="photo-cat-head">%s %s</h3>\n'
+            '      <div class="photo-grid">\n%s\n      </div>'
+            % (esc(label), tally, '\n'.join(cells)))
+    if not blocks:
+        return EMPTY_PHOTOS[bool(ar)]
+    return ('<p class="photo-note">%s</p>\n%s' % (esc(t('photo_note', ar)), '\n'.join(blocks)))
 
 
 # ---------------------------------------------------------------- write-back
@@ -278,6 +308,7 @@ def main():
     videos = doc.get('videos') or []
     pics = doc.get('photos') or []
     crew = doc.get('clients') or []
+    cats = doc.get('photoCategories') or []
     if not videos:
         raise SystemExit('media.json lists no videos')
 
@@ -299,7 +330,7 @@ def main():
     for page, ar in (('work.html', False), ('ar/work.html', True)):
         if replace(page, 'PROJECTS', projects(videos, ar)):
             changed.append(page + ':PROJECTS')
-        if replace(page, 'PHOTOS', photos(pics, ar)):
+        if replace(page, 'PHOTOS', photos(pics, cats, ar)):
             changed.append(page + ':PHOTOS')
 
     loops = sum(1 for v in videos if v.get('preview'))

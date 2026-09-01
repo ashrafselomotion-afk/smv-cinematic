@@ -112,32 +112,91 @@ test.describe('admin page', () => {
 });
 
 test.describe('photography panel', () => {
-  test('emptying the photo list restores the empty state instead of stranding a grid', () => {
+  const PAGES = ['work.html', 'ar/work.html'];
+
+  function withManifest(mutate, check) {
     const file = path.join(ROOT, 'content/media.json');
     const original = fs.readFileSync(file, 'utf8');
-    const pages = ['work.html', 'ar/work.html'];
-    const snapshot = pages.map(p => fs.readFileSync(path.join(ROOT, p), 'utf8'));
+    const snapshot = PAGES.map(p => fs.readFileSync(path.join(ROOT, p), 'utf8'));
     try {
       const doc = JSON.parse(original);
-      doc.photos = [{ file: 'media/photos/probe.jpg', altEn: 'probe', altAr: 'probe',
-                      width: 10, height: 10 }];
+      mutate(doc);
       fs.writeFileSync(file, JSON.stringify(doc, null, 2) + '\n');
       execFileSync('python3', ['scripts/build-gallery.py'], { cwd: ROOT });
-      for (const p of pages) {
-        expect(fs.readFileSync(path.join(ROOT, p), 'utf8'), `${p} should show a grid`)
-          .toContain('photo-grid');
-      }
-      fs.writeFileSync(file, original);
-      execFileSync('python3', ['scripts/build-gallery.py'], { cwd: ROOT });
-      for (const p of pages) {
-        const src = fs.readFileSync(path.join(ROOT, p), 'utf8');
-        expect(src, `${p} kept a grid with no photos behind it`).not.toContain('photo-grid');
-        expect(src, `${p} lost the empty state`).toContain('photo-empty');
-      }
+      check(PAGES.map(p => fs.readFileSync(path.join(ROOT, p), 'utf8')));
     } finally {
       fs.writeFileSync(file, original);
-      pages.forEach((p, i) => fs.writeFileSync(path.join(ROOT, p), snapshot[i]));
+      PAGES.forEach((p, i) => fs.writeFileSync(path.join(ROOT, p), snapshot[i]));
     }
+  }
+
+  test('with no photos, every category shows labelled empty slots', () => {
+    const cats = manifest().photoCategories;
+    expect(cats.length, 'no photo categories defined').toBeGreaterThan(0);
+    const want = cats.reduce((n, c) => n + c.slots, 0);
+    for (const p of PAGES) {
+      const src = fs.readFileSync(path.join(ROOT, p), 'utf8');
+      const panel = src.slice(src.indexOf('BUILD:PHOTOS'), src.indexOf('/BUILD:PHOTOS'));
+      expect((panel.match(/class="shot slot"/g) || []).length, `${p} slot count`).toBe(want);
+      // slots are empty on purpose — no stock photography dressed as the archive
+      expect(panel, `${p} put an image in an empty archive`).not.toContain('<img');
+      for (const c of cats) {
+        const label = p.startsWith('ar/') ? c.labelAr : c.labelEn;
+        expect(panel, `${p} is missing the ${c.key} heading`).toContain(label);
+      }
+    }
+  });
+
+  test('a photo replaces a slot in its own category, and removing it gives the slot back', () => {
+    const cats = manifest().photoCategories;
+    const target = cats[0];
+    const before = (fs.readFileSync(path.join(ROOT, 'work.html'), 'utf8')
+      .match(/class="shot slot"/g) || []).length;
+
+    withManifest(doc => {
+      doc.photos = [{ file: 'media/photos/probe.jpg', category: target.key,
+                      altEn: 'probe', altAr: 'probe', width: 10, height: 10 }];
+    }, srcs => {
+      for (const src of srcs) {
+        const panel = src.slice(src.indexOf('BUILD:PHOTOS'), src.indexOf('/BUILD:PHOTOS'));
+        expect(panel).toContain('probe.jpg');
+        // one real photo means one fewer placeholder, not one extra tile
+        expect((panel.match(/class="shot slot"/g) || []).length).toBe(before - 1);
+      }
+    });
+
+    // the fixture is restored; the panel must be exactly as it started
+    const after = fs.readFileSync(path.join(ROOT, 'work.html'), 'utf8');
+    expect((after.match(/class="shot slot"/g) || []).length).toBe(before);
+    expect(after).not.toContain('probe.jpg');
+  });
+
+  test('with no categories at all, the honest empty state comes back', () => {
+    withManifest(doc => { doc.photoCategories = []; doc.photos = []; }, srcs => {
+      for (const src of srcs) {
+        const panel = src.slice(src.indexOf('BUILD:PHOTOS'), src.indexOf('/BUILD:PHOTOS'));
+        expect(panel).toContain('photo-empty');
+        expect(panel).not.toContain('photo-grid');
+      }
+    });
+  });
+
+  test('every category is named in both languages and has slots', () => {
+    for (const c of manifest().photoCategories) {
+      expect(c.key, 'category without a key').toBeTruthy();
+      expect(c.labelEn, `${c.key} has no English label`).toBeTruthy();
+      expect(c.labelAr, `${c.key} has no Arabic label`).toBeTruthy();
+      expect(c.slots, `${c.key} has no slots`).toBeGreaterThan(0);
+    }
+  });
+
+  test('the admin can put a photo in a category', async ({ page }) => {
+    await page.goto('/admin/index.html');
+    // the picker must exist in the template, or an upload lands in no category
+    const tpl = await page.evaluate(() =>
+      document.getElementById('photoTpl').innerHTML);
+    expect(tpl).toContain('catPick');
+    expect(tpl).toContain('data-k="category"');
   });
 });
 

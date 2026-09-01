@@ -276,3 +276,22 @@ appear on the public website. Nothing in this file is published. Items marked
 - STILL UNVERIFIED: services 05 (live broadcast and streaming) and 06 (aerial
   and specialised capture) carry the same claims this register lists as
   unconfirmed, now with fuller descriptions attached in both languages.
+- Photography panel now shows the archive STRUCTURE rather than a single empty
+  message: four categories — press coverage, executive portraits, ceremony
+  stills, venue documentation, taken from the wording already published in the
+  old empty state — each with labelled empty slots (14 in total) above a line
+  reading "layout preview, each slot fills as approved photography is released".
+- The slots are deliberately EMPTY. The only images available in the repository
+  are behind-the-scenes stock — camera bodies, an editing suite, a projector, a
+  Porsche on a highway — and putting those under "The archive / Stills in focus"
+  would present generic stock as SMV's photography, which is the one thing this
+  panel exists not to do. A test fails if an <img> ever appears in the panel
+  while no photograph is in the manifest.
+- Adding a real photo to a category replaces one slot in that category; removing
+  it gives the slot back. With no categories defined at all, the original honest
+  empty state returns. Both paths are covered by tests.
+- The admin's photo cards now carry a category picker, and publishing refuses a
+  photo with no category — an uncategorised photo would render nowhere.
+- TODO: CLIENT VERIFICATION — the four category names and the Arabic labels are
+  the engineer's, derived from approved English copy. Confirm they are the right
+  cut of the archive before stills are loaded against them.

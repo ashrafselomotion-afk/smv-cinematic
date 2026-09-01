@@ -325,6 +325,32 @@
       "noMaxres": false
     }
   ],
+  "photoCategories": [
+    {
+      "key": "press",
+      "labelEn": "Press coverage",
+      "labelAr": "التغطيات الصحفية",
+      "slots": 4
+    },
+    {
+      "key": "portraits",
+      "labelEn": "Executive portraits",
+      "labelAr": "الصور التنفيذية",
+      "slots": 3
+    },
+    {
+      "key": "ceremony",
+      "labelEn": "Ceremony stills",
+      "labelAr": "لقطات المراسم",
+      "slots": 3
+    },
+    {
+      "key": "venue",
+      "labelEn": "Venue documentation",
+      "labelAr": "توثيق المواقع",
+      "slots": 4
+    }
+  ],
   "photos": [],
   "clients": [
     {
