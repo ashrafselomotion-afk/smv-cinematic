@@ -12,7 +12,8 @@
     required:'هذا الحقل مطلوب.', email:'يرجى إدخال بريد عمل صحيح.',
     consent:'يلزم الموافقة للمتابعة.', choose:'يرجى الاختيار من القائمة.',
     errTitle:(n)=>`يوجد ${n} من الحقول تحتاج إلى مراجعة`,
-    sending:'جارٍ الإرسال…', play:'تشغيل', pause:'إيقاف مؤقت'
+    sending:'جارٍ الإرسال…', play:'تشغيل', pause:'إيقاف مؤقت',
+    albums:(n,f)=>`عرض ${n} من الألبومات · ${f}`
   } : {
     openMenu:'Open menu', closeMenu:'Close menu',
     toDark:'Switch to dark mode', toLight:'Switch to light mode',
@@ -20,7 +21,8 @@
     required:'This field is required.', email:'Enter a valid work email address.',
     consent:'Consent is required to continue.', choose:'Please choose an option.',
     errTitle:(n)=>`${n} ${n===1?'field needs':'fields need'} your attention`,
-    sending:'Sending…', play:'Play', pause:'Pause'
+    sending:'Sending…', play:'Play', pause:'Pause',
+    albums:(n,f)=>`Showing ${n} ${n===1?'album':'albums'} · ${f}`
   };
   window.__smvL = L; window.__smvAR = AR;
 
@@ -215,6 +217,53 @@
     });
     const want = new URL(location.href).searchParams.get('view');
     if (want === 'photography') select(document.getElementById('tabPhoto'), false);
+  }
+
+  /* ---------- PHOTOGRAPHY: category list + album grid ---------- */
+  const pcats = [...document.querySelectorAll('.pcat')];
+  const albums = [...document.querySelectorAll('.album')];
+  if (pcats.length && albums.length) {
+    const live = document.createElement('p');
+    live.className = 'sr-only';
+    live.setAttribute('role', 'status');
+    live.setAttribute('aria-live', 'polite');
+    (document.querySelector('.photo-shell') || document.body).appendChild(live);
+
+    const pick = btn => {
+      const want = btn.dataset.cat;
+      pcats.forEach(b => {
+        const on = b === btn;
+        b.classList.toggle('on', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+      let shown = 0;
+      albums.forEach(a => {
+        const hit = want === 'all' || a.dataset.cat === want;
+        a.classList.toggle('is-hidden', !hit);
+        if (hit) shown++;
+      });
+      live.textContent = L.albums ? L.albums(shown, btn.textContent.trim())
+                                  : shown + ' / ' + btn.textContent.trim();
+    };
+    pcats.forEach(b => b.addEventListener('click', () => pick(b)));
+
+    /* The homepage does this with GSAP; the work page has no GSAP, so the
+       wash is a CSS transition and JS only says which edge it comes from. */
+    if (!reduced) albums.forEach(a => {
+      const ov = document.createElement('span');
+      ov.className = 'dah';
+      a.appendChild(ov);
+      const edge = e => {
+        const r = a.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) * (r.width > r.height ? r.height / r.width : 1);
+        const y = e.clientY - r.top - r.height / 2;
+        const d = Math.round(((Math.atan2(y, x) * 180 / Math.PI) + 180) / 90 + 3) % 4;
+        return [['0', '-100%'], ['100%', '0'], ['0', '100%'], ['-100%', '0']][d];
+      };
+      const set = v => { ov.style.setProperty('--dx', v[0]); ov.style.setProperty('--dy', v[1]); };
+      a.addEventListener('pointerenter', e => { set(edge(e)); a.offsetWidth; a.classList.add('lit'); });
+      a.addEventListener('pointerleave', e => { a.classList.remove('lit'); set(edge(e)); });
+    });
   }
 
   /* ---------- SILENT PREVIEW LOOPS ----------

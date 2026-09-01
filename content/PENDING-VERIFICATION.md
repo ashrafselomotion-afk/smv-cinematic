@@ -276,22 +276,26 @@ appear on the public website. Nothing in this file is published. Items marked
 - STILL UNVERIFIED: services 05 (live broadcast and streaming) and 06 (aerial
   and specialised capture) carry the same claims this register lists as
   unconfirmed, now with fuller descriptions attached in both languages.
-- Photography panel now shows the archive STRUCTURE rather than a single empty
-  message: four categories — press coverage, executive portraits, ceremony
-  stills, venue documentation, taken from the wording already published in the
-  old empty state — each with labelled empty slots (14 in total) above a line
-  reading "layout preview, each slot fills as approved photography is released".
-- The slots are deliberately EMPTY. The only images available in the repository
-  are behind-the-scenes stock — camera bodies, an editing suite, a projector, a
-  Porsche on a highway — and putting those under "The archive / Stills in focus"
-  would present generic stock as SMV's photography, which is the one thing this
-  panel exists not to do. A test fails if an <img> ever appears in the panel
-  while no photograph is in the manifest.
-- Adding a real photo to a category replaces one slot in that category; removing
-  it gives the slot back. With no categories defined at all, the original honest
-  empty state returns. Both paths are covered by tests.
-- The admin's photo cards now carry a category picker, and publishing refuses a
-  photo with no category — an uncategorised photo would render nowhere.
-- TODO: CLIENT VERIFICATION — the four category names and the Arabic labels are
-  the engineer's, derived from approved English copy. Confirm they are the right
-  cut of the archive before stills are loaded against them.
+- Photography panel (final shape): a category LIST beside a grid of ALBUM
+  cards. The cards reuse the retired services-card treatment — portrait 3:4.5
+  frame, bottom gradient, orange arrow, direction-aware orange wash on hover —
+  so both halves of the Work page read as one product. Portrait at every width,
+  including phones. Choosing a category filters the grid and announces the
+  result; the homepage's GSAP is not loaded here, so the wash is a CSS
+  transition with JS only supplying the entry edge.
+- Four categories: press coverage, executive portraits, ceremony stills, venue
+  documentation — taken from wording the old empty state already published —
+  holding 14 placeholder albums in total.
+- The albums are EMPTY on purpose and say "awaiting stills". The only imagery
+  in the repository is behind-the-scenes stock: camera bodies, an editing
+  suite, a projector, a Porsche on a highway. Presenting that under "The
+  archive / Stills in focus" would pass stock off as SMV's photography. A test
+  fails if an image appears in the panel while no album has a cover.
+- Data model: `photoCategories` (key, labels, slots) and `photoAlbums`
+  (key, category, titles, cover). A real album takes a placeholder's place
+  rather than adding a tile; with no categories the honest empty state returns.
+  Photos carry an `album` key, and the album's first photo becomes its cover.
+- TODO: CLIENT VERIFICATION — the four category names and their Arabic labels
+  are the engineer's, derived from approved English copy. Album titles are
+  placeholders ("Album 01"); real ones will name events or clients, which needs
+  the same written approval as everything else in this register.

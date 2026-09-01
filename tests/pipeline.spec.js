@@ -129,56 +129,69 @@ test.describe('photography panel', () => {
       PAGES.forEach((p, i) => fs.writeFileSync(path.join(ROOT, p), snapshot[i]));
     }
   }
+  const panelOf = src => src.slice(src.indexOf('BUILD:PHOTOS'), src.indexOf('/BUILD:PHOTOS'));
 
-  test('with no photos, every category shows labelled empty slots', () => {
+  test('every category is listed, with an album for each of its slots', () => {
     const cats = manifest().photoCategories;
     expect(cats.length, 'no photo categories defined').toBeGreaterThan(0);
     const want = cats.reduce((n, c) => n + c.slots, 0);
     for (const p of PAGES) {
-      const src = fs.readFileSync(path.join(ROOT, p), 'utf8');
-      const panel = src.slice(src.indexOf('BUILD:PHOTOS'), src.indexOf('/BUILD:PHOTOS'));
-      expect((panel.match(/class="shot slot"/g) || []).length, `${p} slot count`).toBe(want);
-      // slots are empty on purpose — no stock photography dressed as the archive
-      expect(panel, `${p} put an image in an empty archive`).not.toContain('<img');
+      const panel = panelOf(fs.readFileSync(path.join(ROOT, p), 'utf8'));
+      expect((panel.match(/class="album[" ]/g) || []).length, `${p} album count`).toBe(want);
+      // "all" plus one entry per category
+      expect((panel.match(/class="pcat/g) || []).length, `${p} category list`).toBe(cats.length + 1);
       for (const c of cats) {
         const label = p.startsWith('ar/') ? c.labelAr : c.labelEn;
-        expect(panel, `${p} is missing the ${c.key} heading`).toContain(label);
+        expect(panel, `${p} is missing the ${c.key} entry`).toContain(label);
+        expect(panel, `${p} has no album tagged ${c.key}`).toContain(`data-cat="${c.key}"`);
       }
     }
   });
 
-  test('a photo replaces a slot in its own category, and removing it gives the slot back', () => {
+  test('an album with no stills carries no image and says so', () => {
+    for (const p of PAGES) {
+      const panel = panelOf(fs.readFileSync(path.join(ROOT, p), 'utf8'));
+      // stock imagery must never stand in for the archive
+      expect(panel, `${p} put an image in an empty archive`).not.toContain('<img');
+      expect((panel.match(/class="album is-empty"/g) || []).length,
+        `${p} empty albums are not marked`).toBeGreaterThan(0);
+    }
+  });
+
+  test('a real album takes a slot in its own category and keeps its cover', () => {
     const cats = manifest().photoCategories;
     const target = cats[0];
     const before = (fs.readFileSync(path.join(ROOT, 'work.html'), 'utf8')
-      .match(/class="shot slot"/g) || []).length;
+      .match(/class="album[" ]/g) || []).length;
 
     withManifest(doc => {
-      doc.photos = [{ file: 'media/photos/probe.jpg', category: target.key,
-                      altEn: 'probe', altAr: 'probe', width: 10, height: 10 }];
+      doc.photoAlbums = [{ key: 'probe', category: target.key,
+                           titleEn: 'Probe album', titleAr: 'ألبوم تجريبي',
+                           cover: 'media/photos/probe.jpg' }];
     }, srcs => {
-      for (const src of srcs) {
-        const panel = src.slice(src.indexOf('BUILD:PHOTOS'), src.indexOf('/BUILD:PHOTOS'));
-        expect(panel).toContain('probe.jpg');
-        // one real photo means one fewer placeholder, not one extra tile
-        expect((panel.match(/class="shot slot"/g) || []).length).toBe(before - 1);
-      }
+      srcs.forEach((src, i) => {
+        const panel = panelOf(src);
+        // PAGES order is [work.html, ar/work.html]; sniffing lang="ar" would
+        // match the English page's own language switcher
+        const ar = PAGES[i].startsWith('ar/');
+        expect(panel).toContain(ar ? 'ألبوم تجريبي' : 'Probe album');
+        // the cover must resolve from the page that references it
+        expect(panel).toContain(ar ? '../media/photos/probe.jpg' : '"media/photos/probe.jpg"');
+        // a real album replaces a placeholder rather than adding a tile
+        expect((panel.match(/class="album[" ]/g) || []).length).toBe(before);
+      });
     });
-
-    // the fixture is restored; the panel must be exactly as it started
-    const after = fs.readFileSync(path.join(ROOT, 'work.html'), 'utf8');
-    expect((after.match(/class="shot slot"/g) || []).length).toBe(before);
-    expect(after).not.toContain('probe.jpg');
   });
 
   test('with no categories at all, the honest empty state comes back', () => {
-    withManifest(doc => { doc.photoCategories = []; doc.photos = []; }, srcs => {
-      for (const src of srcs) {
-        const panel = src.slice(src.indexOf('BUILD:PHOTOS'), src.indexOf('/BUILD:PHOTOS'));
-        expect(panel).toContain('photo-empty');
-        expect(panel).not.toContain('photo-grid');
-      }
-    });
+    withManifest(doc => { doc.photoCategories = []; doc.photos = []; doc.photoAlbums = []; },
+      srcs => {
+        for (const src of srcs) {
+          const panel = panelOf(src);
+          expect(panel).toContain('photo-empty');
+          expect(panel).not.toContain('album-grid');
+        }
+      });
   });
 
   test('every category is named in both languages and has slots', () => {
@@ -190,11 +203,46 @@ test.describe('photography panel', () => {
     }
   });
 
+  test('choosing a category filters the albums, in both locales', async ({ page }) => {
+    for (const p of ['/work.html', '/ar/work.html']) {
+      await page.goto(p + '?view=photography');
+      await page.waitForFunction(() => !!document.querySelector('.pcat'), null, { timeout: 8000 });
+      const cats = manifest().photoCategories;
+      const target = cats[1];
+      const all = await page.locator('.album').count();
+      expect(await page.locator('.album:not(.is-hidden)').count()).toBe(all);
+
+      await page.click(`.pcat[data-cat="${target.key}"]`);
+      expect(await page.locator('.album:not(.is-hidden)').count(),
+        `${p} filtered count`).toBe(target.slots);
+      await expect(page.locator(`.pcat[data-cat="${target.key}"]`))
+        .toHaveAttribute('aria-pressed', 'true');
+      // only one entry may be active at a time
+      expect(await page.locator('.pcat[aria-pressed="true"]').count()).toBe(1);
+      // the change is announced, not just shown
+      await expect(page.locator('.photo-shell [role=status]')).not.toBeEmpty();
+
+      await page.click('.pcat[data-cat="all"]');
+      expect(await page.locator('.album:not(.is-hidden)').count()).toBe(all);
+    }
+  });
+
+  test('albums are portrait and carry the orange hover wash', async ({ page }) => {
+    await page.goto('/work.html?view=photography');
+    await page.waitForFunction(() => !!document.querySelector('.album .dah'), null, { timeout: 8000 });
+    const shape = await page.evaluate(() => {
+      const r = document.querySelector('.album').getBoundingClientRect();
+      return r.width / r.height;
+    });
+    expect(shape, 'albums must be portrait').toBeLessThan(1);
+    expect(await page.locator('.album .dah').count()).toBe(await page.locator('.album').count());
+    await page.hover('.album');
+    await expect(page.locator('.album').first()).toHaveClass(/lit/);
+  });
+
   test('the admin can put a photo in a category', async ({ page }) => {
     await page.goto('/admin/index.html');
-    // the picker must exist in the template, or an upload lands in no category
-    const tpl = await page.evaluate(() =>
-      document.getElementById('photoTpl').innerHTML);
+    const tpl = await page.evaluate(() => document.getElementById('photoTpl').innerHTML);
     expect(tpl).toContain('catPick');
     expect(tpl).toContain('data-k="category"');
   });

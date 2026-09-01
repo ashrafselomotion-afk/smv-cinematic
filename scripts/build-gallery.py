@@ -32,9 +32,12 @@ T = {
     'cred':      ('Selected productions', 'إنتاجات مختارة'),
     'cred_note': ('UAE + Global / Institutions + Events', 'الإمارات والعالم / مؤسسات وفعاليات'),
     'cred_aria': ('Selected productions', 'إنتاجات مختارة'),
-    'slot':      ('Awaiting approved stills', 'بانتظار صور معتمدة'),
-    'photo_note':('Layout preview. Each slot fills as approved photography is released.',
-                  'معاينة للتصميم. يمتلئ كل موضع فور اعتماد الصور ونشرها.'),
+    'slot':      ('Awaiting stills', 'بانتظار الصور'),
+    'album':     ('Album %02d', 'ألبوم %02d'),
+    'all_albums':('All albums', 'كل الألبومات'),
+    'stills':    ('%d stills', '%d صورة'),
+    'photo_note':('Layout preview. Each album fills as approved photography is released.',
+                  'معاينة للتصميم. يمتلئ كل ألبوم فور اعتماد الصور ونشرها.'),
 }
 
 
@@ -241,51 +244,68 @@ EMPTY_PHOTOS = {
 }
 
 
-def photos(items, cats, ar):
-    """The photography panel, grouped by category.
+def photos(items, cats, albums, ar):
+    """The photography panel: a list of categories beside a grid of albums.
 
-    A category shows its approved stills first, then labelled empty slots up to
-    its configured count. The slots are deliberately empty: filling them with
-    stock photographs would present generic imagery as SMV's archive, which is
-    the one thing this panel exists not to do."""
+    Each tile is an album, not a single photograph, and carries the same
+    portrait shape and orange hover as the old services cards. Albums with no
+    stills yet say so — filling them with stock would present generic imagery
+    as SMV's archive, which is what this panel exists not to do."""
     if not cats:
         return EMPTY_PHOTOS[bool(ar)]
-    blocks = []
+
+    cards, counts = [], {}
     for c in cats:
-        mine = [p for p in items if p.get('category') == c['key']]
         label = c.get('labelAr' if ar else 'labelEn') or c['key']
-        cells = []
-        for i, p in enumerate(mine, start=1):
-            alt = p.get('altAr' if ar else 'altEn') or (t('photo_of', ar) % i)
-            cap = p.get('captionAr' if ar else 'captionEn') or ''
-            cells.append(
-                '        <figure class="shot">\n'
-                '          <img src="%s" alt="%s" loading="lazy" decoding="async"%s%s>\n'
-                '%s'
-                '        </figure>'
-                % (esc(local(p['file'], ar)), esc(alt),
-                   ' width="%d"' % p['width'] if p.get('width') else '',
-                   ' height="%d"' % p['height'] if p.get('height') else '',
-                   ('          <figcaption>%s</figcaption>\n' % esc(cap)) if cap else ''))
+        mine = [a for a in albums if a.get('category') == c['key']]
+        n = 0
+        for a in mine:
+            n += 1
+            shots = [p for p in items if p.get('album') == a.get('key')]
+            title = a.get('titleAr' if ar else 'titleEn') or (t('album', ar) % n)
+            state = (t('stills', ar) % len(shots)) if shots else t('slot', ar)
+            cover = shots[0]['file'] if shots else a.get('cover')
+            cards.append(album_card(c['key'], label, title, state, cover, n, ar))
         for n in range(len(mine) + 1, int(c.get('slots') or 0) + 1):
-            # aspect varies so the column layout reads like a real set, not a stack
-            shape = ('3 / 4', '4 / 3', '1 / 1', '4 / 5')[(n - 1) % 4]
-            cells.append(
-                '        <div class="shot slot" style="aspect-ratio:%s">\n'
-                '          <span class="slot-n">%02d</span>\n'
-                '          <span class="slot-label">%s</span>\n'
-                '        </div>' % (shape, n, esc(t('slot', ar))))
-        if not cells:
-            continue
-        # a count only says something once there is something to count
-        tally = ('<span class="photo-cat-n">%02d</span>' % len(mine)) if mine else ''
-        blocks.append(
-            '      <h3 class="photo-cat-head">%s %s</h3>\n'
-            '      <div class="photo-grid">\n%s\n      </div>'
-            % (esc(label), tally, '\n'.join(cells)))
-    if not blocks:
+            cards.append(album_card(c['key'], label, t('album', ar) % n,
+                                    t('slot', ar), None, n, ar))
+        counts[c['key']] = max(len(mine), int(c.get('slots') or 0))
+
+    if not cards:
         return EMPTY_PHOTOS[bool(ar)]
-    return ('<p class="photo-note">%s</p>\n%s' % (esc(t('photo_note', ar)), '\n'.join(blocks)))
+
+    rows = ['        <li><button type="button" class="pcat on" data-cat="all" '
+            'aria-pressed="true">%s <i>%02d</i></button></li>'
+            % (esc(t('all_albums', ar)), sum(counts.values()))]
+    for c in cats:
+        rows.append('        <li><button type="button" class="pcat" data-cat="%s" '
+                    'aria-pressed="false">%s <i>%02d</i></button></li>'
+                    % (esc(c['key']), esc(c.get('labelAr' if ar else 'labelEn') or c['key']),
+                       counts.get(c['key'], 0)))
+
+    return '\n'.join([
+        '<p class="photo-note">%s</p>' % esc(t('photo_note', ar)),
+        '    <div class="photo-shell">',
+        '      <ul class="photo-cats">',
+        '\n'.join(rows),
+        '      </ul>',
+        '      <div class="album-grid">',
+        '\n'.join(cards),
+        '      </div>',
+        '    </div>',
+    ])
+
+
+def album_card(cat, cat_label, title, state, cover, n, ar):
+    img = ('<img src="%s" alt="" loading="lazy" decoding="async">' % esc(local(cover, ar))) \
+          if cover else ''
+    return ('        <article class="album%s" data-cat="%s">\n'
+            '          %s<span class="k label">%s</span>\n'
+            '          <div class="inner"><h3>%s</h3><span class="arr" aria-hidden="true">&#8594;</span></div>\n'
+            '          <span class="album-state">%s</span>\n'
+            '        </article>'
+            % ('' if cover else ' is-empty', esc(cat), img,
+               esc(cat_label), esc(title), esc(state)))
 
 
 # ---------------------------------------------------------------- write-back
@@ -309,6 +329,7 @@ def main():
     pics = doc.get('photos') or []
     crew = doc.get('clients') or []
     cats = doc.get('photoCategories') or []
+    albums = doc.get('photoAlbums') or []
     if not videos:
         raise SystemExit('media.json lists no videos')
 
@@ -330,7 +351,7 @@ def main():
     for page, ar in (('work.html', False), ('ar/work.html', True)):
         if replace(page, 'PROJECTS', projects(videos, ar)):
             changed.append(page + ':PROJECTS')
-        if replace(page, 'PHOTOS', photos(pics, cats, ar)):
+        if replace(page, 'PHOTOS', photos(pics, cats, albums, ar)):
             changed.append(page + ':PHOTOS')
 
     loops = sum(1 for v in videos if v.get('preview'))
