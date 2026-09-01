@@ -495,6 +495,21 @@ html.gl .wipe .line{overflow:hidden;display:block}
 .tile.beam::before{opacity:1;background:none}
 .tile.beam::after{opacity:1;background:conic-gradient(from var(--beam),transparent 0 80%,var(--hot-fill) 92%,transparent 100%);animation:beam 6s linear infinite}
 @keyframes beam{to{--beam:360deg}}
+/* Magic UI · Border Beam — the same travelling edge the bento tiles use, run
+   around the navigation pill. The mask paints the ring only: a conic gradient
+   fills the padding box, then the content box is punched out of it. */
+#nav::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;
+  pointer-events:none;z-index:2;
+  background:conic-gradient(from var(--beam),transparent 0 74%,var(--hot-fill) 88%,
+    #ffd2b8 94%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:beam 7s linear infinite}
+/* the beam is decoration; hold it still rather than remove the edge entirely */
+@media (prefers-reduced-motion:reduce){#nav::after{animation:none}}
+.lite #nav::after{animation:none}
+
 /* Aceternity · Lamp Effect (contact) */
 .lamp{position:relative;height:clamp(180px,28vw,320px);margin:-40px auto 0;max-width:900px;pointer-events:none;overflow:visible}
 .lamp .l1,.lamp .l2{position:absolute;bottom:36%;width:50%;height:100%;opacity:0;transform-origin:bottom;filter:blur(2px)}

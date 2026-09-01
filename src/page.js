@@ -404,4 +404,8 @@
     url.searchParams.delete('sent');
     history.replaceState(null, '', url.pathname + url.search);
   }
+
+  /* Everything above is wired. Tests wait on this rather than racing the file,
+     the same way the mobile menu exposes __smvSetMenu. */
+  window.__smvReady = true;
 })();

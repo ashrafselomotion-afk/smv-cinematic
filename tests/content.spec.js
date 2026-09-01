@@ -65,12 +65,19 @@ test.describe('contact form', () => {
 
   test('valid submit sets a submitting state and blocks double submission', async ({ page }) => {
     await page.goto('/contact.html');
+    // the page's own submit handler is what sets the disabled state; attaching
+    // ours before page.js has run makes the assertions race it
+    await page.waitForFunction(() => window.__smvReady === true, null, { timeout: 10000 });
     // observe the submit event without letting the browser navigate away
     await page.evaluate(() => {
       window.__submits = 0;
       const f = document.getElementById('brief');
       f.addEventListener('submit', e => {
-        window.__submits++;
+        // The page's own handler runs first and calls preventDefault on a
+        // resubmission. Counting every submit event would count the blocked
+        // ones too, and fail the moment a second click reaches the form at all
+        // — what matters is that exactly one submission gets through.
+        if (!e.defaultPrevented) window.__submits++;
         window.__ariaDisabled = f.querySelector('button[type=submit]').getAttribute('aria-disabled');
         e.preventDefault();
       });
@@ -88,7 +95,8 @@ test.describe('contact form', () => {
     await expect(btn).toBeDisabled();                       // hard block on a second press
     expect(await btn.textContent()).toMatch(/Sending/i);
     await btn.click({ force: true }).catch(() => {});
-    expect(await page.evaluate(() => window.__submits)).toBe(1);
+    expect(await page.evaluate(() => window.__submits),
+      'a second press got through to the endpoint').toBe(1);
   });
 
   test('privacy link opens in a new tab so the brief survives', async ({ page }) => {

@@ -314,3 +314,7 @@ appear on the public website. Nothing in this file is published. Items marked
 - Fallbacks: where backdrop-filter is unsupported, and under
   prefers-reduced-transparency, every glass surface falls back to the solid
   panel colour. Axe found no contrast regression across 11 pages × 4 viewports.
+- The navigation carries a travelling orange edge line (Magic UI border beam) —
+  the same conic-gradient-plus-mask technique already used on the bento tiles,
+  run around the nav pill on a 7s loop. It holds still under
+  prefers-reduced-motion and on save-data.
