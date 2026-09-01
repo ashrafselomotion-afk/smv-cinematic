@@ -44,6 +44,8 @@ test.describe('mouse pointer is never hidden without a replacement', () => {
   });
 });
 
+const EXPECTED_STOPS = 8;
+
 test('section 04 journey: compact spacing, rail pinned to the nodes', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   for (const p of ['/index.html','/ar/index.html']) {
@@ -67,7 +69,10 @@ test('section 04 journey: compact spacing, rail pinned to the nodes', async ({ p
         nodeOffsets: nodes.map(n => { const r = n.getBoundingClientRect(); return Math.round(r.left + r.width / 2 - cx); })
       };
     });
-    expect(s.stops, `${p} stop count`).toBe(6);
+    // the journey grew from six stops to eight when it became the services
+    // section; assert it is populated, not a fixed number
+    expect(s.stops, `${p} stop count`).toBeGreaterThanOrEqual(6);
+    expect(s.stops, `${p} stop count differs between locales`).toBe(EXPECTED_STOPS);
     // the rail must begin and end exactly on the first and last node
     expect(Math.abs(s.railTopGap), `${p} rail overshoots the top`).toBeLessThanOrEqual(2);
     expect(Math.abs(s.railBottomGap), `${p} rail overshoots the bottom`).toBeLessThanOrEqual(2);
@@ -75,7 +80,9 @@ test('section 04 journey: compact spacing, rail pinned to the nodes', async ({ p
     for (const o of s.nodeOffsets) expect(Math.abs(o), `${p} node off the rail`).toBeLessThanOrEqual(2);
     // spacing must stay content-driven, not a reserved 56vh per stop
     expect(s.stopH, `${p} stop is too tall`).toBeLessThan(360);
-    expect(s.sectionH, `${p} section is too tall`).toBeLessThan(2600);
+    // scale the cap with the stop count, so adding a service does not trip a
+    // guard that is really about per-stop spacing
+    expect(s.sectionH, `${p} section is too tall`).toBeLessThan(s.stops * 360 + 420);
   }
 });
 
@@ -162,7 +169,8 @@ test('section 04 rail reaches the last node', async ({ page }) => {
     const railH = svg.getBoundingClientRect().height;
     return { shortfall: Math.round(railH - railH * (1 - off / len)),
              dashMatchesPixels: Math.abs(len - railH) < 2,
-             lastLit: document.querySelectorAll('.service-stop')[5].classList.contains('is-active') };
+             lastLit: [...document.querySelectorAll('.service-stop')].pop()
+                        .classList.contains('is-active') };
   });
   // the dash length must be in screen pixels, or the fill stops short of the end
   expect(s.dashMatchesPixels).toBe(true);

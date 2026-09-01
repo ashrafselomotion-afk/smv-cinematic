@@ -255,3 +255,24 @@ appear on the public website. Nothing in this file is published. Items marked
   selector, so the hero eyebrow shipped unstyled (body font instead of the mono
   treatment), and a stray closing brace was swallowing the section-heading rule
   that followed it. The stylesheet now minifies with zero warnings.
+- Homepage restructured again (2026-08-31, client instruction): the eight
+  services moved into the section-04 journey layout — the drawn vertical line,
+  the numbered stops, the copy blocks and the side cards — and the placeholder
+  images now sit inside those cards. The old services grid (section 02) is
+  deleted, and the homepage renumbers to 01 Selected work, 02 Approach,
+  03 Services, 04 Credentials, 05 Contact.
+- DELETED with it: the six "production confidence" blocks that occupied
+  section 04 — protocol and access, permissions and planning, backup and
+  continuity, confidentiality, rapid turnaround, UAE-wide deployment. That was
+  evidence-led procurement copy and it is now published nowhere on the site.
+  Recoverable from git if it should return somewhere.
+- The eight service descriptions and their chips are the approved copy
+  recovered from the deleted capabilities.html / ar/capabilities.html, not
+  newly written. Card labels use each service's "typical deliverables", cut to
+  the first three items.
+- The card images remain generic stock, not SMV work. They are now larger and
+  more prominent than before, which raises rather than lowers the case for
+  replacing them with real frames.
+- STILL UNVERIFIED: services 05 (live broadcast and streaming) and 06 (aerial
+  and specialised capture) carry the same claims this register lists as
+  unconfirmed, now with fuller descriptions attached in both languages.

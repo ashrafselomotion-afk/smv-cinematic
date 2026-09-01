@@ -1086,3 +1086,23 @@ html.menu-open #mmenu{transition:opacity .4s,visibility 0s}
 
 /* ============ FAQ, on the contact page ============ */
 #faq.page-sec .faq{max-width:none;margin-top:26px}
+
+
+/* ---------- service cards now carry the image ----------
+   The photograph sits behind the label, so the card needs its own scrim; the
+   text was previously reading against a flat panel. */
+.service-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  z-index:0;opacity:.88}
+/* Weighted to the bottom, where the label sits: the top of the frame stays a
+   photograph rather than being washed flat. */
+.service-card::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(rgba(12,14,18,0) 34%,rgba(12,14,18,.62) 66%,rgba(12,14,18,.93))}
+.service-card b,.service-card span{color:#fff}
+:root[data-theme="light"] .service-card::after{
+  background:linear-gradient(rgba(12,14,18,0) 34%,rgba(12,14,18,.58) 66%,rgba(12,14,18,.9))}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .service-card::after{
+  background:linear-gradient(rgba(12,14,18,0) 34%,rgba(12,14,18,.58) 66%,rgba(12,14,18,.9))}}
+.service-card b,.service-card span,.service-card i{position:relative;z-index:2}
+.service-card i{position:absolute}
+.service-card{min-height:240px}
+@media (max-width:900px){.service-card{min-height:200px}}
